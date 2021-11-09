@@ -8,3 +8,6 @@ translate_span = 1.0
 
 # 是否划词翻译，默认复制时翻译
 translate_select = False
+
+# 百度接口，默认翻译为中文
+translate_to_language = 'zh'

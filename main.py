@@ -36,7 +36,7 @@ class Translate(Gtk.Window):
         hb = Gtk.HeaderBar()
         # 隐藏原有的工具按钮
         hb.set_show_close_button(False)
-        hb.props.title = "翻译"
+        hb.props.title = "兰译"
         self.set_titlebar(hb)
 
         btn_pin = Gtk.Button.new_with_label("追加×")

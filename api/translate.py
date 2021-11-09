@@ -11,7 +11,7 @@ path_next_s = "s_next"
 
 def translate_data(s_from,
                    fromLang="auto",
-                   toLang='zh',
+                   toLang=config.translate_to_language,
                    type="baidu",
                    add_old=True):
     global last_s, last_s2, last_time
