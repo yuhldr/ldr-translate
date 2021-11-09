@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=兰译
+Comment=翻译
+Exec=路径/run.sh
+Terminal=true
+StartupNotify=true
+Type=Application
+Categories=Utility;
+Icon=路径/ui/icon.png
