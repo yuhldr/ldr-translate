@@ -1,22 +1,30 @@
+#!/usr/bin/python3
+# coding: utf-8
+#
+# A simple indicator applet displaying cpu and memory information
+#
+# Author: Alex Eftimie <alex@eftimie.ro>
+# Fork Author: fossfreedom <foss.freedom@gmail.com>
+# Original Homepage: http://launchpad.net/indicator-sysmonitor
+# Fork Homepage: https://github.com/fossfreedom/indicator-sysmonitor
+# License: GPL v3
+#
 import gi
 import logging
 import os
-import tempfile
 from argparse import ArgumentParser
-from gettext import gettext as _
-from gettext import bindtextdomain, textdomain
-from threading import Event
 from main import Translate, VERSION
 
 gi.require_version('AppIndicator3', '0.1')
 gi.require_version('Keybinder', '3.0')
 
 from gi.repository import AppIndicator3 as appindicator
-from gi.repository import GLib, Gtk, Keybinder
+from gi.repository import Gtk, Keybinder
 
 
 class LdrTranlate(object):
     hide = False
+
     def _create_menu(self):
         """Creates the main menu and shows it."""
         # create menu {{{
@@ -76,7 +84,7 @@ class LdrTranlate(object):
             None, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.INFO,
             Gtk.ButtonsType.OK, None)
 
-        self._help_dialog.set_title(_("帮助"))
+        self._help_dialog.set_title("帮助")
         self._help_dialog.set_markup("帮助文档，暂时省略")
         self._help_dialog.run()
         self._help_dialog.destroy()
@@ -121,7 +129,6 @@ if __name__ == "__main__":
 
     logging.info("start")
 
-    # setup an instance with config
     app = LdrTranlate()
     try:
         Gtk.main()

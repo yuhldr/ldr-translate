@@ -1,13 +1,14 @@
-# -*- coding: UTF-8 -*-
+#!/usr/bin/python3
+# coding: utf-8
+
 import gi
-import time  # 引入time模块
 from api.translate import translate_data
 import config
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('Keybinder', '3.0')
-from gi.repository import Gtk, Gdk, GLib, Keybinder
-from gi.overrides.Gio import Gio
+from gi.repository import Gtk, Gdk
+
 
 VERSION = '0.0.1'
 
@@ -109,7 +110,11 @@ class Translate(Gtk.Window):
         textbuffer_from = self.text_view_from.get_buffer()
         textbuffer_to = self.text_view_to.get_buffer()
 
-        s_from, s_to = translate_data(s_from.strip(), add_old=self.add_old)
+        if(s_from is None):
+            s_from = "复制即可翻译"
+            s_to = "Alt Q 快捷键、或状态栏图标可隐藏"
+        else:
+            s_from, s_to = translate_data(s_from.strip(), add_old=self.add_old)
 
         textbuffer_from.set_text(s_from.strip())
         textbuffer_to.set_text(s_to.strip())
