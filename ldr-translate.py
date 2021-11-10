@@ -13,7 +13,7 @@ import gi
 import logging
 import os
 from argparse import ArgumentParser
-from main import Translate, VERSION
+from ui_translate import Translate, VERSION
 
 gi.require_version('AppIndicator3', '0.1')
 gi.require_version('Keybinder', '3.0')
@@ -23,7 +23,7 @@ from gi.repository import Gtk, Keybinder
 
 
 class LdrTranlate(object):
-    hide = False
+    hide = True
 
     def _create_menu(self):
         """Creates the main menu and shows it."""
@@ -50,7 +50,7 @@ class LdrTranlate(object):
         # }}} menu done!
 
     def __init__(self):
-        self._translate_win = None
+        self.translate_win = None
         self._help_dialog = None
 
         self.ind = appindicator.Indicator.new(
@@ -75,40 +75,27 @@ class LdrTranlate(object):
             pass
 
     def _on_help(self, event=None, data=None):
-        """Raise a dialog with info about the app."""
         if self._help_dialog is not None:
             self._help_dialog.present()
             return
 
-        self._help_dialog = Gtk.MessageDialog(
-            None, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.INFO,
-            Gtk.ButtonsType.OK, None)
+        s = "1. 软件安装位置：~/.local/share/ldr-translate\n2. 终端输入 ldr-translate 即可运行\n3. 注销并重新登录以后，应用程序中应包含‘兰译’\n4. 复制即可自动翻译、Alt Q快捷键自动隐藏/显示主窗口\n5. 系统截图并复制到剪贴板，自动OCR识别并翻译\n6. 更多教程见：https://github.com/yuhlzu/ldr-translate"
+
+        self._help_dialog = Gtk.MessageDialog(None, Gtk.DialogFlags.MODAL,
+                                              Gtk.MessageType.INFO,
+                                              Gtk.ButtonsType.OK, s)
 
         self._help_dialog.set_title("帮助")
-        self._help_dialog.set_markup("帮助文档，暂时省略")
         self._help_dialog.run()
         self._help_dialog.destroy()
         self._help_dialog = None
 
     def on_translate_activated(self, event=None):
-        """Raises the preferences dialog. If it's already open, it's
-        focused"""
-        print("********** " + str(self._translate_win))
-        if self._translate_win is not None:
-            print("显示")
-            self.hide = not self.hide
-
-            if(self.hide):
-                self._translate_win.close()
-                print("隐藏")
-                return
-            else:
-                self._translate_win.present()
+        if (self.translate_win is None or self.translate_win.is_hide):
+            self.translate_win = Translate()
+            self.translate_win.start()
         else:
-            print("创建")
-            self._translate_win = Translate()
-
-        self.hide = False
+            self.translate_win.close()
 
 
 if __name__ == "__main__":

@@ -8,13 +8,28 @@ import config
 import time
 
 
-def translate(s, fromLang="auto", toLang='zh'):
+translate_to_language_baidu = [
+    "zh",
+    "wyw",
+    "en",
+    "jp",
+    "kor",
+    "de",
+    "fra",
+]
+
+
+def translate(s, fromLang="auto", toLang=config.translate_to_language_zh[0]):
 
     appid = config.baidu_appid  # 填写你的appid
     secretKey = config.baidu_secretKey  # 填写你的密钥
 
     # fromLang = 'auto'   # 原文语种
     # toLang = 'zh'   # 译文语种
+    i = config.translate_to_language_zh.index(toLang)
+    print(toLang + " == " + str(i))
+    toLang = translate_to_language_baidu[i]
+
     salt = random.randint(32768, 65536)
     sign = appid + s + str(salt) + secretKey
     sign = hashlib.md5(sign.encode()).hexdigest()
