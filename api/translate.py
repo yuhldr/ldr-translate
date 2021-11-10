@@ -8,12 +8,13 @@ last_time = 0
 
 path_next_s = "s_next"
 
+# 整合一下，方便接入其他api接口
 
-def translate_data(s_from,
-                   fromLang="auto",
-                   toLang=config.translate_to_language,
-                   type="baidu",
-                   add_old=True):
+def text(s_from,
+         fromLang="auto",
+         toLang=config.translate_to_language,
+         type="baidu",
+         add_old=True):
     global last_s, last_s2, last_time
 
     if (last_s == s_from):
@@ -33,3 +34,13 @@ def translate_data(s_from,
     last_s = s_from
     last_time = time.time()
     return last_s, last_s2
+
+
+def ocr(img, type="baidu"):
+
+    if (type == "baidu"):
+        s = baidu.ocr(img)
+    else:
+        s = baidu.ocr(img)
+
+    return s

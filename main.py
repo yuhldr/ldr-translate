@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import gi
-from api.translate import translate_data
+from api import translate
 import config
 
 gi.require_version('Gtk', '3.0')
@@ -26,6 +26,8 @@ class Translate(Gtk.Window):
         self.set_keep_above(True)
 
         self.show_all()
+        # Gtk.main()
+
         self.copy_translate()
 
     def close(self, a=None, b=None):
@@ -34,11 +36,11 @@ class Translate(Gtk.Window):
     def _create_bar(self):
 
         # 定义HeaderBar
-        hb = Gtk.HeaderBar()
+        self.hb = Gtk.HeaderBar()
         # 隐藏原有的工具按钮
-        hb.set_show_close_button(False)
-        hb.props.title = "兰译"
-        self.set_titlebar(hb)
+        self.hb.set_show_close_button(False)
+        self.hb.props.title = "兰译"
+        self.set_titlebar(self.hb)
 
         btn_pin = Gtk.Button.new_with_label("追加×")
         # icon = Gio.ThemedIcon(name="view-pin-symbolic")
@@ -46,7 +48,7 @@ class Translate(Gtk.Window):
         # image = Gtk.Image.new_from_file("./ui/pin2.svg")
         # btn_pin.add(image)
         btn_pin.connect("clicked", self.set_add_old)
-        hb.pack_start(btn_pin)
+        self.hb.pack_start(btn_pin)
 
         btn_update = Gtk.Button.new_with_label("翻译")
         # icon = Gio.ThemedIcon(name="system-reboot-symbolic")
@@ -54,7 +56,7 @@ class Translate(Gtk.Window):
         # btn_update.add(image)
         btn_update.connect("clicked", self.update_translate_view)
         # 放置于HeaderBar右边
-        hb.pack_end(btn_update)
+        self.hb.pack_end(btn_update)
 
     def _create_content(self):
 
@@ -84,9 +86,12 @@ class Translate(Gtk.Window):
     def copy_auto_translate(self, cb, event=None):
         s_from = ""
 
-        image = cb.wait_for_image()
-        if image is not None:
-            print(image.get_pixbuf())
+        image_pixbuf = cb.wait_for_image()
+        if image_pixbuf is not None:
+            self.set_title("识别中……")
+            img_path = "data/copy"
+            image_pixbuf.savev(img_path, "png", "", "")
+            s_from = translate.ocr(open(img_path, 'rb').read())
         else:
             s_from = cb.wait_for_text()
 
@@ -109,12 +114,13 @@ class Translate(Gtk.Window):
 
         textbuffer_from = self.text_view_from.get_buffer()
         textbuffer_to = self.text_view_to.get_buffer()
+        self.set_title("翻译中……")
 
         if(s_from is None):
             s_from = "复制即可翻译"
             s_to = "Alt Q 快捷键、或状态栏图标可隐藏"
         else:
-            s_from, s_to = translate_data(s_from.strip(), add_old=self.add_old)
+            s_from, s_to = translate.text(s_from.strip(), add_old=self.add_old)
 
         textbuffer_from.set_text(s_from.strip())
         textbuffer_to.set_text(s_to.strip())
@@ -124,6 +130,12 @@ class Translate(Gtk.Window):
             return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
         else:
             return Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+
+    def set_title(self, s):
+        print(s)
+        print(self)
+        print(self.text_view_from)
+        self.text_view_from.get_buffer().set_text(s)
 
     def set_add_old(self, view=None):
         self.add_old = not self.add_old

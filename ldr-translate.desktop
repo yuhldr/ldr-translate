@@ -5,4 +5,3 @@ Terminal=false
 StartupNotify=true
 Type=Application
 Categories=Utility;
-Exec=ldr-translate
