@@ -2,7 +2,7 @@ PREFIX=$(HOME)/.local/share/ldr-translate
 DESKTOP=$(HOME)/.local/share/applications
 
 check:
-	sudo apt install python3-pip
+	sudo apt install python3-pip gir1.2-appindicator3-0.1
 	pip3 install -r requirements.txt
 
 
