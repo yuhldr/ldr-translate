@@ -1,13 +1,10 @@
 #!/usr/bin/python3
 # coding: utf-8
 
-import time
 import gi
 from api import translate
 import config
 
-gi.require_version('Gtk', '3.0')
-gi.require_version('Keybinder', '3.0')
 from gi.repository import Gtk, Gdk
 
 

@@ -13,11 +13,9 @@ import gi
 import logging
 import os
 from argparse import ArgumentParser
+
+gi.require_versions({"Gtk": "3.0", "Keybinder": "3.0", "AppIndicator3": "0.1"})
 from ui_translate import Translate, VERSION
-
-gi.require_version('AppIndicator3', '0.1')
-gi.require_version('Keybinder', '3.0')
-
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gtk, Keybinder
 

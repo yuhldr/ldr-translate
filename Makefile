@@ -2,6 +2,7 @@ PREFIX=$(HOME)/.local/share/ldr-translate
 DESKTOP=$(HOME)/.local/share/applications
 
 check:
+	sudo apt install gir1.2-keybinder-3.0 python3-pip
 	pip3 install -r requirements.txt
 
 
@@ -15,7 +16,7 @@ install: check
 
 	echo "#!/bin/bash" > $(PREFIX)/lt.sh
 	echo "cd $(PREFIX)" >> $(PREFIX)/lt.sh
-	echo "nohup python ./ldr-translate.py &" >> $(PREFIX)/lt.sh
+	echo "nohup python3 ./ldr-translate.py &" >> $(PREFIX)/lt.sh
 	chmod +x $(PREFIX)/lt.sh
 
 	mkdir -p $(HOME)/.local/bin
