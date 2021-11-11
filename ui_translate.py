@@ -13,8 +13,6 @@ VERSION = '0.0.1'
 
 class Translate(Gtk.Window):
 
-    n = 0
-
     is_hide = True
 
     def __init__(self):
@@ -146,8 +144,6 @@ class Translate(Gtk.Window):
         self.translate_by_s(s_from=s)
 
     def translate_by_s(self, s_from):
-
-        self.n += 1
 
         textbuffer_from = self.text_view_from.get_buffer()
         textbuffer_to = self.text_view_to.get_buffer()

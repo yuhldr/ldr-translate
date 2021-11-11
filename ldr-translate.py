@@ -25,28 +25,22 @@ class LdrTranlate(object):
     hide = True
 
     def _create_menu(self):
-        """Creates the main menu and shows it."""
-        # create menu {{{
         menu = Gtk.Menu()
-        # add preferences menu item
+
         pref_menu = Gtk.MenuItem(label='翻译：显示/关闭')
         pref_menu.connect('activate', self.on_translate_activated)
         menu.add(pref_menu)
 
-        # add help menu item
         help_menu = Gtk.MenuItem(label='帮助：' + VERSION)
         help_menu.connect('activate', self._on_help)
         menu.add(help_menu)
 
-        # add preference menu item
         exit_menu = Gtk.MenuItem(label='退出')
         exit_menu.connect('activate', self.on_exit)
         menu.add(exit_menu)
 
         menu.show_all()
         self.ind.set_menu(menu)
-        logging.info("Menu shown")
-        # }}} menu done!
 
     def __init__(self):
         self.translate_win = None
@@ -114,23 +108,6 @@ class LdrTranlate(object):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument("--config",
-                        default=None,
-                        help="Use custom config file.")
-    parser.add_argument("--version",
-                        default=False,
-                        action='store_true',
-                        help='Show version and exit.')
-
-    options = parser.parse_args()
-
-    if options.version:
-        print(VERSION)
-        exit(0)
-
-    logging.info("start")
-
     app = LdrTranlate()
     try:
         Gtk.main()
