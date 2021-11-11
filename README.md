@@ -65,6 +65,8 @@ make debug
 
     复制时自动弹出窗口，并置顶，可常驻后台，可暂停翻译
 
+    ![图片翻译](images/lt_menu.png)
+
 4. 修改编辑
 
     可以修改复制或者OCR的内容，然后点击右上角重新翻译
@@ -108,10 +110,11 @@ make reinstall
 
 ## 资料
 
+- [Python Gtk+3 API &#xB7; Python GTK+ 3 API](https://athenajc.gitbooks.io/python-gtk-3-api/content/)
+
 - [Welcome to big-doc’s documentation! &mdash; big-doc 0.1 documentation](https://thebigdoc.readthedocs.io/en/latest/index.html)
 
 - [The Python GTK+ 3 Tutorial &mdash; Python GTK+ 3 Tutorial 3.4 documentation](https://python-gtk-3-tutorial.readthedocs.io/en/latest/index.html)
-
 
 ## 其他
 

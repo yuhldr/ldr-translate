@@ -64,6 +64,10 @@ class Translate(Gtk.Window):
 
         self.scroll_from = Gtk.ScrolledWindow()
         self.text_view_from = Gtk.TextView()
+        self.text_view_from.set_left_margin(8)
+        self.text_view_from.set_right_margin(8)
+        self.text_view_from.set_top_margin(8)
+        self.text_view_from.set_bottom_margin(8)
         self.text_view_from.set_wrap_mode(wrap_mode=Gtk.WrapMode.CHAR)
         self.scroll_from.add(self.text_view_from)
         self.box.pack_start(self.scroll_from, True, True, 0)
@@ -72,6 +76,10 @@ class Translate(Gtk.Window):
 
         self.scroll_to = Gtk.ScrolledWindow()
         self.text_view_to = Gtk.TextView()
+        self.text_view_to.set_left_margin(8)
+        self.text_view_to.set_right_margin(8)
+        self.text_view_to.set_top_margin(8)
+        self.text_view_to.set_bottom_margin(8)
         self.text_view_to.set_wrap_mode(wrap_mode=Gtk.WrapMode.CHAR)
         self.scroll_to.add(self.text_view_to)
         self.box.pack_start(self.scroll_to, True, True, 0)

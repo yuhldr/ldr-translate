@@ -12,11 +12,12 @@
 import gi
 import os
 import config
+from pathlib import Path
 
 gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
 from ui_translate import Translate, VERSION
 from gi.repository import AppIndicator3 as appindicator
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GdkPixbuf
 
 
 class LdrTranlate(object):
@@ -34,11 +35,13 @@ class LdrTranlate(object):
         self.set_auto_translate()
         menu.add(self.menu_auto_translate)
 
-        help_menu = Gtk.MenuItem(label='帮助文档：V' + VERSION)
+        menu.add(Gtk.SeparatorMenuItem())
+
+        help_menu = Gtk.MenuItem(label='关于V' + VERSION)
         help_menu.connect('activate', self._on_help)
         menu.add(help_menu)
 
-        exit_menu = Gtk.MenuItem(label='退出')
+        exit_menu = Gtk.MenuItem(label='完全退出')
         exit_menu.connect('activate', self.on_exit)
         menu.add(exit_menu)
 
@@ -71,20 +74,31 @@ class LdrTranlate(object):
             pass
 
     def _on_help(self, event=None, data=None):
-        if self._help_dialog is not None:
-            self._help_dialog.present()
-            return
 
-        s = "1. 软件安装位置：~/.local/share/ldr-translate\n2. 终端输入 ldr-translate 即可运行\n3. 注销并重新登录以后，应用程序中应包含‘兰译’\n4. 复制即可自动翻译、Alt Q快捷键自动隐藏/显示主窗口\n5. 系统截图并复制到剪贴板，自动OCR识别并翻译\n6. 更多教程见：https://github.com/yuhlzu/ldr-translate"
+        s = "1. 复制即可自动翻译，状态栏可暂停复制即翻译\n2. 系统截图并复制到剪贴板，自动OCR识别并翻译"
+        logo = GdkPixbuf.Pixbuf.new_from_file_at_size("./ui/icon.png", 64, 64)
 
-        self._help_dialog = Gtk.MessageDialog(None, Gtk.DialogFlags.MODAL,
-                                              Gtk.MessageType.INFO,
-                                              Gtk.ButtonsType.OK, s)
+        dialog = Gtk.AboutDialog()
 
-        self._help_dialog.set_title("帮助")
-        self._help_dialog.run()
-        self._help_dialog.destroy()
-        self._help_dialog = None
+        dialog.set_logo(logo)
+        dialog.set_program_name("兰译")
+        dialog.set_version("" + VERSION)
+        dialog.set_license_type(Gtk.License.GPL_3_0)
+        dialog.set_comments(s)
+
+        dialog.set_website("https://github.com/yuhlzu/ldr-translate")
+        dialog.set_website_label("开源地址")
+        dialog.set_copyright("© 2021-2022 兰朵儿")
+
+        dialog.set_authors(["yuh"])
+        # 翻译
+        dialog.set_translator_credits("yuh")
+        # 文档
+        dialog.set_documenters(["yuh"])
+        # 美工
+        dialog.set_artists(["yuh"])
+        dialog.connect('response', lambda dialog, data: dialog.destroy())
+        dialog.show_all()
 
     def on_translate_activated(self, cb=None, event=None):
         if (self.is_auto_translate):
@@ -102,9 +116,9 @@ class LdrTranlate(object):
         print(view)
         print(event)
         self.is_auto_translate = not self.is_auto_translate
-        s = "自动翻译：开启"
+        s = "自动翻译：已开启"
         if(not self.is_auto_translate):
-            s = "自动翻译：关闭"
+            s = "自动翻译：已关闭"
             self.ind.set_label("暂停翻译", "")
         else:
             self.ind.set_label("翻译中", "")
@@ -121,7 +135,10 @@ class LdrTranlate(object):
 
 
 if __name__ == "__main__":
+    if not Path("data").exists():
+        os.makedirs("data")
     app = LdrTranlate()
+
     try:
         Gtk.main()
     except KeyboardInterrupt:
