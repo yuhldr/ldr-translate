@@ -33,18 +33,10 @@ class Translate(Gtk.Window):
     def open(self):
         self.is_hide = False
         self.show_all()
-        print("2活着么？ " + str(self.is_hide))
 
     def close(self, a=None, b=None):
         self.is_hide = True
-        print("关闭")
         self.destroy()
-        print("3活着么？ " + str(self.is_hide))
-
-    def close_connect(self, a, b):
-        print(self)
-        print(a)
-        print(b)
 
     def _create_bar(self):
 
@@ -117,9 +109,6 @@ class Translate(Gtk.Window):
         return text
 
     def copy_auto_translate(self, cb, event=None):
-        print(self)
-        print(cb)
-        print(event)
         s_from = ""
         self.spinner.start()
 

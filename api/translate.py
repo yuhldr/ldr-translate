@@ -69,7 +69,14 @@ def get_to_language():
                 to_language_zh = file.read()
     if(len(to_language_zh) == 0):
         to_language_zh = config.translate_to_language_zh[0]
-    print(last_to_language_zh + "==" + to_language_zh)
     last_to_language_zh = to_language_zh
 
     return to_language_zh, change_language
+
+
+# 中文转为序号，与第三方对应
+def zh2LangPar(zh):
+    i = config.translate_to_language_zh.index(zh)
+    if (i < 0):
+        i = 0
+    return i

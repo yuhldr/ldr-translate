@@ -10,11 +10,7 @@
 # License: GPL v3
 #
 import gi
-import logging
 import os
-from argparse import ArgumentParser
-
-from requests.api import patch
 import config
 
 gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
@@ -24,16 +20,21 @@ from gi.repository import Gtk, Gdk
 
 
 class LdrTranlate(object):
-    hide = True
+    is_auto_translate = False
 
     def _create_menu(self):
         menu = Gtk.Menu()
 
-        pref_menu = Gtk.MenuItem(label='翻译：显示/关闭')
+        pref_menu = Gtk.MenuItem(label='翻译窗口：显示/关闭')
         pref_menu.connect('activate', self.on_translate_activated)
         menu.add(pref_menu)
 
-        help_menu = Gtk.MenuItem(label='帮助：' + VERSION)
+        self.menu_auto_translate = Gtk.MenuItem()
+        self.menu_auto_translate.connect('activate', self.set_auto_translate)
+        self.set_auto_translate()
+        menu.add(self.menu_auto_translate)
+
+        help_menu = Gtk.MenuItem(label='帮助文档：V' + VERSION)
         help_menu.connect('activate', self._on_help)
         menu.add(help_menu)
 
@@ -59,7 +60,7 @@ class LdrTranlate(object):
 
         self.on_translate_activated()
 
-# 注意不要把剪贴板监听放在翻译窗口，因为它关闭还是能接收信号，或许是销毁的有问题，但是放在这里真的很好！还能自动弹出
+        # 注意不要把剪贴板监听放在翻译窗口，因为它关闭还是能接收信号，或许是销毁的有问题，但是放在这里真的很好！还能自动弹出
         self.getClipboard().connect("owner-change",
                                     self.on_translate_activated)
 
@@ -86,13 +87,31 @@ class LdrTranlate(object):
         self._help_dialog = None
 
     def on_translate_activated(self, cb=None, event=None):
-        if (self.translate_win is None or self.translate_win.is_hide):
-            self.translate_win = Translate()
-            self.translate_win.open()
-        elif (event is None):
-            self.translate_win.close()
+        if (self.is_auto_translate):
+            if (self.translate_win is None or self.translate_win.is_hide):
+                self.translate_win = Translate()
+                self.translate_win.open()
+            elif (event is None):
+                self.translate_win.close()
+            else:
+                self.translate_win.copy_auto_translate(cb, event)
         else:
-            self.translate_win.copy_auto_translate(cb, event)
+            print("暂停翻译")
+
+    def set_auto_translate(self, event=None, view=None):
+        print(view)
+        print(event)
+        self.is_auto_translate = not self.is_auto_translate
+        s = "自动翻译：开启"
+        if(not self.is_auto_translate):
+            s = "自动翻译：关闭"
+            self.ind.set_label("暂停翻译", "")
+        else:
+            self.ind.set_label("翻译中", "")
+
+        self.menu_auto_translate.set_label(s)
+        if (self.translate_win is not None):
+            self.translate_win.translate_by_s(s)
 
     def getClipboard(self):
         if (config.translate_select):
@@ -102,10 +121,8 @@ class LdrTranlate(object):
 
 
 if __name__ == "__main__":
-    print("初始化")
     app = LdrTranlate()
     try:
         Gtk.main()
     except KeyboardInterrupt:
         app.on_exit()
-    print("启动完毕")

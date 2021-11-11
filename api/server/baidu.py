@@ -6,7 +6,7 @@ import requests
 import urllib
 import config
 import time
-
+import api
 
 translate_to_language_baidu = [
     "zh",
@@ -26,9 +26,7 @@ def translate(s, fromLang="auto", toLang=config.translate_to_language_zh[0]):
 
     # fromLang = 'auto'   # 原文语种
     # toLang = 'zh'   # 译文语种
-    i = config.translate_to_language_zh.index(toLang)
-    print(toLang + " == " + str(i))
-    toLang = translate_to_language_baidu[i]
+    toLang = translate_to_language_baidu[api.translate.zh2LangPar(toLang)]
 
     salt = random.randint(32768, 65536)
     sign = appid + s + str(salt) + secretKey
@@ -37,10 +35,8 @@ def translate(s, fromLang="auto", toLang=config.translate_to_language_zh[0]):
     url = url % (appid, urllib.parse.quote(s), fromLang, toLang, salt, sign)
     try:
         request = requests.get(url)
-        print(request.status_code)
         if(request.status_code == 200):
             result = request.json()
-            print(result)
             if ("error_code" in result):
                 s1 = "百度翻译请求错误：" + result["error_code"] + " " + result["error_msg"]
             else:
@@ -50,12 +46,10 @@ def translate(s, fromLang="auto", toLang=config.translate_to_language_zh[0]):
 
     except Exception as e:
         s1 = "网络错误：" + str(e)
-    print(s1)
 
     return s1
 
 
-# translate("this is apple")
 def get_token(file_path="data/baidu_token"):
     access_token = ""
     if (os.path.exists(file_path)):
@@ -64,7 +58,6 @@ def get_token(file_path="data/baidu_token"):
             if(len(token) > 0 and token.find("|") > -1):
                 max_date = token.split("|")[0]
                 span = int(max_date) - time.time()
-                print(span)
                 if (span > 0):
                     access_token = token.split("|")[1]
 
@@ -81,7 +74,6 @@ def get_token(file_path="data/baidu_token"):
         else:
             access_token = jsons["access_token"]
             with open(file_path, "w") as file:
-                print("更新")
                 date = time.time() + int(jsons["expires_in"])
                 file.write("%d|%s" % (date, access_token))
 
@@ -103,7 +95,6 @@ def ocr(img_data):
     response = requests.post(request_url, data=params, headers=headers)
     if response:
         jsons = (response.json())
-        print(jsons)
         if ("error_code" in jsons):
             return str(jsons["error_code"]) + jsons["error_msg"]
         else:
