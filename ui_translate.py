@@ -154,7 +154,7 @@ class Translate(Gtk.Window):
 
         if(s_from is None):
             s_from = "复制即可翻译"
-            s_to = "Alt Q 快捷键、或状态栏图标可隐藏"
+            s_to = "系统直接截图到剪贴板，自动识别并翻译"
         else:
             s_from, s_to = translate.text(
                 s_from.strip(), add_old=self.cbtn_add_old.get_active())

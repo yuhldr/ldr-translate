@@ -75,6 +75,8 @@ make debug
 
 ### 安装
 
+> sudo权限仅为创建链接、核对依赖
+
 ```bash
 # 安装路径为 `$(HOME)/.local/share/ldr-translate`
 make install
@@ -83,7 +85,7 @@ make install
 终端输入
 
 ```bash
-# 如果无反应，注意 `~/.local/bin` 是否在环境变量中
+# 如果无反应，注意 `/usr/bin` 是否在环境变量中
 ldr-translate
 ```
 
