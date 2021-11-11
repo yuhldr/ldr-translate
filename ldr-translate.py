@@ -13,6 +13,8 @@ import gi
 import logging
 import os
 from argparse import ArgumentParser
+
+from requests.api import patch
 import config
 
 gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
@@ -55,15 +57,9 @@ class LdrTranlate(object):
 
         self._create_menu()
 
-# 全局快捷键需要依赖第三方 gir1.2-keybinder-3.0，这个安装其实也容易，apt就可以但是，暂时不用了
-        # gi.require_version("Gtk", "3.0")
-        # from gi.repository import Keybinder
-        # key = Keybinder
-        # key.bind("<alt>q", self.on_translate_activated)
-        # key.init()
-
         self.on_translate_activated()
 
+# 注意不要把剪贴板监听放在翻译窗口，因为它关闭还是能接收信号，或许是销毁的有问题，但是放在这里真的很好！还能自动弹出
         self.getClipboard().connect("owner-change",
                                     self.on_translate_activated)
 
@@ -89,16 +85,14 @@ class LdrTranlate(object):
         self._help_dialog.destroy()
         self._help_dialog = None
 
-    def on_translate_activated(self, a=None, b=None):
-        print(b)
-        print(self.translate_win)
-
+    def on_translate_activated(self, cb=None, event=None):
         if (self.translate_win is None or self.translate_win.is_hide):
             self.translate_win = Translate()
             self.translate_win.open()
-        elif(b is None):
-            # None 的话，说明不是复制唤起的
+        elif (event is None):
             self.translate_win.close()
+        else:
+            self.translate_win.copy_auto_translate(cb, event)
 
     def getClipboard(self):
         if (config.translate_select):
@@ -108,8 +102,10 @@ class LdrTranlate(object):
 
 
 if __name__ == "__main__":
+    print("初始化")
     app = LdrTranlate()
     try:
         Gtk.main()
     except KeyboardInterrupt:
         app.on_exit()
+    print("启动完毕")

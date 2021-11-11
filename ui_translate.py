@@ -17,6 +17,7 @@ class Translate(Gtk.Window):
 
     def __init__(self):
         Gtk.Window.__init__(self)
+        self.clipboard = self.getClipboard()
 
         self.set_icon_from_file('./ui/icon.png')
         self.set_keep_above(True)
@@ -31,7 +32,6 @@ class Translate(Gtk.Window):
 
     def open(self):
         self.is_hide = False
-
         self.show_all()
         print("2活着么？ " + str(self.is_hide))
 
@@ -40,6 +40,11 @@ class Translate(Gtk.Window):
         print("关闭")
         self.destroy()
         print("3活着么？ " + str(self.is_hide))
+
+    def close_connect(self, a, b):
+        print(self)
+        print(a)
+        print(b)
 
     def _create_bar(self):
 
@@ -79,11 +84,6 @@ class Translate(Gtk.Window):
         self.scroll_to.add(self.text_view_to)
         self.box.pack_start(self.scroll_to, True, True, 0)
 
-        # 选中即可，但是有时候会出现一些问题，因为选中期间，每次间断，都会回调
-        # clipboard = Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
-        # 复制以后才回调，比如快捷键复制、右键复制
-        self.getClipboard().connect("owner-change", self.copy_auto_translate)
-
     def _create_language_menu(self):
 
         self.box_center = Gtk.Box(spacing=8,
@@ -117,6 +117,9 @@ class Translate(Gtk.Window):
         return text
 
     def copy_auto_translate(self, cb, event=None):
+        print(self)
+        print(cb)
+        print(event)
         s_from = ""
         self.spinner.start()
 
@@ -131,7 +134,7 @@ class Translate(Gtk.Window):
         self.translate_by_s(s_from)
 
     def copy_translate(self, view=None):
-        self.copy_auto_translate(cb=self.getClipboard())
+        self.copy_auto_translate(cb=self.clipboard)
 
     def update_translate_view(self, view=None):
 
