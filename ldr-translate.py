@@ -13,11 +13,12 @@ import gi
 import logging
 import os
 from argparse import ArgumentParser
+import config
 
-gi.require_versions({"Gtk": "3.0", "Keybinder": "3.0", "AppIndicator3": "0.1"})
+gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
 from ui_translate import Translate, VERSION
 from gi.repository import AppIndicator3 as appindicator
-from gi.repository import Gtk, Keybinder
+from gi.repository import Gtk, Gdk
 
 
 class LdrTranlate(object):
@@ -28,7 +29,7 @@ class LdrTranlate(object):
         # create menu {{{
         menu = Gtk.Menu()
         # add preferences menu item
-        pref_menu = Gtk.MenuItem(label='翻译：显示/隐藏')
+        pref_menu = Gtk.MenuItem(label='翻译：显示/关闭')
         pref_menu.connect('activate', self.on_translate_activated)
         menu.add(pref_menu)
 
@@ -60,11 +61,17 @@ class LdrTranlate(object):
 
         self._create_menu()
 
-        key = Keybinder
-        key.bind("<alt>q", self.on_translate_activated)
-        key.init()
+# 全局快捷键需要依赖第三方 gir1.2-keybinder-3.0，这个安装其实也容易，apt就可以但是，暂时不用了
+        # gi.require_version("Gtk", "3.0")
+        # from gi.repository import Keybinder
+        # key = Keybinder
+        # key.bind("<alt>q", self.on_translate_activated)
+        # key.init()
 
         self.on_translate_activated()
+
+        self.getClipboard().connect("owner-change",
+                                    self.on_translate_activated)
 
     def on_exit(self, event=None, data=None):
         try:
@@ -88,12 +95,22 @@ class LdrTranlate(object):
         self._help_dialog.destroy()
         self._help_dialog = None
 
-    def on_translate_activated(self, event=None):
+    def on_translate_activated(self, a=None, b=None):
+        print(b)
+        print(self.translate_win)
+
         if (self.translate_win is None or self.translate_win.is_hide):
             self.translate_win = Translate()
-            self.translate_win.start()
-        else:
+            self.translate_win.open()
+        elif(b is None):
+            # None 的话，说明不是复制唤起的
             self.translate_win.close()
+
+    def getClipboard(self):
+        if (config.translate_select):
+            return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
+        else:
+            return Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
 
 if __name__ == "__main__":

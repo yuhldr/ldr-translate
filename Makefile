@@ -2,7 +2,7 @@ PREFIX=$(HOME)/.local/share/ldr-translate
 DESKTOP=$(HOME)/.local/share/applications
 
 check:
-	sudo apt install gir1.2-keybinder-3.0 python3-pip
+	sudo apt install python3-pip
 	pip3 install -r requirements.txt
 
 

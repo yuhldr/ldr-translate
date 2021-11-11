@@ -15,7 +15,7 @@ class Translate(Gtk.Window):
 
     n = 0
 
-    is_hide = False
+    is_hide = True
 
     def __init__(self):
         Gtk.Window.__init__(self)
@@ -31,7 +31,7 @@ class Translate(Gtk.Window):
         self.currency_combo.set_active(0)
         self.currency_combo.set_entry_text_column(0)
 
-    def start(self):
+    def open(self):
         self.is_hide = False
 
         self.show_all()
@@ -40,7 +40,7 @@ class Translate(Gtk.Window):
     def close(self, a=None, b=None):
         self.is_hide = True
         print("关闭")
-        self.hide()
+        self.destroy()
         print("3活着么？ " + str(self.is_hide))
 
     def _create_bar(self):
@@ -55,9 +55,9 @@ class Translate(Gtk.Window):
         self.btn_setting = Gtk.Button.new_with_label("设置")
         self.hb.pack_start(self.btn_setting)
 
-        btn_update = Gtk.Button.new_with_label("翻译")
-        btn_update.connect("clicked", self.update_translate_view)
-        self.hb.pack_end(btn_update)
+        btn_close = Gtk.Button.new_with_label("关闭")
+        btn_close.connect("clicked", self.close)
+        self.hb.pack_end(btn_close)
 
     def _create_content(self):
 
@@ -90,6 +90,10 @@ class Translate(Gtk.Window):
 
         self.box_center = Gtk.Box(spacing=8,
                                   orientation=Gtk.Orientation.HORIZONTAL)
+
+        btn_translate = Gtk.Button.new_with_label("翻译")
+        btn_translate.connect("clicked", self.update_translate_view)
+        self.box_center.pack_start(btn_translate, False, True, 0)
 
         self.currency_combo = Gtk.ComboBoxText()
         self.currency_combo.connect("changed", self.on_currency_combo_changed)
