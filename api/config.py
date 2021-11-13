@@ -5,12 +5,12 @@ from pathlib import Path
 
 config = configparser.ConfigParser()
 config_data = None
-config_file_path = "config.json"
+config_file_name = "config.json"
 
 
 def load_configs():
     global config_data
-    config_data = json.load(open(config_file_path, "r"))
+    config_data = json.load(open(config_file_name, "r"))
 
 
 def get_update_version():
@@ -56,14 +56,12 @@ def set_config(section, key, value):
     if (config_data is None):
         load_configs()
     config_data[section][key] = value
-    with open(config_file_path, 'w') as file:
+    with open(config_file_name, 'w') as file:
         json.dump(config_data, file, ensure_ascii=False)
 
 
 # 更新时数据迁移
-def old2new():
-
-    old_config_file = "cache/" + config_file_path
+def old2new(old_config_file="./cache/" + config_file_name):
     if Path(old_config_file).exists():
         config_data = json.load(open(old_config_file, "r"))
 
