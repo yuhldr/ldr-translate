@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkHeaderBar" id="pf_hb">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkButton" id="pf_save">
+        <property name="label" translatable="yes">保存</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="pf_close">
+        <property name="label" translatable="yes">关闭</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </object>
+  <!-- n-columns=4 n-rows=8 -->
+  <object class="GtkGrid" id="tc">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="margin-start">12</property>
+    <property name="margin-end">12</property>
+    <property name="margin-top">8</property>
+    <property name="margin-bottom">8</property>
+    <property name="row-spacing">8</property>
+    <property name="column-spacing">18</property>
+    <property name="row-homogeneous">True</property>
+    <property name="column-homogeneous">True</property>
+    <child>
+      <object class="GtkButton" id="btn_translate_check">
+        <property name="label" translatable="yes">核对</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkTextView" id="tv_translate_app_id">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="wrap-mode">char</property>
+        <property name="left-margin">2</property>
+        <property name="right-margin">2</property>
+        <property name="top-margin">2</property>
+        <property name="bottom-margin">2</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkTextView" id="tv_translate_secret_key">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="wrap-mode">char</property>
+        <property name="left-margin">2</property>
+        <property name="right-margin">2</property>
+        <property name="top-margin">2</property>
+        <property name="bottom-margin">2</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">2</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btn_ocr_check">
+        <property name="label" translatable="yes">核对</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">7</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkTextView" id="tv_ocr_app_key">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="wrap-mode">char</property>
+        <property name="left-margin">2</property>
+        <property name="right-margin">2</property>
+        <property name="top-margin">2</property>
+        <property name="bottom-margin">2</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">5</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkTextView" id="tv_ocr_secret_key">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="wrap-mode">char</property>
+        <property name="left-margin">2</property>
+        <property name="right-margin">2</property>
+        <property name="top-margin">2</property>
+        <property name="bottom-margin">2</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">6</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="lb_ocr">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">OCR</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">4</property>
+        <property name="width">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="lb_tanslate_way">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="use-markup">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">3</property>
+        <property name="top-attach">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="lb_ocr_way">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="use-markup">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">3</property>
+        <property name="top-attach">7</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="lb_translate_app_id">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">appId</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="lb_translate_secret_key">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">secretKey</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="lb_ocr_api_key">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">apiKey</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="lb_ocr_secret_key">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">secretKey</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">6</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="lb_translate">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">翻译</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
+        <property name="width">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="lb_translate_msg">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">3</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="lb_ocr_msg">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">7</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+  </object>
+</interface>

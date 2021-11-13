@@ -1,0 +1,6 @@
+name: ldr-translate
+summary: 翻译软件
+description: |
+  A detailed description of your application.
+  The description can have multiple lines.
+version: '1.0'

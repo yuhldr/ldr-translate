@@ -4,35 +4,46 @@ import random
 import base64
 import requests
 import urllib
-import config
 import time
 import api
-
-translate_to_language_baidu = [
-    "zh",
-    "wyw",
-    "en",
-    "jp",
-    "kor",
-    "de",
-    "fra",
-]
+from api import config
 
 
-def translate(s, fromLang="auto", toLang=config.translate_to_language_zh[0]):
+config_server = "baidu"
+default_translate_app_id = "20211109000995303"
+default_translate_secret_key = "qLFDFx7fLRrioaa6CTnk"
+default_ocr_app_key = "S1NHCzzzBhL2TUMx5iGpOSUu"
+default_ocr_secret_key = "709INHX6GCLsAXXZPLhKGVMmra7bEwGl"
 
-    appid = config.baidu_appid  # 填写你的appid
-    secretKey = config.baidu_secretKey  # 填写你的密钥
+
+def translate_text(s, fromLang="auto", toLangZh=""):
+    config_baidu = config.get_config_section(config_server)
+
+    appId = config_baidu["translate_app_id"]
+    secretKey = config_baidu["translate_secret_key"]
+
+    if(len(appId) == 0 or len(secretKey) == 0):
+        appId = default_translate_app_id
+        secretKey = default_translate_secret_key
+
+    translate_to_languages = config_baidu["translate_to_languages"]
 
     # fromLang = 'auto'   # 原文语种
     # toLang = 'zh'   # 译文语种
-    toLang = translate_to_language_baidu[api.translate.zh2LangPar(toLang)]
+    toLang = translate_to_languages[api.translate.zh2LangPar(toLangZh)]
+
+    text, ok = translate(s, appId, secretKey, fromLang, toLang)
+    return text
+
+
+def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
+    ok = False
 
     salt = random.randint(32768, 65536)
-    sign = appid + s + str(salt) + secretKey
+    sign = appId + s + str(salt) + secretKey
     sign = hashlib.md5(sign.encode()).hexdigest()
     url = "https://api.fanyi.baidu.com/api/trans/vip/translate?appid=%s&q=%s&from=%s&to=%s&salt=%s&sign=%s"
-    url = url % (appid, urllib.parse.quote(s), fromLang, toLang, salt, sign)
+    url = url % (appId, urllib.parse.quote(s), fromLang, toLang, salt, sign)
     try:
         request = requests.get(url)
         if(request.status_code == 200):
@@ -40,6 +51,7 @@ def translate(s, fromLang="auto", toLang=config.translate_to_language_zh[0]):
             if ("error_code" in result):
                 s1 = "百度翻译请求错误：" + result["error_code"] + " " + result["error_msg"]
             else:
+                ok = True
                 s1 = result["trans_result"][0]["dst"]
         else:
             s1 = "请求错误：" + request.content
@@ -47,37 +59,60 @@ def translate(s, fromLang="auto", toLang=config.translate_to_language_zh[0]):
     except Exception as e:
         s1 = "网络错误：" + str(e)
 
-    return s1
+    return s1, ok
 
 
-def get_token(file_path="data/baidu_token"):
+def get_token_by_url(ocr_api_key, ocr_secret_key):
+    ok = False
     access_token = ""
-    if (os.path.exists(file_path)):
-        with open(file_path, "r") as file:
-            token = file.read()
-            if(len(token) > 0 and token.find("|") > -1):
-                max_date = token.split("|")[0]
-                span = int(max_date) - time.time()
-                if (span > 0):
-                    access_token = token.split("|")[1]
+    expires_in_date = -1
 
+    # client_id 为官网获取的AK， client_secret 为官网获取的SK
+    host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s' % (
+        ocr_api_key, ocr_secret_key)
+    try:
+        request = requests.get(host)
+        print(request.text)
+
+        jsons = request.json()
+        print(jsons)
+        if ("access_token" not in jsons):
+            access_token = "错误：" + jsons["error_description"]
+        else:
+            access_token = jsons["access_token"]
+            expires_in_date = time.time() + jsons["expires_in"]
+            ok = True
+
+    except Exception as e:
+        access_token = "请求错误：" + str(e)
+
+    return ok, access_token, expires_in_date
+
+
+def get_token():
+    ok = False
+
+    config_baidu = config.get_config_section(config_server)
+    expires_in_date = config_baidu["expires_in_date"]
+
+    if (expires_in_date - time.time() > 0):
+        access_token = config_baidu["access_token"]
         if(len(access_token) != 0):
             return access_token
 
-    # client_id 为官网获取的AK， client_secret 为官网获取的SK
-    host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s' % (config.baidu_ocr_api_key, config.baidu_ocr_secret_key)
-    response = requests.get(host)
-    if response:
-        jsons = response.json()
-        if ("error_code" in jsons):
-            return jsons["error_description"]
-        else:
-            access_token = jsons["access_token"]
-            with open(file_path, "w") as file:
-                date = time.time() + int(jsons["expires_in"])
-                file.write("%d|%s" % (date, access_token))
+    ocr_api_key = config_baidu["ocr_api_key"]
+    ocr_secret_key = config_baidu["ocr_secret_key"]
 
-    return access_token
+    if (len(ocr_api_key) == 0 or len(ocr_secret_key) == 0):
+        ocr_api_key = default_ocr_app_key
+        ocr_secret_key = default_ocr_secret_key
+
+    ok, access_token, expires_in_date = get_token_by_url(ocr_api_key, ocr_secret_key)
+    if(ok):
+        config.set_config(config_server, "access_token", access_token)
+        config.set_config(config_server, "expires_in_date", expires_in_date)
+    print(access_token)
+    return ok, access_token
 
 
 def ocr(img_data):
@@ -90,6 +125,7 @@ def ocr(img_data):
     img = base64.b64encode(img_data)
     token = get_token()
     params = {"image": img}
+    print(token)
     request_url = request_url + "?access_token=" + token
     headers = {'content-type': 'application/x-www-form-urlencoded'}
     response = requests.post(request_url, data=params, headers=headers)
@@ -101,3 +137,21 @@ def ocr(img_data):
             for word in jsons["words_result"]:
                 s += word["words"] + " "
     return s
+
+
+def check_translate(appId, secretKey):
+    text, ok = translate(
+        "test",
+        appId,
+        secretKey,
+        "auto",
+        "zh",
+    )
+    print(text)
+    return ok
+
+
+def check_ocr(apiKey, secretKey):
+    ok, access_token, expires_in_date = get_token_by_url(apiKey, secretKey)
+    print(access_token)
+    return ok

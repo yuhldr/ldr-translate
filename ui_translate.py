@@ -1,19 +1,17 @@
 #!/usr/bin/python3
 # coding: utf-8
-
-import gi
-from api import translate
-import config
+from api import translate, config
+from api.server import baidu
+from preferences import Preference
 
 from gi.repository import Gtk, Gdk
-
-
-VERSION = '0.0.1'
 
 
 class Translate(Gtk.Window):
 
     is_hide = True
+    setting_titles = ["百度API", "其他待补充"]
+    setting_title_types = [baidu.config_server, ""]
 
     def __init__(self):
         Gtk.Window.__init__(self)
@@ -27,8 +25,11 @@ class Translate(Gtk.Window):
 
         self.connect("delete-event", self.close)
 
-        self.currency_combo.set_active(0)
-        self.currency_combo.set_entry_text_column(0)
+        # 初始化时载入上次的数据
+        toLang, changeLang = translate.get_to_language()
+        i = translate.zh2LangPar(toLang)
+        self.currency_combo.set_active(i)
+        self.currency_combo.set_entry_text_column(i)
 
     def open(self):
         self.is_hide = False
@@ -47,12 +48,32 @@ class Translate(Gtk.Window):
         self.hb.props.title = "兰译"
         self.set_titlebar(self.hb)
 
-        self.btn_setting = Gtk.Button.new_with_label("设置")
-        self.hb.pack_start(self.btn_setting)
+        # self.btn_setting = Gtk.Button.new_with_label("设置")
+        # self.hb.pack_start(self.btn_setting)
+
+        menubutton = Gtk.MenuButton("设置")
+
+        menu = Gtk.Menu()
+        menubutton.set_popup(menu)
+        for title in self.setting_titles:
+            menuitem = Gtk.MenuItem(title)
+            menuitem.connect("activate", self.on_menuitem_activated)
+            menu.append(menuitem)
+        menu.show_all()
+
+        self.hb.pack_start(menubutton)
 
         btn_close = Gtk.Button.new_with_label("关闭")
         btn_close.connect("clicked", self.close)
         self.hb.pack_end(btn_close)
+
+    def on_menuitem_activated(self, menuitem):
+        print("%s Activated" % (menuitem.get_label()))
+        title = menuitem.get_label()
+        i = self.setting_titles.index(title)
+
+        window = Preference(title, self.setting_title_types[i])
+        window.open()
 
     def _create_content(self):
 
@@ -95,7 +116,7 @@ class Translate(Gtk.Window):
 
         self.currency_combo = Gtk.ComboBoxText()
         self.currency_combo.connect("changed", self.on_currency_combo_changed)
-        for currency in config.translate_to_language_zh:
+        for currency in config.get_translate_to_languages_zh():
             self.currency_combo.append_text(currency)
 
         self.box_center.pack_start(self.currency_combo, False, False, 0)
@@ -111,7 +132,7 @@ class Translate(Gtk.Window):
     def on_currency_combo_changed(self, combo):
         text = combo.get_active_text()
         if text is None:
-            text = config.translate_to_language_zh[0]
+            text = config.get_translate_to_languages_zh()[0]
         translate.set_to_language(text)
         self.copy_translate()
         return text
@@ -122,7 +143,7 @@ class Translate(Gtk.Window):
 
         image_pixbuf = cb.wait_for_image()
         if image_pixbuf is not None:
-            img_path = "data/copy"
+            img_path = "cache/copy"
             image_pixbuf.savev(img_path, "png", "", "")
             s_from = translate.ocr(open(img_path, 'rb').read())
         else:
@@ -160,12 +181,7 @@ class Translate(Gtk.Window):
         self.spinner.stop()
 
     def getClipboard(self):
-        if(config.translate_select):
-            return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
-        else:
+        if (config.get_config_setting()["translate_way_copy"]):
             return Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-
-
-# win = Translate()
-
-# Gtk.main()
+        else:
+            return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)

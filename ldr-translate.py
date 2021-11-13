@@ -11,11 +11,13 @@
 #
 import gi
 import os
-import config
+from api import config
 from pathlib import Path
 
 gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
-from ui_translate import Translate, VERSION
+from ui_translate import Translate
+from preferences import Preference
+
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gtk, Gdk, GdkPixbuf
 
@@ -37,7 +39,7 @@ class LdrTranlate(object):
 
         menu.add(Gtk.SeparatorMenuItem())
 
-        help_menu = Gtk.MenuItem(label='关于V' + VERSION)
+        help_menu = Gtk.MenuItem(label=config.get_update_version())
         help_menu.connect('activate', self._on_help)
         menu.add(help_menu)
 
@@ -73,21 +75,26 @@ class LdrTranlate(object):
         except RuntimeError:
             pass
 
+    def _on_preference(self, event=None, data=None):
+        pass
+
     def _on_help(self, event=None, data=None):
 
-        s = "1. 复制即可自动翻译，状态栏可暂停复制即翻译\n2. 系统截图并复制到剪贴板，自动OCR识别并翻译"
+        s = "1. 复制即可自动翻译，状态栏可暂停复制即翻译\n2. 截图到系统剪贴板，自动OCR识别并翻译"
         logo = GdkPixbuf.Pixbuf.new_from_file_at_size("./ui/icon.png", 64, 64)
+
+        config_version = config.get_config_version()
 
         dialog = Gtk.AboutDialog()
 
         dialog.set_logo(logo)
         dialog.set_program_name("兰译")
-        dialog.set_version("" + VERSION)
+        dialog.set_version("V " + config_version["name"])
         dialog.set_license_type(Gtk.License.GPL_3_0)
         dialog.set_comments(s)
 
-        dialog.set_website("https://github.com/yuhlzu/ldr-translate")
-        dialog.set_website_label("开源地址")
+        dialog.set_website(config_version["home_url"])
+        dialog.set_website_label(config_version["home_name"])
         dialog.set_copyright("© 2021-2022 兰朵儿")
 
         dialog.set_authors(["yuh"])
@@ -128,15 +135,15 @@ class LdrTranlate(object):
             self.translate_win.translate_by_s(s)
 
     def getClipboard(self):
-        if (config.translate_select):
-            return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
-        else:
+        if (config.get_config_setting()["translate_way_copy"]):
             return Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        else:
+            return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
 
 
 if __name__ == "__main__":
-    if not Path("data").exists():
-        os.makedirs("data")
+    if not Path("cache").exists():
+        os.makedirs("cache")
     app = LdrTranlate()
 
     try:
