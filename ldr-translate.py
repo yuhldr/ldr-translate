@@ -24,6 +24,7 @@ from gi.repository import Gtk, Gdk, GdkPixbuf
 
 class LdrTranlate(object):
     is_auto_translate = False
+    update = False
 
     def _create_menu(self):
         menu = Gtk.Menu()
@@ -34,18 +35,18 @@ class LdrTranlate(object):
 
         self.menu_auto_translate = Gtk.MenuItem()
         self.menu_auto_translate.connect('activate', self.set_auto_translate)
-        self.set_auto_translate()
         menu.add(self.menu_auto_translate)
 
         menu.add(Gtk.SeparatorMenuItem())
-
-        help_menu = Gtk.MenuItem(label=config.get_update_version())
+        s, self.update = config.get_update_version()
+        help_menu = Gtk.MenuItem(label=s)
         help_menu.connect('activate', self._on_help)
         menu.add(help_menu)
 
         exit_menu = Gtk.MenuItem(label='完全退出')
         exit_menu.connect('activate', self.on_exit)
         menu.add(exit_menu)
+        self.set_auto_translate()
 
         menu.show_all()
         self.ind.set_menu(menu)
@@ -124,11 +125,13 @@ class LdrTranlate(object):
         print(event)
         self.is_auto_translate = not self.is_auto_translate
         s = "自动翻译：已开启"
+        ind_label = "翻译中"
         if(not self.is_auto_translate):
             s = "自动翻译：已关闭"
-            self.ind.set_label("暂停翻译", "")
-        else:
-            self.ind.set_label("翻译中", "")
+            ind_label = "暂停翻译"
+        elif(self.update):
+            ind_label = "有更新"
+        self.ind.set_label(ind_label, "")
 
         self.menu_auto_translate.set_label(s)
         if (self.translate_win is not None):
