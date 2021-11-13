@@ -18,25 +18,18 @@ def get_update_version():
     version_config_old = get_config_version()
 
     s = "关于：V " + version_config_old["name"]
-    print(s)
+
     try:
         url = version_config_old["url"]
-        print(url)
         request = requests.get(url)
-        print(request.text)
-        print(request.status_code)
         if (request.status_code == 200):
             json_config = request.json()
-            print(json_config["version"]["code"])
-            print(version_config_old["code"])
             update = json_config["version"]["code"] > version_config_old["code"]
-            print(update)
             if (update):
                 s = "软件有更新！"
-
     except Exception as e:
         print(e)
-    print(s)
+
     return s, update
 
 

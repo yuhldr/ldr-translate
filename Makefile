@@ -25,11 +25,9 @@ install: check
 	@echo "#!/bin/bash" > $(PREFIX)/ldr-translate
 	@echo "$(PREFIX)/lt.sh" >> $(PREFIX)/ldr-translate
 	chmod +x $(PREFIX)/ldr-translate
-	mkdir -p $(HOME)/.local/bin
 
 	sudo mkdir -p /usr/bin
 	sudo ln -s $(PREFIX)/ldr-translate /usr/bin/ldr-translate
-
 
 	mkdir -p $(DESKTOP)
 	cp ldr-translate.desktop $(DESKTOP)
@@ -50,7 +48,6 @@ uninstall:
 
 	rm -rf $(PREFIX)
 	rm -f $(DESKTOP)/ldr-translate.desktop
-	rm -f $(HOME)/.local/bin/ldr-translate
 	sudo rm -f /usr/bin/ldr-translate
 
 reinstall: uninstall install

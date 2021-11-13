@@ -1,6 +1,14 @@
 name: ldr-translate
+base: core20
 summary: 翻译软件
 description: |
-  A detailed description of your application.
-  The description can have multiple lines.
-version: '1.0'
+  使用百度接口，对接翻译，可以复制翻译、OCR，方便文献阅读
+version: '1.0.0'
+apps:
+  ldr-translate:
+    command: /root/parts/ldr-translate/src/lt
+
+parts:
+  ldr-translate:
+    plugin: python
+    source: .

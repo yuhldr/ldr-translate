@@ -72,10 +72,8 @@ def get_token_by_url(ocr_api_key, ocr_secret_key):
         ocr_api_key, ocr_secret_key)
     try:
         request = requests.get(host)
-        print(request.text)
 
         jsons = request.json()
-        print(jsons)
         if ("access_token" not in jsons):
             access_token = "错误：" + jsons["error_description"]
         else:
@@ -111,7 +109,7 @@ def get_token():
     if(ok):
         config.set_config(config_server, "access_token", access_token)
         config.set_config(config_server, "expires_in_date", expires_in_date)
-    print(access_token)
+
     return ok, access_token
 
 
@@ -125,7 +123,7 @@ def ocr(img_data):
     img = base64.b64encode(img_data)
     token = get_token()
     params = {"image": img}
-    print(token)
+
     request_url = request_url + "?access_token=" + token
     headers = {'content-type': 'application/x-www-form-urlencoded'}
     response = requests.post(request_url, data=params, headers=headers)
@@ -147,11 +145,9 @@ def check_translate(appId, secretKey):
         "auto",
         "zh",
     )
-    print(text)
     return ok
 
 
 def check_ocr(apiKey, secretKey):
     ok, access_token, expires_in_date = get_token_by_url(apiKey, secretKey)
-    print(access_token)
     return ok

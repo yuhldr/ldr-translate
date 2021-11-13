@@ -22,7 +22,6 @@ def text(s_from, fromLang="auto", type="baidu", add_old=True):
 
     # 文字和上次一样，并且被翻译的语言没有修改，就不翻译了
     if (last_s == s_from and not changeLang):
-        print("重复：    %s" % (s_from))
         return last_s, last_s2
     span = translate_span * 1.2 - (time.time() - last_time)
     if (span > 0):
@@ -58,7 +57,6 @@ translate_to_languages_zh = config.get_config_setting(
 
 def set_to_language(to_lg):
     global to_language_zh
-    print("----- " + to_lg)
     to_language_zh = to_lg
     config.set_config(config_section, "to_long", to_lg)
 
@@ -76,7 +74,6 @@ def get_to_language():
 
 # 中文转为序号，与第三方对应
 def zh2LangPar(zh):
-    print(translate_to_languages_zh)
     i = translate_to_languages_zh.index(zh)
     if (i < 0):
         i = 0

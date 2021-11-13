@@ -12,8 +12,10 @@ class Translate(Gtk.Window):
     is_hide = True
     setting_titles = ["百度API", "其他待补充"]
     setting_title_types = [baidu.config_server, ""]
+    isFirst = False
+    n = 0
 
-    def __init__(self):
+    def __init__(self, n):
         Gtk.Window.__init__(self)
         self.clipboard = self.getClipboard()
 
@@ -24,12 +26,11 @@ class Translate(Gtk.Window):
         self._create_content()
 
         self.connect("delete-event", self.close)
+        self.n = n
 
         # 初始化时载入上次的数据
         toLang, changeLang = translate.get_to_language()
-        i = translate.zh2LangPar(toLang)
-        self.currency_combo.set_active(i)
-        self.currency_combo.set_entry_text_column(i)
+        self.currency_combo.set_active(translate.zh2LangPar(toLang))
 
     def open(self):
         self.is_hide = False
@@ -68,7 +69,7 @@ class Translate(Gtk.Window):
         self.hb.pack_end(btn_close)
 
     def on_menuitem_activated(self, menuitem):
-        print("%s Activated" % (menuitem.get_label()))
+
         title = menuitem.get_label()
         i = self.setting_titles.index(title)
 
@@ -169,12 +170,14 @@ class Translate(Gtk.Window):
         textbuffer_from = self.text_view_from.get_buffer()
         textbuffer_to = self.text_view_to.get_buffer()
 
-        if(s_from is None):
+        if(s_from is None or self.n == 1):
             s_from = "复制即可翻译"
             s_to = "系统直接截图到剪贴板，自动识别并翻译"
         else:
             s_from, s_to = translate.text(
                 s_from.strip(), add_old=self.cbtn_add_old.get_active())
+
+        self.n += 1
 
         textbuffer_from.set_text(s_from.strip())
         textbuffer_to.set_text(s_to.strip())

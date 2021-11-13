@@ -12,12 +12,10 @@ class Preference(Gtk.Window):
 
     def __init__(self, title, server):
         Gtk.Window.__init__(self)
-        print(title)
-        print(server)
 
         self.server = server
 
-        self.set_default_size(450, 360)
+        # self.set_default_size(450, 360)
         self.set_keep_above(True)
 
         ui = Gtk.Builder()
@@ -67,7 +65,6 @@ class Preference(Gtk.Window):
         text_a = self.get_text(self.tv_translate_app_id)
         text_b = self.get_text(self.tv_translate_secret_key)
 
-        print("|%s| == |%s|" % (text_a, text_b))
         msg = "账号或密码错误"
 
         if(len(text_a) == 0 or len(text_b) == 0):
@@ -88,8 +85,6 @@ class Preference(Gtk.Window):
         ok = False
         text_a = self.get_text(self.tv_ocr_app_key)
         text_b = self.get_text(self.tv_ocr_secret_key)
-
-        print("|%s| == |%s|" % (text_a, text_b))
 
         msg = "账号或密码错误"
 
@@ -119,5 +114,3 @@ class Preference(Gtk.Window):
     def save(self, a=None, b=None):
         self.check_translate(save=True)
         self.check_ocr(save=True)
-
-        print("保存" + self.server)

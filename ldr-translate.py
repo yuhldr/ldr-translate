@@ -16,59 +16,66 @@ from pathlib import Path
 
 gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
 from ui_translate import Translate
-from preferences import Preference
 
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gtk, Gdk, GdkPixbuf
 
 
 class LdrTranlate(object):
-    is_auto_translate = False
+    is_auto_translate = True
     update = False
-
-    def _create_menu(self):
-        menu = Gtk.Menu()
-
-        pref_menu = Gtk.MenuItem(label='翻译窗口：显示/关闭')
-        pref_menu.connect('activate', self.on_translate_activated)
-        menu.add(pref_menu)
-
-        self.menu_auto_translate = Gtk.MenuItem()
-        self.menu_auto_translate.connect('activate', self.set_auto_translate)
-        menu.add(self.menu_auto_translate)
-
-        menu.add(Gtk.SeparatorMenuItem())
-        s, self.update = config.get_update_version()
-        help_menu = Gtk.MenuItem(label=s)
-        help_menu.connect('activate', self._on_help)
-        menu.add(help_menu)
-
-        exit_menu = Gtk.MenuItem(label='完全退出')
-        exit_menu.connect('activate', self.on_exit)
-        menu.add(exit_menu)
-        self.set_auto_translate()
-
-        menu.show_all()
-        self.ind.set_menu(menu)
+    n = 0
 
     def __init__(self):
         self.translate_win = None
         self._help_dialog = None
 
-        self.ind = appindicator.Indicator.new(
+        self.indicator = appindicator.Indicator.new(
             "ldr-tranlate", os.path.abspath('ui/icon.svg'),
             appindicator.IndicatorCategory.SYSTEM_SERVICES)
-        self.ind.set_ordering_index(1)
-
-        self.ind.set_status(appindicator.IndicatorStatus.ACTIVE)
+        self.indicator.set_label("翻译中", "")
+        self.indicator.set_ordering_index(1)
+        self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 
         self._create_menu()
 
-        self.on_translate_activated()
-
-        # 注意不要把剪贴板监听放在翻译窗口，因为它关闭还是能接收信号，或许是销毁的有问题，但是放在这里真的很好！还能自动弹出
         self.getClipboard().connect("owner-change",
-                                    self.on_translate_activated)
+                                    self.translate_show_or_hide)
+
+        self.translate_show_or_hide()
+
+    def get_version_data(self):
+        # 这个会卡，外网
+        s, self.update = config.get_update_version()
+        self.help_menu.set_label(s)
+        if(self.update):
+            self.indicator.set_label("有更新", "")
+
+    def _create_menu(self):
+        menu = Gtk.Menu()
+
+        pref_menu = Gtk.MenuItem(label='翻译窗口：显示/关闭')
+        pref_menu.connect('activate', self.translate_show_or_hide)
+        menu.add(pref_menu)
+
+        self.menu_auto_translate = Gtk.MenuItem(label="自动翻译：已开启")
+        self.menu_auto_translate.connect('activate', self.auto_copy_translate)
+        menu.add(self.menu_auto_translate)
+
+        menu.add(Gtk.SeparatorMenuItem())
+
+        config_version = config.get_config_version()
+
+        self.help_menu = Gtk.MenuItem(label="关于：V" + config_version["name"])
+        self.help_menu.connect('activate', self._on_help)
+        menu.add(self.help_menu)
+
+        exit_menu = Gtk.MenuItem(label='完全退出')
+        exit_menu.connect('activate', self.on_exit)
+        menu.add(exit_menu)
+
+        menu.show_all()
+        self.indicator.set_menu(menu)
 
     def on_exit(self, event=None, data=None):
         try:
@@ -108,21 +115,20 @@ class LdrTranlate(object):
         dialog.connect('response', lambda dialog, data: dialog.destroy())
         dialog.show_all()
 
-    def on_translate_activated(self, cb=None, event=None):
+    def translate_show_or_hide(self, cb=None, event=None):
         if (self.is_auto_translate):
+            self.n += 1
             if (self.translate_win is None or self.translate_win.is_hide):
-                self.translate_win = Translate()
+                self.translate_win = Translate(self.n)
                 self.translate_win.open()
             elif (event is None):
                 self.translate_win.close()
             else:
                 self.translate_win.copy_auto_translate(cb, event)
-        else:
-            print("暂停翻译")
+        # if(self.n == 2):
+        #     self.get_version_data()
 
-    def set_auto_translate(self, event=None, view=None):
-        print(view)
-        print(event)
+    def auto_copy_translate(self, event=None, view=None):
         self.is_auto_translate = not self.is_auto_translate
         s = "自动翻译：已开启"
         ind_label = "翻译中"
@@ -131,7 +137,7 @@ class LdrTranlate(object):
             ind_label = "暂停翻译"
         elif(self.update):
             ind_label = "有更新"
-        self.ind.set_label(ind_label, "")
+        self.indicator.set_label(ind_label, "")
 
         self.menu_auto_translate.set_label(s)
         if (self.translate_win is not None):
@@ -148,7 +154,6 @@ if __name__ == "__main__":
     if not Path("cache").exists():
         os.makedirs("cache")
     app = LdrTranlate()
-
     try:
         Gtk.main()
     except KeyboardInterrupt:
