@@ -5,14 +5,13 @@
 
 目前没打包，直接在命令行打开当前文件夹，并输入 `make install` 即可
 
-- 复制文本自动翻译
-- 可划词翻译
+- 复制文本自动翻译(可划词翻译)
 - 可选追加复制
 - 可修改复制内容，重新翻译
 - 截图自动识别、并翻译
 - 多语言互译支持，自动识别当前语言
+- 设置中自定义接口账号
 - （待完善）支持多平台api接口，目前仅支持百度api，足够了……
-- （待完善）设置中自定义接口账号
 - 页面随着系统主题（gnome）自动变化
 
 |系统默认主题 yaru|第三方主题layan|第三方主题kimi|
@@ -22,6 +21,10 @@
 ## 账号
 
 翻译页面左上角，可以设置百度的翻译API以及图片识别API，默认账号用的人太多，容易报错
+
+|设置 yaru|百度api设置|
+|:-:|:-:|
+![设置](images/prf_api.png)|![百度api设置](images/api_baidu.png)|
 
 ## 测试与安装
 
@@ -37,7 +40,7 @@ make debug
 
 1. 自动翻译
   
-    复制时自动翻译。如需划词翻译，[config.py](./config.py) 里修改 `translate_select=True`，不建议划词翻译，有时候有问题
+    复制时自动翻译。如需划词翻译，[config.json](./config.json) 里修改 `"translate_way_copy": false,`，不建议划词翻译，有时候有问题
 
     ![运行](images/lt_more.png)
 
@@ -80,7 +83,7 @@ ldr-translate
 或者直接找到 `兰译` 图标
  <img src="ui/icon.png" width = "36" height = "36" alt="图片名称" align=center />，点击即可运行
 
-> 大概需要注销当前用户重新登录，才可以看到图标，不懂什么意思的话，直接重启……
+> 偶尔需要注销当前用户重新登录，才可以看到图标，不懂什么意思的话，直接重启……
 
 ### 卸载
 
@@ -101,6 +104,11 @@ git pull && make reinstall
 - [Welcome to big-doc’s documentation! &mdash; big-doc 0.1 documentation](https://thebigdoc.readthedocs.io/en/latest/index.html)
 
 - [The Python GTK+ 3 Tutorial &mdash; Python GTK+ 3 Tutorial 3.4 documentation](https://python-gtk-3-tutorial.readthedocs.io/en/latest/index.html)
+
+## 开发工具
+
+- 功能开发：vscode
+- ui开发：glade
 
 ## 其他
 
