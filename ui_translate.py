@@ -112,9 +112,7 @@ class Translate(Gtk.ApplicationWindow):
         textbuffer_from = self.tv_from.get_buffer()
         textbuffer_to = self.tv_to.get_buffer()
 
-        print(s_from)
         s_from, s_to = translate.text(s_from, add_old=self.cbtn_add_old.get_active())
-        print(s_from)
 
         textbuffer_from.set_text(s_from.strip())
         textbuffer_to.set_text(s_to.strip())

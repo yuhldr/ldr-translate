@@ -119,7 +119,6 @@ class LdrTranlate(Gtk.Application):
         dialog.show_all()
 
     def _active_auto_translate(self, view=None):
-        print(view)
         self.is_auto_translate = not self.is_auto_translate
         s = "自动翻译：已开启"
         ind_label = "翻译中"
@@ -139,30 +138,30 @@ class LdrTranlate(Gtk.Application):
                                   event=None):
         # 3种情况会调用这个函数
         #   复制
-        is_copy_to_translate = clipboard is not None and event is not None
+        is_copy = clipboard is not None and event is not None
         # 点击暂停翻译
-        is_active_auto_translate = clipboard is None and event is None
+        is_active_auto = clipboard is None and event is None
         # 点击打开或隐藏翻译页面
-        is_active_translate_windows = clipboard is not None and event is None
+        is_active_windows = clipboard is not None and event is None
 
-        tanslate_is_closed = self.translate_win is None or self.translate_win.is_hide
+        windows_is_closed = self.translate_win is None or self.translate_win.is_hide
 
-        if(is_copy_to_translate):
+        if(is_copy):
             if (self.is_auto_translate):
-                if (tanslate_is_closed):
+                if (windows_is_closed):
                     self.translate_win = Translate()
                     self.translate_win.open()
                 self.translate_win.copy_auto_translate(clipboard)
-        elif(is_active_auto_translate):
+        elif(is_active_auto):
             if(self.is_auto_translate):
-                if (tanslate_is_closed):
+                if (windows_is_closed):
                     self.translate_win = Translate()
                     self.translate_win.open()
                     self.translate_win.copy_auto_translate()
-            elif (not tanslate_is_closed):
+            elif (not windows_is_closed):
                 self.translate_win.close()
-        elif(is_active_translate_windows):
-            if (tanslate_is_closed):
+        elif(is_active_windows):
+            if (windows_is_closed):
                 self.translate_win = Translate()
                 self.translate_win.open()
                 self.translate_win.copy_auto_translate()
