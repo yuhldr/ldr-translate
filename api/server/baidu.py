@@ -58,7 +58,7 @@ def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
 
     except Exception as e:
         s1 = "网络错误：" + str(e)
-
+    print(ok)
     return s1, ok
 
 
@@ -84,7 +84,7 @@ def get_token_by_url(ocr_api_key, ocr_secret_key):
     except Exception as e:
         access_token = "请求错误：" + str(e)
 
-    return ok, access_token, expires_in_date
+    return ok, str(access_token), expires_in_date
 
 
 def get_token():
@@ -121,9 +121,10 @@ def ocr(img_data):
     s = ""
     request_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
     img = base64.b64encode(img_data)
-    token = get_token()
+    ok, token = get_token()
     params = {"image": img}
-
+    print(request_url)
+    print(token)
     request_url = request_url + "?access_token=" + token
     headers = {'content-type': 'application/x-www-form-urlencoded'}
     response = requests.post(request_url, data=params, headers=headers)
@@ -145,9 +146,14 @@ def check_translate(appId, secretKey):
         "auto",
         "zh",
     )
+    print(appId, secretKey)
+    print(text)
+
     return ok
 
 
 def check_ocr(apiKey, secretKey):
     ok, access_token, expires_in_date = get_token_by_url(apiKey, secretKey)
+    print(apiKey, secretKey)
+    print(access_token)
     return ok

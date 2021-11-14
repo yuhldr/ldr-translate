@@ -65,18 +65,17 @@ class Preference(Gtk.Window):
         text_a = self.get_text(self.tv_translate_app_id)
         text_b = self.get_text(self.tv_translate_secret_key)
 
-        msg = "账号或密码错误"
+        msg = "超时或账号密码错误"
 
         if(len(text_a) == 0 or len(text_b) == 0):
             msg = "已恢复默认（不推荐）"
         else:
             ok = translate.check_server_translate(self.server, text_a, text_b)
+            print(ok)
             if (ok):
-                msg = "成功，请手动保存"
-                if (save):
-                    msg == "成功，已保存"
-                    config.set_config(self.server, "ocr_api_key", text_a)
-                    config.set_config(self.server, "ocr_secret_key", text_b)
+                msg = "成功，已保存"
+                config.set_config(self.server, "translate_app_id", text_a)
+                config.set_config(self.server, "translate_secret_key", text_b)
         self.lb_translate_msg.set_text(msg)
 
         return ok, text_a, text_b
@@ -86,18 +85,18 @@ class Preference(Gtk.Window):
         text_a = self.get_text(self.tv_ocr_app_key)
         text_b = self.get_text(self.tv_ocr_secret_key)
 
-        msg = "账号或密码错误"
+        msg = "超时或账号密码错误"
 
         if (len(text_a) == 0 or len(text_b) == 0):
             msg = "已恢复默认（不推荐）"
         else:
             ok = translate.check_server_ocr(self.server, text_a, text_b)
             if (ok):
-                msg = "成功，请手动保存"
-                if(save):
-                    msg == "成功，已保存"
-                    config.set_config(self.server, "ocr_api_key", text_a)
-                    config.set_config(self.server, "ocr_secret_key", text_b)
+                msg = "成功，已保存"
+                config.set_config(self.server, "ocr_api_key", text_a)
+                config.set_config(self.server, "ocr_secret_key", text_b)
+                config.set_config(self.server, "access_token", "")
+                config.set_config(self.server, "expires_in_date", 0)
 
         self.lb_ocr_msg.set_text(msg)
 

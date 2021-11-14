@@ -64,12 +64,13 @@ def set_config(section, key, value):
 def old2new(old_config_file="./cache/" + config_file_name):
     if Path(old_config_file).exists():
         config_data = json.load(open(old_config_file, "r"))
-
-        for key in [
-                "translate_app_id", "translate_secret_key", "ocr_api_key",
-                "ocr_secret_key", "access_token", "expires_in_date"
-        ]:
-            set_config("baidu", key, config_data["baidu"][key])
+        api_servers = ["baidu"]
+        for api_server in api_servers:
+            for key in [
+                    "translate_app_id", "translate_secret_key", "ocr_api_key",
+                    "ocr_secret_key", "access_token", "expires_in_date"
+            ]:
+                set_config(api_server, key, config_data[api_server][key])
 
         for key in ["translate_way_copy", "to_long"]:
             set_config("setting", key, config_data["setting"][key])
