@@ -13,6 +13,10 @@ import gi
 import os
 from api import config
 from pathlib import Path
+from api.server.baidu import translate
+# import faulthandler
+# # 在import之后直接添加以下启用代码即可 python3 -X faulthandler ldr-translate.py
+# faulthandler.enable()
 
 gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
 from ui_translate import Translate
@@ -21,10 +25,9 @@ from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gtk, Gdk, GdkPixbuf
 
 
-class LdrTranlate(object):
-    is_auto_translate = True
+class LdrTranlate(Gtk.Application):
+    is_auto_translate = False
     update = False
-    n = 0
 
     def __init__(self):
         self.translate_win = None
@@ -40,26 +43,26 @@ class LdrTranlate(object):
         self._create_menu()
 
         self.getClipboard().connect("owner-change",
-                                    self.translate_show_or_hide)
-
-        self.translate_show_or_hide()
+                                    self._active_translate_windows)
+        self._active_auto_translate()
 
     def get_version_data(self):
         # 这个会卡，外网
         s, self.update = config.get_update_version()
         self.help_menu.set_label(s)
-        if(self.update):
+        if (self.update):
             self.indicator.set_label("有更新", "")
 
     def _create_menu(self):
         menu = Gtk.Menu()
 
         pref_menu = Gtk.MenuItem(label='翻译窗口：显示/关闭')
-        pref_menu.connect('activate', self.translate_show_or_hide)
+        pref_menu.connect('activate', self._active_translate_windows)
         menu.add(pref_menu)
 
         self.menu_auto_translate = Gtk.MenuItem(label="自动翻译：已开启")
-        self.menu_auto_translate.connect('activate', self.auto_copy_translate)
+        self.menu_auto_translate.connect('activate',
+                                         self._active_auto_translate)
         menu.add(self.menu_auto_translate)
 
         menu.add(Gtk.SeparatorMenuItem())
@@ -115,40 +118,62 @@ class LdrTranlate(object):
         dialog.connect('response', lambda dialog, data: dialog.destroy())
         dialog.show_all()
 
-    def translate_show_or_hide(self, cb=None, event=None):
-        if (self.is_auto_translate):
-            self.n += 1
-            if (self.translate_win is None or self.translate_win.is_hide):
-                self.translate_win = Translate(self.n)
-                self.translate_win.open()
-            elif (event is None):
-                self.translate_win.close()
-            else:
-                self.translate_win.copy_auto_translate(cb, event)
-        # if(self.n == 2):
-        #     self.get_version_data()
-
-    def auto_copy_translate(self, event=None, view=None):
+    def _active_auto_translate(self, view=None):
+        print(view)
         self.is_auto_translate = not self.is_auto_translate
         s = "自动翻译：已开启"
         ind_label = "翻译中"
-        if(not self.is_auto_translate):
+        if (not self.is_auto_translate):
             s = "自动翻译：已关闭"
             ind_label = "暂停翻译"
-        elif(self.update):
+        elif (self.update):
             ind_label = "有更新"
-        self.indicator.set_label(ind_label, "")
 
+        self.indicator.set_label(ind_label, "")
         self.menu_auto_translate.set_label(s)
-        if (self.translate_win is not None):
-            self.translate_win.translate_by_s(s)
+
+        self._active_translate_windows()
+
+    def _active_translate_windows(self,
+                                  clipboard=None,
+                                  event=None):
+        # 3种情况会调用这个函数
+        #   复制
+        is_copy_to_translate = clipboard is not None and event is not None
+        # 点击暂停翻译
+        is_active_auto_translate = clipboard is None and event is None
+        # 点击打开或隐藏翻译页面
+        is_active_translate_windows = clipboard is not None and event is None
+
+        tanslate_is_closed = self.translate_win is None or self.translate_win.is_hide
+
+        if(is_copy_to_translate):
+            if (self.is_auto_translate):
+                if (tanslate_is_closed):
+                    self.translate_win = Translate()
+                    self.translate_win.open()
+                self.translate_win.copy_auto_translate(clipboard)
+        elif(is_active_auto_translate):
+            if(self.is_auto_translate):
+                if (tanslate_is_closed):
+                    self.translate_win = Translate()
+                    self.translate_win.open()
+                    self.translate_win.copy_auto_translate()
+            elif (not tanslate_is_closed):
+                self.translate_win.close()
+        elif(is_active_translate_windows):
+            if (tanslate_is_closed):
+                self.translate_win = Translate()
+                self.translate_win.open()
+                self.translate_win.copy_auto_translate()
+            else:
+                self.translate_win.close()
 
     def getClipboard(self):
         if (config.get_config_setting()["translate_way_copy"]):
             return Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         else:
             return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
-
 
 if __name__ == "__main__":
     if not Path("cache").exists():

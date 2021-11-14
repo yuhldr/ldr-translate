@@ -1,7 +1,6 @@
 import gi
 import time
 from api import config, translate
-import webbrowser
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -53,6 +52,7 @@ class Preference(Gtk.Window):
         ui.get_object('lb_ocr_way').set_markup(url_ocr)
 
         self.add(tc)
+        self.show_all()
 
     def open(self):
         self.show_all()

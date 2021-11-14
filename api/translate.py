@@ -3,8 +3,8 @@ from api.server import baidu
 import time
 from api import config
 
-last_s = ""
-last_s2 = "空白"
+last_s = None
+last_s2 = None
 last_time = 0
 
 path_next_s = "s_next"
@@ -20,6 +20,12 @@ def text(s_from, fromLang="auto", type="baidu", add_old=True):
 
     translate_span = config_setting["translate_span"]
 
+    if(s_from is None):
+        if(last_s is None):
+            return "复制即可翻译", "系统直接截图到剪贴板，自动识别并翻译"
+        else:
+            s_from = last_s
+
     # 文字和上次一样，并且被翻译的语言没有修改，就不翻译了
     if (last_s == s_from and not changeLang):
         return last_s, last_s2
@@ -28,6 +34,8 @@ def text(s_from, fromLang="auto", type="baidu", add_old=True):
         time.sleep(span)
     if (add_old):
         s_from = last_s + " " + s_from
+
+    s_from = s_from.strip()
 
     if (type == "baidu"):
         last_s2 = baidu.translate_text(s_from, fromLang, toLang)
