@@ -1,7 +1,8 @@
 package: ldr-translate
+Section: net
 version: 1.0.0
 Depends: gir1.2-appindicator3-0.1,python3
 architecture: amd64
-Maintainer: yuhldr@qq.com
+Maintainer: yuhldr <yuhldr@qq.com>
+Homepage: https://github.com/yuhlzu/ldr-translate
 description: 一个非常好用的翻译软件
-

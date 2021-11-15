@@ -11,13 +11,13 @@ build: clear
 
 	cp -r ui api ui_translate.py ldr-translate.py preferences.py config.json build/ldr-translate$(DEB_PATH)/ldr-translate/
 
-	cp deb/ldr build/ldr-translate/usr/bin/
+	cp debian/ldr build/ldr-translate/usr/bin/
 	@echo "cd $(DEB_PATH)/ldr-translate/" >> build/ldr-translate/usr/bin/ldr
 	@echo "python3 ./ldr-translate.py" >> build/ldr-translate/usr/bin/ldr
 
 	cp ui/icon.png build/ldr-translate/usr/share/icons/ldr-translate.png
-	cp deb/ldr-translate.desktop build/ldr-translate/usr/share/applications/
-	cp deb/control build/ldr-translate/DEBIAN/
+	cp debian/ldr-translate.desktop build/ldr-translate/usr/share/applications/
+	cp debian/control build/ldr-translate/DEBIAN/
 
 	cd build && sudo dpkg -b  ldr-translate ldr-translate.deb
 
@@ -38,9 +38,9 @@ install: check
 
 	cp -r ui api ui_translate.py ldr-translate.py preferences.py config.json $(PREFIX)/lib/ldr-translate/
 	cp ui/icon.png $(PREFIX)/share/icons/ldr-translate.png
-	cp deb/ldr-translate.desktop $(PREFIX)/share/applications/
+	cp debian/ldr-translate.desktop $(PREFIX)/share/applications/
 
-	cp deb/ldr $(PREFIX)/bin/ldr
+	cp debian/ldr $(PREFIX)/bin/ldr
 	@echo "cd $(PREFIX)/lib/ldr-translate/" >> $(PREFIX)/bin/ldr
 	@echo "python3 ./ldr-translate.py" >> $(PREFIX)/bin/ldr
 

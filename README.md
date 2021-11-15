@@ -6,9 +6,9 @@
 已打包deb，经测试ubuntu2004可以安装其他暂未测试
 
 - 复制文本自动翻译(可划词翻译)
+- 截图自动识别、并翻译
 - 可选追加复制
 - 可修改复制内容，重新翻译
-- 截图自动识别、并翻译
 - 多语言互译支持，自动识别当前语言
 - 设置中自定义接口账号
 - （待完善）支持多平台api接口，目前仅支持百度api，足够了……
@@ -18,7 +18,33 @@
 |:-:|:-:|:-:|
 ![主题2](images/lt.png)|![主题1](images/lt-layan.png)|![主题1](images/lt-kimi.png)
 
-## 账号
+## 安装
+
+在 [这里下载](releases) `.deb` 的安装包，然后在下载目录，右键，终端打开，终端输入如下：
+
+```sh
+sudo dpkg -i ./*.deb
+
+# 如果报错，输入下面的
+sudo apt install -f
+# 再安装
+sudo dpkg -i ./*.deb
+```
+
+> 卸载
+
+```bash
+sudo apt remove ldr-translate -y
+```
+
+## 其他
+
+> 希望一起完善 snap 打包和 ppa 发布，可联系 yuhldr@qq.com
+
+- snap打包，一直失败，如果您熟悉snap，希望一起完善
+- ppa 发布，我设置了，但是不熟悉，目前未能完成
+
+## API账号
 
 翻译页面左上角，可以设置百度的翻译API以及图片识别API，默认账号用的人太多，容易报错
 
@@ -26,15 +52,7 @@
 |:-:|:-:|
 ![设置](images/prf_api.png)|![百度api设置](images/api_baidu.png)|
 
-## 安装
-
-```sh
-sudo dpkg -i ./*.deb
-
-# 如果报错，输入下面的
-sudo apt install -f
-sudo dpkg -i ./*.deb
-```
+## 功能
 
 运行以后，弹出翻译窗口，自动置顶窗口，5大功能
 
@@ -69,11 +87,6 @@ sudo dpkg -i ./*.deb
 
 > 偶尔需要注销当前用户重新登录，才可以看到图标，不懂什么意思的话，直接重启……
 
-### 卸载
-
-```bash
-sudo apt remove ldr-translate -y
-```
 
 ## 资料
 
