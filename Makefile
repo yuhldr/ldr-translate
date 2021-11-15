@@ -1,8 +1,20 @@
-PREFIX=$(HOME)/.local/share/ldr-translate
-DESKTOP=$(HOME)/.local/share/applications
-CONFIG=$(PREFIX)/config.json
-cacheConfig=$(HOME)/.cache/ldr-translate/config.json
-autoStartUp=$(HOME)/.config/autostart/
+PREFIX=$(HOME)/.local
+
+
+build: clear
+	mkdir -p build/ldr-translate/DEBIAN
+	mkdir -p build/ldr-translate/usr/bin
+	mkdir -p build/ldr-translate/usr/lib/ldr-translate/cache
+	mkdir -p build/ldr-translate/usr/share/applications
+	mkdir -p build/ldr-translate/usr/share/icons
+
+	cp -r ui api ui_translate.py ldr-translate.py preferences.py config.json build/ldr-translate/usr/lib/ldr-translate/
+	cp ui/icon.png build/ldr-translate/usr/share/icons/ldr-translate.png
+	cp deb/control build/ldr-translate/DEBIAN/
+	cp deb/ldr build/ldr-translate/usr/bin/
+	cp deb/ldr-translate.desktop build/ldr-translate/usr/share/applications/
+
+	cd build && sudo dpkg -b  ldr-translate ldr-translate.deb
 
 check:
 	sudo apt install python3-pip gir1.2-appindicator3-0.1
@@ -14,44 +26,28 @@ debug: check
 
 
 install: check
-	mkdir -p $(PREFIX)/cache/
+	mkdir -p $(PREFIX)/bin
+	mkdir -p $(PREFIX)/lib/ldr-translate/cache
+	mkdir -p $(PREFIX)/share/applications
+	mkdir -p $(PREFIX)/share/icons
 
-	@echo "#!/bin/bash" > $(PREFIX)/lt.sh
-	@echo "cd $(PREFIX)" >> $(PREFIX)/lt.sh
-	@echo "nohup python3 ./ldr-translate.py &" >> $(PREFIX)/lt.sh
-	chmod +x $(PREFIX)/lt.sh
+	cp -r ui api ui_translate.py ldr-translate.py preferences.py config.json $(PREFIX)/lib/ldr-translate/
+	cp ui/icon.png $(PREFIX)/share/icons/ldr-translate.png
+	cp deb/ldr-translate.desktop $(PREFIX)/share/applications/
 
-	@echo "#!/bin/bash" > $(PREFIX)/ldr-translate
-	@echo "$(PREFIX)/lt.sh" >> $(PREFIX)/ldr-translate
-	chmod +x $(PREFIX)/ldr-translate
+	@echo "#!/bin/bash" > $(PREFIX)/bin/ldr
+	@echo "cd $(PREFIX)/lib/ldr-translate/" >> $(PREFIX)/bin/ldr
+	@echo "python3 ./ldr-translate.py" >> $(PREFIX)/bin/ldr
+	chmod +x $(PREFIX)/bin/ldr
 
-	sudo mkdir -p /usr/bin
-	sudo ln -s $(PREFIX)/ldr-translate /usr/bin/ldr-translate
-
-	cp -r ui api ui_translate.py ldr-translate.py preferences.py config.json $(PREFIX)
-
-	mkdir -p $(DESKTOP)
-	cp ldr-translate.desktop $(DESKTOP)
-	@echo "Icon=$(PREFIX)/ui/icon.png" >> $(DESKTOP)/ldr-translate.desktop
-	@echo "Exec=$(PREFIX)/lt.sh" >> $(DESKTOP)/ldr-translate.desktop
-	mkdir -p $(autoStartUp)
-	cp $(DESKTOP)/ldr-translate.desktop $(autoStartUp)
-
-	cd $(PREFIX) && python3 -c "from api import config; config.old2new()"
-
-	@echo "\n\n*****兰译app使用说明*****\n\n1. 软件安装位置：$(PREFIX)\n2. 终端输入 ldr-translate 即可运行\n3. 注销并重新登录以后，应用程序中应包含‘兰译’\n4. 复制即可自动翻译、显示主窗口\n5. 系统截图到剪贴板，自动OCR识别并翻译\n6. 更多教程见：https://github.com/yuhlzu/ldr-translate"
+	@echo "\n\n*****兰译app使用说明*****\n\n1. 软件安装位置：$(PREFIX)/lib/ldr-translate/\n2. 终端输入 ldr-translate 即可运行\n3. 注销并重新登录以后，应用程序中应包含‘兰译’\n4. 复制即可自动翻译、显示主窗口\n5. 系统截图到剪贴板，自动OCR识别并翻译\n6. 更多教程见：https://github.com/yuhlzu/ldr-translate"
 
 
 uninstall:
-	mkdir -p $(HOME)/.cache/ldr-translate/
-    ifeq ($(CONFIG), $(wildcard $(CONFIG)))
-		mv $(CONFIG) $(cacheConfig)
-    endif
-
-	rm -rf $(PREFIX)
-	rm -f $(DESKTOP)/ldr-translate.desktop
-	sudo rm -f /usr/bin/ldr-translate
-	rm -rf $(autoStartUp)/ldr-translate.desktop
+	rm -rf $(PREFIX)/lib/ldr-translate/
+	rm -f $(PREFIX)/share/icons/ldr-translate.png
+	rm -rf $(PREFIX)/bin/ldr
+	rm -rf $(PREFIX)/share/applications/ldr-translate.desktop
 
 reinstall: uninstall install
 
@@ -62,4 +58,5 @@ clear:
 	rm -rf ./tempCodeRunnerFile*
 	rm -rf ./cache
 	rm -rf *.spec
+	rm -rf ./build
 

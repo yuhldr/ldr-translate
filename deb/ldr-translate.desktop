@@ -5,3 +5,5 @@ Terminal=false
 StartupNotify=true
 Type=Application
 Categories=Utility;
+Icon=ldr-translate.png
+Exec=ldr

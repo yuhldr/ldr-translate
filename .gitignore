@@ -3,6 +3,7 @@ Pipfile*
 cache
 *~
 tempCodeRunnerFile*
+build/
 
 
 # ******* python  ********

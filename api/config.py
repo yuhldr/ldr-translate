@@ -2,16 +2,19 @@ import configparser
 import json
 import requests
 import os
+import shutil
 from pathlib import Path
 
 config = configparser.ConfigParser()
 config_data = None
 config_file_name = "config.json"
+config_dir = os.getenv("HOME") + "/.cache/ldr-translate"
+config_path = config_dir + "/" + config_file_name
 
 
 def load_configs():
     global config_data
-    config_data = json.load(open(config_file_name, "r"))
+    config_data = json.load(open(config_path, "r"))
 
 
 def get_update_version():
@@ -57,24 +60,33 @@ def set_config(section, key, value):
     if (config_data is None):
         load_configs()
     config_data[section][key] = value
-    with open(config_file_name, 'w') as file:
+    with open(config_path, 'w') as file:
         json.dump(config_data, file, ensure_ascii=False)
 
 
 # 更新时数据迁移
 def old2new():
-    old_config_file = os.getenv("HOME") + "/.cache/ldr-translate/" + config_file_name
-    if Path(old_config_file).exists():
+    config_data_new = json.load(open(config_file_name, "r"))
+
+    if os.path.exists(config_path):
         print("旧文件已找到")
-        config_data = json.load(open(old_config_file, "r"))
+        config_data_old = json.load(open(config_path, "r"))
         api_servers = ["baidu"]
         for api_server in api_servers:
             for key in [
                     "translate_app_id", "translate_secret_key", "ocr_api_key",
                     "ocr_secret_key", "access_token", "expires_in_date"
             ]:
-                set_config(api_server, key, config_data[api_server][key])
+                config_data_new[api_server][key] = config_data_old[api_server][key]
 
         for key in ["translate_way_copy", "to_long"]:
-            set_config("setting", key, config_data["setting"][key])
-        print("数据迁移完毕")
+            config_data_new["setting"][key] = config_data_old["setting"][key]
+
+    else:
+        if not Path(config_dir).exists():
+            os.makedirs(config_dir)
+    print(config_path)
+    with open(config_path, 'w') as file:
+        json.dump(config_data_new, file, ensure_ascii=False)
+
+    print("数据迁移完毕")

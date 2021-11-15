@@ -12,14 +12,15 @@
 import gi
 import os
 import shutil
-from api import config
 from pathlib import Path
-from api.server.baidu import translate
 # import faulthandler
 # # 在import之后直接添加以下启用代码即可 python3 -X faulthandler ldr-translate.py
 # faulthandler.enable()
+from api import config
+config.old2new()
 
 gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
+
 from ui_translate import Translate
 
 from gi.repository import AppIndicator3 as appindicator
@@ -204,6 +205,7 @@ class LdrTranlate(Gtk.Application):
 if __name__ == "__main__":
     if not Path("cache").exists():
         os.makedirs("cache")
+    print("kai")
     app = LdrTranlate()
     try:
         Gtk.main()

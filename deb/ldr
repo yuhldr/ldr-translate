@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /usr/lib/ldr-translate
+python3 ./ldr-translate.py
