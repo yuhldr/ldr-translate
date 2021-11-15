@@ -1,6 +1,7 @@
 import configparser
 import json
 import requests
+import os
 from pathlib import Path
 
 config = configparser.ConfigParser()
@@ -61,8 +62,10 @@ def set_config(section, key, value):
 
 
 # 更新时数据迁移
-def old2new(old_config_file="./cache/" + config_file_name):
+def old2new():
+    old_config_file = os.getenv("HOME") + "/.cache/ldr-translate/" + config_file_name
     if Path(old_config_file).exists():
+        print("旧文件已找到")
         config_data = json.load(open(old_config_file, "r"))
         api_servers = ["baidu"]
         for api_server in api_servers:
@@ -74,3 +77,4 @@ def old2new(old_config_file="./cache/" + config_file_name):
 
         for key in ["translate_way_copy", "to_long"]:
             set_config("setting", key, config_data["setting"][key])
+        print("数据迁移完毕")

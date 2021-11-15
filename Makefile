@@ -36,10 +36,7 @@ install: check
 	mkdir -p $(autoStartUp)
 	cp $(DESKTOP)/ldr-translate.desktop $(autoStartUp)
 
-    ifeq ($(cacheConfig), $(wildcard $(cacheConfig)))
-		cd $(PREFIX) && mv $(cacheConfig) ./cache/ && python3 -c "from api import config; config.old2new()"
-		@echo "数据迁移完毕"
-    endif
+	cd $(PREFIX) && python3 -c "from api import config; config.old2new()"
 
 	@echo "\n\n*****兰译app使用说明*****\n\n1. 软件安装位置：$(PREFIX)\n2. 终端输入 ldr-translate 即可运行\n3. 注销并重新登录以后，应用程序中应包含‘兰译’\n4. 复制即可自动翻译、显示主窗口\n5. 系统截图到剪贴板，自动OCR识别并翻译\n6. 更多教程见：https://github.com/yuhlzu/ldr-translate"
 
@@ -47,7 +44,7 @@ install: check
 uninstall:
 	mkdir -p $(HOME)/.cache/ldr-translate/
     ifeq ($(CONFIG), $(wildcard $(CONFIG)))
-		cp $(CONFIG) $(cacheConfig)
+		mv $(CONFIG) $(cacheConfig)
     endif
 
 	rm -rf $(PREFIX)
