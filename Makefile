@@ -15,7 +15,6 @@ debug: check
 
 install: check
 	mkdir -p $(PREFIX)/cache/
-	cp -r ui api ui_translate.py ldr-translate.py preferences.py config.json $(PREFIX)
 
 	@echo "#!/bin/bash" > $(PREFIX)/lt.sh
 	@echo "cd $(PREFIX)" >> $(PREFIX)/lt.sh
@@ -28,6 +27,8 @@ install: check
 
 	sudo mkdir -p /usr/bin
 	sudo ln -s $(PREFIX)/ldr-translate /usr/bin/ldr-translate
+
+	cp -r ui api ui_translate.py ldr-translate.py preferences.py config.json $(PREFIX)
 
 	mkdir -p $(DESKTOP)
 	cp ldr-translate.desktop $(DESKTOP)
