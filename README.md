@@ -20,15 +20,20 @@
 
 ## 安装
 
-在 [这里下载](releases) `.deb` 的安装包，然后在下载目录，右键，终端打开，终端输入如下：
+在 releases下载`.deb` 的安装包
+
+- [github 国外](https://github.com/yuhlzu/ldr-translate/releases/) 
+- [gitee 国内](https://gitee.com/yuhldr/ldr-translate/releases)
+
+然后在下载目录，右键，终端打开，终端输入如下：
 
 ```sh
-sudo dpkg -i ./*.deb
+sudo dpkg -i ./下载的deb文件名
 
 # 如果报错，输入下面的
 sudo apt install -f
 # 再安装
-sudo dpkg -i ./*.deb
+sudo dpkg -i ./下载的deb文件名
 ```
 
 > 卸载
