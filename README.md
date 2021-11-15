@@ -3,7 +3,7 @@
  <img src="ui/icon.png" width = "36" height = "36" alt="图片名称" align=center />
 一个ubuntu的翻译软件，使用Gtk3开发，python语言，翻译用的百度接口
 
-目前没打包，直接在命令行打开当前文件夹，并输入 `make install` 即可
+已打包deb，经测试ubuntu2004可以安装其他暂未测试
 
 - 复制文本自动翻译(可划词翻译)
 - 可选追加复制
@@ -26,16 +26,14 @@
 |:-:|:-:|
 ![设置](images/prf_api.png)|![百度api设置](images/api_baidu.png)|
 
-## 测试与安装
-
-> 请确保安装了 `make`，ubuntu2004最小安装默认没有，需要终端输入 `sudo apt install make` 进行安装
-
-### 测试
-
-临时测试的话，可以在当前目录，运行 [ldr-translate.py](./ldr-translate.py) 文件，或者直接如下
+## 安装
 
 ```sh
-make debug
+sudo dpkg -i ./*.deb
+
+# 如果报错，输入下面的
+sudo apt install -f
+sudo dpkg -i ./*.deb
 ```
 
 运行以后，弹出翻译窗口，自动置顶窗口，5大功能
@@ -66,22 +64,6 @@ make debug
 
     有时候一句话在文献里分成上下两页，复制半句翻译有问题，这时候勾选 `追加模式`，接下来复制的内容，会和前一次的复制内容，一起翻译
 
-### 安装
-
-> sudo权限仅为创建链接、核对依赖
-
-```bash
-# 安装路径为 `$(HOME)/.local/share/ldr-translate`
-make install
-```
-
-终端输入
-
-```bash
-# 如果无反应，注意 `/usr/bin` 是否在环境变量中
-ldr-translate
-```
-
 或者直接找到 `兰译` 图标
  <img src="ui/icon.png" width = "36" height = "36" alt="图片名称" align=center />，点击即可运行
 
@@ -90,13 +72,7 @@ ldr-translate
 ### 卸载
 
 ```bash
-make uninstall
-```
-
-### 更新并重装
-
-```bash
-git pull && make reinstall
+sudo apt remove ldr-translate -y
 ```
 
 ## 资料
@@ -111,20 +87,3 @@ git pull && make reinstall
 
 - 功能开发：vscode
 - ui开发：glade
-
-## 其他
-
-python直接打包，体积有点大，不到1M的东西，它给打包了100多M……
-
-```bash
-#建立虚拟环境
-pipenv install
-#进入虚拟环境（上一步可省略,因为没有虚拟环境的话会自动建立一个）
-pipenv shell
-#安装模块
-pip install requests pyquery pysimplegui fake_useragent
-#打包的模块也要安装
-pip install pyinstaller
-#开始打包
-pyinstaller -F  ./ldr-translate.py 
-```
