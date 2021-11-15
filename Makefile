@@ -2,6 +2,7 @@ PREFIX=$(HOME)/.local/share/ldr-translate
 DESKTOP=$(HOME)/.local/share/applications
 CONFIG=$(PREFIX)/config.json
 cacheConfig=$(HOME)/.cache/ldr-translate/config.json
+autoStartUp=$(HOME)/.config/autostart/
 
 check:
 	sudo apt install python3-pip gir1.2-appindicator3-0.1
@@ -32,6 +33,8 @@ install: check
 	cp ldr-translate.desktop $(DESKTOP)
 	@echo "Icon=$(PREFIX)/ui/icon.png" >> $(DESKTOP)/ldr-translate.desktop
 	@echo "Exec=$(PREFIX)/lt.sh" >> $(DESKTOP)/ldr-translate.desktop
+	mkdir -p $(autoStartUp)
+	cp $(DESKTOP)/ldr-translate.desktop $(autoStartUp)
 
     ifeq ($(cacheConfig), $(wildcard $(cacheConfig)))
 		cd $(PREFIX) && mv $(cacheConfig) ./cache/ && python3 -c "from api import config; config.old2new()"
@@ -50,6 +53,7 @@ uninstall:
 	rm -rf $(PREFIX)
 	rm -f $(DESKTOP)/ldr-translate.desktop
 	sudo rm -f /usr/bin/ldr-translate
+	rm -rf $(autoStartUp)/ldr-translate.desktop
 
 reinstall: uninstall install
 

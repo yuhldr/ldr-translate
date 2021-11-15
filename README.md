@@ -28,6 +28,8 @@
 
 ## 测试与安装
 
+> 请确保安装了 `make`，ubuntu2004最小安装默认没有，需要终端输入 `sudo apt install make` 进行安装
+
 ### 测试
 
 临时测试的话，可以在当前目录，运行 [ldr-translate.py](./ldr-translate.py) 文件，或者直接如下
