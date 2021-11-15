@@ -14,7 +14,7 @@
 - （待完善）支持多平台api接口，目前仅支持百度api，足够了……
 - 页面随着系统主题（gnome）自动变化
 
-|系统默认主题 yaru|第三方主题layan|第三方主题kimi|
+|系统默认主题 yaru-dark|第三方主题layan|第三方主题kimi-dark|
 |:-:|:-:|:-:|
 ![主题2](images/lt.png)|![主题1](images/lt-layan.png)|![主题1](images/lt-kimi.png)
 
@@ -22,7 +22,7 @@
 
 翻译页面左上角，可以设置百度的翻译API以及图片识别API，默认账号用的人太多，容易报错
 
-|设置 yaru|百度api设置|
+|设置|百度api设置|
 |:-:|:-:|
 ![设置](images/prf_api.png)|![百度api设置](images/api_baidu.png)|
 
