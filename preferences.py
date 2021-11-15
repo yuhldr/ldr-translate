@@ -1,5 +1,4 @@
 import gi
-import time
 from api import config, translate
 
 gi.require_version('Gtk', '3.0')

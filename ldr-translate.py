@@ -11,6 +11,7 @@
 #
 import gi
 import os
+import shutil
 from api import config
 from pathlib import Path
 from api.server.baidu import translate
@@ -26,8 +27,13 @@ from gi.repository import Gtk, Gdk, GdkPixbuf
 
 
 class LdrTranlate(Gtk.Application):
-    is_auto_translate = False
     update = False
+
+    DESKTOP_NAME = "ldr-translate.desktop"
+    HOME_PATH = os.getenv("HOME")
+    AUTOSTART_DIR = HOME_PATH + '/.config/autostart'
+    AUTOSTART_PATH = AUTOSTART_DIR + "/" + DESKTOP_NAME
+    DESKTOP_PATH = HOME_PATH + "/.local/share/applications/" + DESKTOP_NAME
 
     def __init__(self):
         self.translate_win = None
@@ -44,7 +50,7 @@ class LdrTranlate(Gtk.Application):
 
         self.getClipboard().connect("owner-change",
                                     self._active_translate_windows)
-        self._active_auto_translate()
+        self.menu_auto_translate.set_active(True)
 
     def get_version_data(self):
         # 这个会卡，外网
@@ -59,11 +65,18 @@ class LdrTranlate(Gtk.Application):
         pref_menu = Gtk.MenuItem(label='翻译窗口：显示/关闭')
         pref_menu.connect('activate', self._active_translate_windows)
         menu.add(pref_menu)
+        menu.add(Gtk.SeparatorMenuItem())
 
-        self.menu_auto_translate = Gtk.MenuItem(label="自动翻译：已开启")
+        self.menu_auto_translate = Gtk.CheckMenuItem(label="自动翻译")
         self.menu_auto_translate.connect('activate',
                                          self._active_auto_translate)
         menu.add(self.menu_auto_translate)
+
+
+        pref_menu_auto_start_up = Gtk.CheckMenuItem(
+            label='开机自启', active=self.get_autostart())
+        pref_menu_auto_start_up.connect('activate', self.update_autostart)
+        menu.add(pref_menu_auto_start_up)
 
         menu.add(Gtk.SeparatorMenuItem())
 
@@ -119,17 +132,13 @@ class LdrTranlate(Gtk.Application):
         dialog.show_all()
 
     def _active_auto_translate(self, view=None):
-        self.is_auto_translate = not self.is_auto_translate
-        s = "自动翻译：已开启"
         ind_label = "翻译中"
-        if (not self.is_auto_translate):
-            s = "自动翻译：已关闭"
+        if (not view.get_active()):
             ind_label = "暂停翻译"
         elif (self.update):
             ind_label = "有更新"
 
         self.indicator.set_label(ind_label, "")
-        self.menu_auto_translate.set_label(s)
 
         self._active_translate_windows()
 
@@ -147,13 +156,13 @@ class LdrTranlate(Gtk.Application):
         windows_is_closed = self.translate_win is None or self.translate_win.is_hide
 
         if(is_copy):
-            if (self.is_auto_translate):
+            if (self.menu_auto_translate.get_active()):
                 if (windows_is_closed):
                     self.translate_win = Translate()
                     self.translate_win.open()
                 self.translate_win.copy_auto_translate(clipboard)
         elif(is_active_auto):
-            if(self.is_auto_translate):
+            if (self.menu_auto_translate.get_active()):
                 if (windows_is_closed):
                     self.translate_win = Translate()
                     self.translate_win.open()
@@ -173,6 +182,24 @@ class LdrTranlate(Gtk.Application):
             return Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         else:
             return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
+
+    def update_autostart(self, menu_check):
+        if not menu_check.get_active():
+            try:
+                os.remove(self.AUTOSTART_PATH)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                if not os.path.exists(self.AUTOSTART_DIR):
+                    os.makedirs(self.AUTOSTART_DIR)
+                shutil.copy(self.DESKTOP_PATH, self.AUTOSTART_PATH)
+            except Exception as ex:
+                print(ex)
+
+    def get_autostart(self):
+        return os.path.exists(self.AUTOSTART_PATH)
+
 
 if __name__ == "__main__":
     if not Path("cache").exists():
