@@ -22,7 +22,7 @@
 
 在 releases下载`.deb` 的安装包
 
-- [releases](/yuhlzu/ldr-translate/releases/) 
+- <a href="/yuhldr/ldr-translate/releases">releases</a>
 
 然后在下载目录，右键，终端打开，终端输入如下：
 
