@@ -94,12 +94,6 @@ sudo apt remove ldr-translate -y
 
     有时候一句话在文献里分成上下两页，复制半句翻译有问题，这时候勾选 `追加模式`，接下来复制的内容，会和前一次的复制内容，一起翻译
 
-或者直接找到 `兰译` 图标
- <img src="ui/icon.png" width = "36" height = "36" alt="图片名称" align=center />，点击即可运行
-
-> 偶尔需要注销当前用户重新登录，才可以看到图标，不懂什么意思的话，直接重启……
-
-
 ## 资料
 
 - [Python Gtk+3 API &#xB7; Python GTK+ 3 API](https://athenajc.gitbooks.io/python-gtk-3-api/content/)
