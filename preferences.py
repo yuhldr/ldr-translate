@@ -70,7 +70,6 @@ class Preference(Gtk.Window):
             msg = "已恢复默认（不推荐）"
         else:
             ok = translate.check_server_translate(self.server, text_a, text_b)
-            print(ok)
             if (ok):
                 msg = "成功，已保存"
                 config.set_config(self.server, "translate_app_id", text_a)

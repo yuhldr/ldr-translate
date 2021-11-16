@@ -203,9 +203,7 @@ class LdrTranlate(Gtk.Application):
 
 
 if __name__ == "__main__":
-    if not Path("cache").exists():
-        os.makedirs("cache")
-    print("kai")
+    print("启动")
     app = LdrTranlate()
     try:
         Gtk.main()

@@ -3,7 +3,7 @@
  <img src="ui/icon.png" width = "36" height = "36" alt="图片名称" align=center />
 一个ubuntu的翻译软件，使用Gtk3开发，python语言，翻译用的百度接口
 
-已打包deb，经测试ubuntu2004可以安装其他暂未测试
+> 已打包deb，经测试ubuntu2004可以安装，ubuntu 20.10使用gnome4，暂时无法使用该项目），未来会适配
 
 - 复制文本自动翻译(可划词翻译)
 - 截图自动识别、并翻译
@@ -20,9 +20,10 @@
 
 ## 安装
 
-在 releases下载`.deb` 的安装包
+在 releases下载`.deb` 的安装包，只有23kb
 
-- <a href="/yuhldr/ldr-translate/releases">releases</a>
+- [gitee 国内](https://gitee.com/yuhldr/ldr-translate/releases)
+- [github 国外](https://github.com/yuhldr/ldr-translate/releases/)
 
 然后在下载目录，右键，终端打开，终端输入如下：
 
@@ -30,9 +31,16 @@
 sudo dpkg -i ./下载的deb文件名
 
 # 如果报错，输入下面的
+# 因为此软件依赖：gir1.2-appindicator3-0.1，后续将尽可能摆脱此依赖
+# https://packages.debian.org/buster/gir1.2-appindicator3-0.1
+
 sudo apt install -f
+
 # 再安装
 sudo dpkg -i ./下载的deb文件名
+
+# 终端输入 ldr 或直接点击“兰译”图标即可运行
+# 如果翻译过程中出现错误，请安装python3依赖库requests（目前测试无需安装）
 ```
 
 > 卸载
@@ -99,8 +107,21 @@ sudo apt remove ldr-translate -y
 - [Welcome to big-doc’s documentation! &mdash; big-doc 0.1 documentation](https://thebigdoc.readthedocs.io/en/latest/index.html)
 
 - [The Python GTK+ 3 Tutorial &mdash; Python GTK+ 3 Tutorial 3.4 documentation](https://python-gtk-3-tutorial.readthedocs.io/en/latest/index.html)
+- [linux下deb包的管理及制作 | 一次成功 - Marathon-Davis - 博客园](https://www.cnblogs.com/davis12/p/14365981.html)
 
 ## 开发工具
 
 - 功能开发：vscode
 - ui开发：glade
+- deb打包方法：见 Makefile: `make build`
+
+  - control，用了记录软件标识，版本号，平台，依赖信息等数据，这是最主要的文件配置，必不可少；
+  - preinst，在解包data.tar.gz 前运行的脚本；
+  - postinst，在解包数据后运行的脚本；
+  - prerm，卸载时，在删除文件之前运行的脚本；
+  - postrm，在删除文件之后运行的脚本；在 Cydia 系统中，Cydia 的作者 Saurik 另外- 添加了一个脚本，extrainst_，作用与 postinst 类似。
+  - copyright文件: 不用说，版权信息，相当重要
+  - changelog文件: 这是一个必需文件(ppa必须，此处打包不需要)，包含软件版本号，修订号，发行版和优先级。
+  - rules文件: 这实际上是另外一个Makefile脚本，用来给dpkg-buildpackage用的.
+  - compat文件: 这个文件留着是有用的
+  - dirs文件：这个文件指出我们需要的但是在缺省情况下不会自动创建的目录

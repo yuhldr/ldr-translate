@@ -58,7 +58,7 @@ def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
 
     except Exception as e:
         s1 = "网络错误：" + str(e)
-    print(ok)
+
     return s1, ok
 
 
@@ -89,6 +89,7 @@ def get_token_by_url(ocr_api_key, ocr_secret_key):
 
 def get_token():
     ok = False
+    access_token = ""
 
     config_baidu = config.get_config_section(config_server)
     expires_in_date = config_baidu["expires_in_date"]
@@ -96,7 +97,7 @@ def get_token():
     if (expires_in_date - time.time() > 0):
         access_token = config_baidu["access_token"]
         if(len(access_token) != 0):
-            return access_token
+            return ok, access_token
 
     ocr_api_key = config_baidu["ocr_api_key"]
     ocr_secret_key = config_baidu["ocr_secret_key"]
@@ -109,7 +110,6 @@ def get_token():
     if(ok):
         config.set_config(config_server, "access_token", access_token)
         config.set_config(config_server, "expires_in_date", expires_in_date)
-
     return ok, access_token
 
 
@@ -123,8 +123,6 @@ def ocr(img_data):
     img = base64.b64encode(img_data)
     ok, token = get_token()
     params = {"image": img}
-    print(request_url)
-    print(token)
     request_url = request_url + "?access_token=" + token
     headers = {'content-type': 'application/x-www-form-urlencoded'}
     response = requests.post(request_url, data=params, headers=headers)
@@ -146,14 +144,9 @@ def check_translate(appId, secretKey):
         "auto",
         "zh",
     )
-    print(appId, secretKey)
-    print(text)
-
     return ok
 
 
 def check_ocr(apiKey, secretKey):
     ok, access_token, expires_in_date = get_token_by_url(apiKey, secretKey)
-    print(apiKey, secretKey)
-    print(access_token)
     return ok

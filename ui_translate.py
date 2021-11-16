@@ -88,7 +88,7 @@ class Translate(Gtk.ApplicationWindow):
         if(clipboard is not None):
             image_pixbuf = clipboard.wait_for_image()
             if image_pixbuf is not None:
-                img_path = "cache/copy"
+                img_path = config.app_home_dir + "/copy_img"
                 image_pixbuf.savev(img_path, "png", "", "")
                 s_from = translate.ocr(open(img_path, 'rb').read())
             else:

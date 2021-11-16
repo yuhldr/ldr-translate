@@ -8,8 +8,8 @@ from pathlib import Path
 config = configparser.ConfigParser()
 config_data = None
 config_file_name = "config.json"
-config_dir = os.getenv("HOME") + "/.cache/ldr-translate"
-config_path = config_dir + "/" + config_file_name
+app_home_dir = os.getenv("HOME") + "/.cache/ldr-translate"
+config_path = app_home_dir + "/" + config_file_name
 
 
 def load_configs():
@@ -66,27 +66,29 @@ def set_config(section, key, value):
 
 # 更新时数据迁移
 def old2new():
-    config_data_new = json.load(open(config_file_name, "r"))
-
-    if os.path.exists(config_path):
-        print("旧文件已找到")
-        config_data_old = json.load(open(config_path, "r"))
-        api_servers = ["baidu"]
-        for api_server in api_servers:
-            for key in [
-                    "translate_app_id", "translate_secret_key", "ocr_api_key",
-                    "ocr_secret_key", "access_token", "expires_in_date"
-            ]:
-                config_data_new[api_server][key] = config_data_old[api_server][key]
-
-        for key in ["translate_way_copy", "to_long"]:
-            config_data_new["setting"][key] = config_data_old["setting"][key]
-
-    else:
-        if not Path(config_dir).exists():
-            os.makedirs(config_dir)
     print(config_path)
-    with open(config_path, 'w') as file:
-        json.dump(config_data_new, file, ensure_ascii=False)
+    if(os.path.exists(config_file_name)):
+        config_data_new = json.load(open(config_file_name, "r"))
+        if os.path.exists(config_path):
+            print("旧文件已找到")
+            config_data_old = json.load(open(config_path, "r"))
+            api_servers = ["baidu"]
+            for api_server in api_servers:
+                for key in [
+                        "translate_app_id", "translate_secret_key", "ocr_api_key",
+                        "ocr_secret_key", "access_token", "expires_in_date"
+                ]:
+                    config_data_new[api_server][key] = config_data_old[api_server][key]
 
-    print("数据迁移完毕")
+            for key in ["translate_way_copy", "to_long"]:
+                config_data_new["setting"][key] = config_data_old["setting"][key]
+
+        else:
+            if not Path(app_home_dir).exists():
+                os.makedirs(app_home_dir)
+
+        with open(config_path, 'w') as file:
+            json.dump(config_data_new, file, ensure_ascii=False)
+        os.remove(config_file_name)
+
+        print("数据迁移完毕")
