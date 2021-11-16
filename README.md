@@ -22,8 +22,7 @@
 
 在 releases下载`.deb` 的安装包
 
-- [github 国外](https://github.com/yuhlzu/ldr-translate/releases/) 
-- [gitee 国内](https://gitee.com/yuhldr/ldr-translate/releases)
+- [releases](/yuhlzu/ldr-translate/releases/) 
 
 然后在下载目录，右键，终端打开，终端输入如下：
 

@@ -34,7 +34,7 @@ class LdrTranlate(Gtk.Application):
     HOME_PATH = os.getenv("HOME")
     AUTOSTART_DIR = HOME_PATH + '/.config/autostart'
     AUTOSTART_PATH = AUTOSTART_DIR + "/" + DESKTOP_NAME
-    DESKTOP_PATH = HOME_PATH + "/.local/share/applications/" + DESKTOP_NAME
+    DESKTOP_PATH = "/usr/share/applications/" + DESKTOP_NAME
 
     def __init__(self):
         self.translate_win = None
