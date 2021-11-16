@@ -3,7 +3,7 @@
  <img src="ui/icon.png" width = "36" height = "36" alt="图片名称" align=center />
 一个ubuntu的翻译软件，使用Gtk3开发，python语言，翻译用的百度接口
 
-> 已打包deb，经测试ubuntu2004可以安装，ubuntu 20.10使用gnome4，暂时无法使用该项目），未来会适配
+> 已打包deb，经测试ubuntu20.04可以安装，ubuntu 21.10使用gnome4，无法使用该项目，未来会适配
 
 - 复制文本自动翻译(可划词翻译)
 - 截图自动识别、并翻译
