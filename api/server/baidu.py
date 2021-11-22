@@ -5,8 +5,7 @@ import base64
 import requests
 import urllib
 import time
-import api
-from api import config
+from api import config, tools
 
 
 config_server = "baidu"
@@ -30,7 +29,7 @@ def translate_text(s, fromLang="auto", toLangZh=""):
 
     # fromLang = 'auto'   # 原文语种
     # toLang = 'zh'   # 译文语种
-    toLang = translate_to_languages[api.translate.zh2LangPar(toLangZh)]
+    toLang = translate_to_languages[tools.zh2LangPar(toLangZh)]
 
     text, ok = translate(s, appId, secretKey, fromLang, toLang)
     return text
@@ -113,26 +112,41 @@ def get_token():
     return ok, access_token
 
 
-def ocr(img_data):
+def ocr(img_data, latex=False):
     # open('./images/lt.png', 'rb').read()
     '''
     通用文字识别
     '''
     s = ""
-    request_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
+    request_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/"
+    if(latex):
+        request_url += "formula"
+    else:
+        request_url += "general_basic"
+    print(request_url)
     img = base64.b64encode(img_data)
     ok, token = get_token()
     params = {"image": img}
     request_url = request_url + "?access_token=" + token
     headers = {'content-type': 'application/x-www-form-urlencoded'}
     response = requests.post(request_url, data=params, headers=headers)
+
     if response:
         jsons = (response.json())
+        print(jsons)
         if ("error_code" in jsons):
             return str(jsons["error_code"]) + jsons["error_msg"]
         else:
             for word in jsons["words_result"]:
-                s += word["words"] + " "
+                s += word["words"]
+                if(latex):
+                    s += "\n"
+
+    else:
+        print(response.text)
+
+    if(latex):
+        s = s.replace(" _ ", "_")
     return s
 
 

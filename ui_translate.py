@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # coding: utf-8
-from api import translate, config
+from api import translate, config, tools
 from api.server import baidu
 from preferences import Preference
 
@@ -12,7 +12,8 @@ class Translate(Gtk.ApplicationWindow):
     setting_titles = ["百度API", "其他待补充"]
     setting_title_types = [baidu.config_server, ""]
     is_hide = False
-    isFirst = True
+    isFirsts = [True, True]
+    clipboard = None
 
     def __init__(self):
         Gtk.Window.__init__(self)
@@ -20,7 +21,6 @@ class Translate(Gtk.ApplicationWindow):
         self.set_default_size(400, 360)
         self.set_icon_from_file('./ui/icon.png')
         self.set_keep_above(True)
-        self.clipboard = self.getClipboard()
 
         ui = Gtk.Builder()
         ui.add_from_file('./ui/translate.ui')
@@ -40,6 +40,8 @@ class Translate(Gtk.ApplicationWindow):
         self.tv_to = ui.get_object('tv_to')
         self.currency_combo = ui.get_object('currency_combo')
         self.cbtn_add_old = ui.get_object('cbtn_add_old')
+        # 公式识别
+        self.cbtn_tex = ui.get_object('cbtn_tex')
         self.sp_translate = ui.get_object('sp_translate')
 
         self.currency_combo.connect("changed", self.on_currency_combo_changed)
@@ -53,9 +55,9 @@ class Translate(Gtk.ApplicationWindow):
         self.connect("delete-event", self.close)
 
         # 初始化时载入上次的数据
-        toLang, changeLang = translate.get_to_language()
-        isFirst = True
-        self.currency_combo.set_active(translate.zh2LangPar(toLang))
+        toLang, changeLang = tools.get_to_language()
+        self.currency_combo.set_active(tools.zh2LangPar(toLang))
+        self.clipboard = self.getClipboard()
 
     def open(self):
         self.is_hide = False
@@ -75,25 +77,43 @@ class Translate(Gtk.ApplicationWindow):
         text = combo.get_active_text()
         if text is None:
             text = config.get_translate_to_languages_zh()[0]
-        translate.set_to_language(text)
-        if (not self.isFirst):
+        tools.set_to_language(text)
+        if (not self.isFirsts[0]):
             self.translate_by_s()
         else:
-            self.isFirst = False
+            self.isFirsts[0] = False
         return text
 
-    def copy_auto_translate(self, clipboard=None):
+    def get_text_by_clipboard(self, clipboard_):
+        text = ""
+        image_pixbuf = clipboard_.wait_for_image()
+        if image_pixbuf is not None:
+            img_path = config.app_home_dir + "/copy_img"
+            image_pixbuf.savev(img_path, "png", "", "")
+
+            text = translate.ocr(open(img_path, 'rb').read(),
+                                    latex=self.cbtn_tex.get_active())
+        else:
+            text = clipboard_.wait_for_text()
+
+        print(text)
+        return text
+
+    def copy_auto_translate(self, clipboard_=None):
         s_from = None
         self.sp_translate.start()
-        if(clipboard is not None):
-            image_pixbuf = clipboard.wait_for_image()
-            if image_pixbuf is not None:
-                img_path = config.app_home_dir + "/copy_img"
-                image_pixbuf.savev(img_path, "png", "", "")
-                s_from = translate.ocr(open(img_path, 'rb').read())
-            else:
-                s_from = clipboard.wait_for_text()
-        self.translate_by_s(s_from)
+        if (clipboard_ is not None):
+            s_from = self.get_text_by_clipboard(clipboard_)
+        elif (not self.isFirsts[1]):
+            s_from = self.get_text_by_clipboard(self.clipboard)
+            self.isFirsts[1] = False
+
+        if(self.cbtn_tex.get_active()):
+            if(s_from is None):
+                s_from = "测试功能：\n勾选latex识别，可将图片公式转化为latex代码"
+            self.set_text_view(s_from, "测试功能：\n勾选latex识别，可将图片公式转化为latex代码")
+        else:
+            self.translate_by_s(s_from)
 
 # 按钮再次翻译（可能修改了文本）
     def update_translate_view(self, view=None):
@@ -109,10 +129,13 @@ class Translate(Gtk.ApplicationWindow):
 
     def translate_by_s(self, s_from=None):
 
+        s_from, s_to = translate.text(s_from, add_old=self.cbtn_add_old.get_active())
+        self.set_text_view(s_from, s_to)
+
+    def set_text_view(self, s_from, s_to):
+
         textbuffer_from = self.tv_from.get_buffer()
         textbuffer_to = self.tv_to.get_buffer()
-
-        s_from, s_to = translate.text(s_from, add_old=self.cbtn_add_old.get_active())
 
         textbuffer_from.set_text(s_from.strip())
         textbuffer_to.set_text(s_to.strip())

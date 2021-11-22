@@ -8,6 +8,7 @@ from pathlib import Path
 config = configparser.ConfigParser()
 config_data = None
 config_file_name = "config.json"
+config_file_name_bak = "config.json_bak"
 app_home_dir = os.getenv("HOME") + "/.cache/ldr-translate"
 config_path = app_home_dir + "/" + config_file_name
 
@@ -89,6 +90,12 @@ def old2new():
 
         with open(config_path, 'w') as file:
             json.dump(config_data_new, file, ensure_ascii=False)
-        os.remove(config_file_name)
+        shutil.move(config_file_name, config_file_name_bak)
 
         print("数据迁移完毕")
+    elif(not os.path.exists(config_path)):
+        print("旧数据被删除了，恢复中……")
+
+        if not Path(app_home_dir).exists():
+            os.makedirs(app_home_dir)
+        shutil.copy(config_file_name_bak, config_path)

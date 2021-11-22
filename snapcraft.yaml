@@ -4,11 +4,15 @@ summary: 翻译软件
 description: |
   使用百度接口，对接翻译，可以复制翻译、OCR，方便文献阅读
 version: '1.0.0'
-apps:
-  ldr-translate:
-    command: /root/parts/ldr-translate/src/lt
+
+grade: devel
+confinement: devmode
+
+# apps:
+#   ldr:
+#     command: python3 ./ldr-translate.py
 
 parts:
-  ldr-translate:
+  ldr:
     plugin: python
-    source: .
+    source: ./ldr-translate

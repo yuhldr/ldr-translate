@@ -1,7 +1,7 @@
 import os
 from api.server import baidu
 import time
-from api import config
+from api import config, tools
 
 last_s = None
 last_s2 = None
@@ -15,14 +15,14 @@ config_section = "setting"
 
 def text(s_from, fromLang="auto", type="baidu", add_old=True):
     global last_s, last_s2, last_time
-    toLang, changeLang = get_to_language()
+    toLang, changeLang = tools.get_to_language()
     config_setting = config.get_config_section(config_section)
 
     translate_span = config_setting["translate_span"]
 
     if(s_from is None):
         if(last_s is None):
-            return "复制即可翻译", "系统直接截图到剪贴板，自动识别并翻译"
+            return "复制即可翻译", "系统直接截图到剪贴板，自动识别并翻译" + "\n\n测试功能：\n勾选latex识别，可将图片公式转化为latex代码"
         else:
             s_from = last_s
 
@@ -47,45 +47,14 @@ def text(s_from, fromLang="auto", type="baidu", add_old=True):
     return last_s, last_s2
 
 
-def ocr(img, type="baidu"):
+def ocr(img, type="baidu", latex=False):
 
     if (type == "baidu"):
-        s = baidu.ocr(img)
+        s = baidu.ocr(img, latex=latex)
     else:
-        s = baidu.ocr(img)
+        s = baidu.ocr(img, latex=latex)
 
     return s
-
-
-to_language_zh = ""
-last_to_language_zh = ""
-translate_to_languages_zh = config.get_config_setting(
-)["translate_to_languages_zh"]
-
-
-def set_to_language(to_lg):
-    global to_language_zh
-    to_language_zh = to_lg
-    config.set_config(config_section, "to_long", to_lg)
-
-
-def get_to_language():
-    global to_language_zh, last_to_language_zh
-
-    change_language = last_to_language_zh != to_language_zh
-
-    to_language_zh = config.get_config_setting()["to_long"]
-    last_to_language_zh = to_language_zh
-
-    return to_language_zh, change_language
-
-
-# 中文转为序号，与第三方对应
-def zh2LangPar(zh):
-    i = translate_to_languages_zh.index(zh)
-    if (i < 0):
-        i = 0
-    return i
 
 
 def check_server_translate(server, a, b):
