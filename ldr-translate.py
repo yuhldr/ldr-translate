@@ -105,7 +105,6 @@ class LdrTranlate(Gtk.Application):
 
     def _on_help(self, event=None, data=None):
 
-        s = "1. 复制即可自动翻译，状态栏可暂停复制即翻译\n2. 截图到系统剪贴板，自动OCR识别并翻译"
         logo = GdkPixbuf.Pixbuf.new_from_file_at_size("./ui/icon.png", 64, 64)
 
         config_version = config.get_config_version()
@@ -116,7 +115,7 @@ class LdrTranlate(Gtk.Application):
         dialog.set_program_name("兰译")
         dialog.set_version("V " + config_version["name"])
         dialog.set_license_type(Gtk.License.GPL_3_0)
-        dialog.set_comments(s)
+        dialog.set_comments(config_version["msg"])
 
         dialog.set_website(config_version["home_url"])
         dialog.set_website_label(config_version["home_name"])

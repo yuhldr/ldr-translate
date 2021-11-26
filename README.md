@@ -3,15 +3,16 @@
  <img src="ui/icon.png" width = "36" height = "36" alt="图片名称" align=center />
 一个ubuntu的翻译软件，使用Gtk3开发，python语言，翻译用的百度接口
 
-> 已打包deb，经测试ubuntu20.04可以安装，ubuntu 21.10使用gnome4，无法使用该项目，未来会适配
+> 已打包deb，真实环境安装（非最小安装）ubuntu20.04、ubuntu 21.10桌面版，都可以正常使用该软件
 
 - 复制文本自动翻译(可划词翻译)
 - 截图自动识别、并翻译
-- 可选追加复制
+- 可选追加复制、可自动去除文献中无意义的换行
 - 可修改复制内容，重新翻译
 - 多语言互译支持，自动识别当前语言
 - 设置中自定义接口账号
 - （待完善）支持多平台api接口，目前仅支持百度api，足够了……
+- （测试中）截图公式，自动识别为latex代码，目前使用百度接口，效果不太好
 - 页面随着系统主题（gnome）自动变化
 
 |系统默认主题 yaru-dark|第三方主题layan|第三方主题kimi-dark|
@@ -20,7 +21,7 @@
 
 ## 安装
 
-在 releases下载`.deb` 的安装包，只有23kb
+在 releases下载`.deb` 的安装包，只有20+k
 
 - [gitee 国内](https://gitee.com/yuhldr/ldr-translate/releases)
 - [github 国外](https://github.com/yuhldr/ldr-translate/releases/)
