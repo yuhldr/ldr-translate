@@ -96,7 +96,6 @@ class Translate(Gtk.ApplicationWindow):
         else:
             text = clipboard_.wait_for_text()
 
-        print(text)
         return text
 
     def copy_auto_translate(self, clipboard_=None):

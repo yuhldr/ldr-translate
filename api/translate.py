@@ -1,4 +1,4 @@
-import os
+import re
 from api.server import baidu
 import time
 from api import config, tools
@@ -35,7 +35,8 @@ def text(s_from, fromLang="auto", type="baidu", add_old=True):
     if (add_old):
         s_from = last_s + " " + s_from
 
-    s_from = s_from.strip()
+    s_from = s_from.replace("-\n", "").strip()
+    s_from = re.sub("(?<!\.|-|。)\n", " ", s_from)
 
     if (type == "baidu"):
         last_s2 = baidu.translate_text(s_from, fromLang, toLang)
