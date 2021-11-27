@@ -1,104 +1,141 @@
-import gi
-from api import config, translate
+import gi, os, shutil, requests
+from api import config, translate, tools
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 
 class Preference(Gtk.Window):
-    server = "baidu"
 
-    def __init__(self, title, server):
-        Gtk.Window.__init__(self)
+    DESKTOP_NAME = "ldr-translate.desktop"
+    HOME_PATH = os.getenv("HOME")
+    AUTOSTART_DIR = HOME_PATH + '/.config/autostart'
+    AUTOSTART_PATH = AUTOSTART_DIR + "/" + DESKTOP_NAME
+    DESKTOP_PATH = "/usr/share/applications/" + DESKTOP_NAME
 
-        self.server = server
-
-        # self.set_default_size(450, 360)
-        self.set_keep_above(True)
+    def __init__(self):
 
         ui = Gtk.Builder()
         ui.add_from_file('./ui/preference.ui')
-        tc = ui.get_object('tc')
 
-        self.hb = ui.get_object('pf_hb')
-        self.hb.props.title = title
-        self.set_titlebar(self.hb)
+        window = ui.get_object("windows_peference")
+        window.set_keep_above(True)
+        window.set_default_size(400, 360)
 
-        self.tv_translate_app_id = ui.get_object('tv_translate_app_id')
-        self.tv_translate_secret_key = ui.get_object('tv_translate_secret_key')
-        self.lb_translate_msg = ui.get_object('lb_translate_msg')
+        self.init_other(ui)
+        self.init_baidu_api(ui)
+        self.init_tencent(ui)
+        window.show_all()
 
-        self.tv_ocr_app_key = ui.get_object('tv_ocr_app_key')
-        self.tv_ocr_secret_key = ui.get_object('tv_ocr_secret_key')
-        self.lb_ocr_msg = ui.get_object('lb_ocr_msg')
+    def init_other(self, ui):
+        config_version = config.get_config_version()
 
-        config_baidu = config.get_config_section(self.server)
+        cbtn_auto_start = ui.get_object('cbtn_auto_start')
+        cbtn_auto_start.set_active(self.get_autostart())
+        cbtn_auto_start.connect('activate', self.update_autostart)
 
-        self.tv_translate_app_id.get_buffer().set_text(config_baidu["translate_app_id"])
-        self.tv_translate_secret_key.get_buffer().set_text(config_baidu["translate_secret_key"])
-        self.tv_ocr_app_key.get_buffer().set_text(config_baidu["ocr_api_key"])
-        self.tv_ocr_secret_key.get_buffer().set_text(config_baidu["ocr_secret_key"])
+        self.sp_update = ui.get_object('sp_update')
+        self.lb_update_msg = ui.get_object('lb_update_msg')
+        self.lb_version_msg = ui.get_object('lb_version_msg')
 
-        ui.get_object('btn_translate_check').connect("clicked", self.check_translate)
-        ui.get_object('btn_ocr_check').connect("clicked", self.check_ocr)
-        ui.get_object('pf_save').connect("clicked", self.save)
-        ui.get_object('pf_close').connect("clicked", self.close)
+        self.lb_version_msg.set_markup(config_version["msg"])
+        self.lb_update_msg.set_markup(
+            "<a href='%s'>当前版本：v%s.%d</a>" %
+            (config_version["home_url"], config_version["name"], config_version["code"]))
 
-        url_translate = "<a href='" + config_baidu[
+        ui.get_object('btn_update').connect('clicked', self.check_update)
+
+    def init_baidu_api(self, ui):
+
+        self.tv_baidu_translate_app_id = ui.get_object(
+            'tv_baidu_translate_app_id')
+        self.tv_baidu_translate_secret_key = ui.get_object(
+            'tv_baidu_translate_secret_key')
+        self.lb_baidu_translate_msg = ui.get_object('lb_baidu_translate_msg')
+
+        self.tv_baidu_ocr_app_key = ui.get_object('tv_baidu_ocr_app_key')
+        self.tv_baidu_ocr_secret_key = ui.get_object('tv_baidu_ocr_secret_key')
+        self.lb_baidu_ocr_msg = ui.get_object('lb_baidu_ocr_msg')
+
+        ui.get_object('btn_baidu_translate_save').connect(
+            "clicked", self.save_baidu_translate)
+        ui.get_object('btn_baidu_ocr_save').connect("clicked",
+                                                    self.save_baidu_ocr)
+        config_api = config.get_config_section(tools.server_baidu)
+
+        self.tv_baidu_translate_app_id.get_buffer().set_text(
+            config_api["translate_app_id"])
+        self.tv_baidu_translate_secret_key.get_buffer().set_text(
+            config_api["translate_secret_key"])
+        self.tv_baidu_ocr_app_key.get_buffer().set_text(
+            config_api["ocr_api_key"])
+        self.tv_baidu_ocr_secret_key.get_buffer().set_text(
+            config_api["ocr_secret_key"])
+
+        url_translate = "<a href='" + config_api[
             "translate_url"] + "'>如何获取？</a>"
-        url_ocr = "<a href='" + config_baidu["ocr_url"] + "'>如何获取？</a>"
-        ui.get_object('lb_tanslate_way').set_markup(url_translate)
-        ui.get_object('lb_ocr_way').set_markup(url_ocr)
+        url_ocr = "<a href='" + config_api["ocr_url"] + "'>如何获取？</a>"
+        ui.get_object('lb_baidu_tanslate_way').set_markup(url_translate)
+        ui.get_object('lb_baidu_ocr_way').set_markup(url_ocr)
 
-        self.add(tc)
-        self.show_all()
+    def init_tencent(self, ui):
 
-    def open(self):
-        self.show_all()
+        self.tv_tencent_secret_id = ui.get_object('tv_tencent_secret_id')
+        self.tv_tencent_secret_key = ui.get_object('tv_tencent_secret_key')
+        self.lb_tencnet_msg = ui.get_object('lb_tencnet_msg')
 
-    def close(self, a=None, b=None):
-        self.destroy()
+        config_api = config.get_config_section(tools.server_tencent)
+        url = "<a href='" + config_api["url"] + "'>如何获取？</a>"
+        ui.get_object('lb_tencnet_way').set_markup(url)
 
-    def check_translate(self, btn=None, save=False):
+        ui.get_object('btn_tencnet_save').connect("clicked", self.save_tencent)
+
+    def save_baidu_translate(self, btn=None):
         ok = False
-        text_a = self.get_text(self.tv_translate_app_id)
-        text_b = self.get_text(self.tv_translate_secret_key)
-
-        msg = "超时或账号密码错误"
-
-        if(len(text_a) == 0 or len(text_b) == 0):
-            msg = "已恢复默认（不推荐）"
-        else:
-            ok = translate.check_server_translate(self.server, text_a, text_b)
-            if (ok):
-                msg = "成功，已保存"
-                config.set_config(self.server, "translate_app_id", text_a)
-                config.set_config(self.server, "translate_secret_key", text_b)
-        self.lb_translate_msg.set_text(msg)
-
-        return ok, text_a, text_b
-
-    def check_ocr(self, btn=None, save=False):
-        ok = False
-        text_a = self.get_text(self.tv_ocr_app_key)
-        text_b = self.get_text(self.tv_ocr_secret_key)
+        server = "baidu"
+        text_a = self.get_text(self.tv_baidu_translate_app_id)
+        text_b = self.get_text(self.tv_baidu_translate_secret_key)
 
         msg = "超时或账号密码错误"
 
         if (len(text_a) == 0 or len(text_b) == 0):
             msg = "已恢复默认（不推荐）"
         else:
-            ok = translate.check_server_ocr(self.server, text_a, text_b)
+            ok = translate.check_server_translate(server, text_a, text_b)
             if (ok):
                 msg = "成功，已保存"
-                config.set_config(self.server, "ocr_api_key", text_a)
-                config.set_config(self.server, "ocr_secret_key", text_b)
-                config.set_config(self.server, "access_token", "")
-                config.set_config(self.server, "expires_in_date", 0)
-
-        self.lb_ocr_msg.set_text(msg)
+                config.set_config(server, "translate_app_id", text_a)
+                config.set_config(server, "translate_secret_key", text_b)
+        self.lb_baidu_translate_msg.set_text(msg)
 
         return ok, text_a, text_b
+
+    def save_baidu_ocr(self, btn=None):
+        ok = False
+        server = "baidu"
+
+        text_a = self.get_text(self.tv_baidu_ocr_app_key)
+        text_b = self.get_text(self.tv_baidu_ocr_secret_key)
+
+        msg = "超时或账号密码错误"
+
+        if (len(text_a) == 0 or len(text_b) == 0):
+            msg = "已恢复默认（不推荐）"
+        else:
+            ok = translate.check_server_ocr(server, text_a, text_b)
+            if (ok):
+                msg = "成功，已保存"
+                config.set_config(server, "ocr_api_key", text_a)
+                config.set_config(server, "ocr_secret_key", text_b)
+                config.set_config(server, "access_token", "")
+                config.set_config(server, "expires_in_date", 0)
+
+        self.lb_baidu_ocr_msg.set_text(msg)
+
+        return ok, text_a, text_b
+
+    def save_tencent(self, btn=None):
+        self.lb_tencnet_msg.set_text("暂不支持")
 
     def get_text(self, text_view):
         tb = text_view.get_buffer()
@@ -108,6 +145,40 @@ class Preference(Gtk.Window):
 
         return text
 
-    def save(self, a=None, b=None):
-        self.check_translate(save=True)
-        self.check_ocr(save=True)
+    def update_autostart(self, menu_check):
+        if not menu_check.get_active():
+            try:
+                os.remove(self.AUTOSTART_PATH)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                if not os.path.exists(self.AUTOSTART_DIR):
+                    os.makedirs(self.AUTOSTART_DIR)
+                shutil.copy(self.DESKTOP_PATH, self.AUTOSTART_PATH)
+            except Exception as ex:
+                print(ex)
+
+    def get_autostart(self):
+        return os.path.exists(self.AUTOSTART_PATH)
+
+    def check_update(self, view=None):
+        print(view)
+        self.sp_update.start()
+        urls = [
+            "https://raw.githubusercontent.com/yuhldr/ldr-translate/master/config.json",
+            "https://gitee.com/yuhldr/ldr-translate/raw/master/config.json",
+            config.get_config_version()["url"]
+        ]
+        update = False
+        i = 0
+        while not update and i < len(urls):
+            update, s, msg = config.check_update_version(urls[i])
+            i += 1
+
+        print(s)
+
+        self.lb_update_msg.set_markup(s)
+        self.lb_version_msg.set_markup(msg)
+
+        self.sp_update.stop()

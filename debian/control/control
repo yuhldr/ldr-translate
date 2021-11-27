@@ -4,6 +4,6 @@ version: 1.1.0
 Depends: gir1.2-appindicator3-0.1,python3
 architecture: amd64
 Maintainer: yuhldr <yuhldr@qq.com>
-Homepage: https://github.com/yuhlzu/ldr-translate
+Homepage: https://github.com/yuhldr/ldr-translate
 description: 一个非常好用的翻译软件，看文献的好帮手
-Installed-Size: 29000
+Installed-Size: 29

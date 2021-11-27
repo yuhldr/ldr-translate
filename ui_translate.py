@@ -12,7 +12,7 @@ class Translate(Gtk.ApplicationWindow):
     setting_titles = ["百度API", "其他待补充"]
     setting_title_types = [baidu.config_server, ""]
     is_hide = False
-    isFirsts = [True, True]
+    isFirsts = [True, True, True]
     clipboard = None
 
     def __init__(self):
@@ -25,28 +25,28 @@ class Translate(Gtk.ApplicationWindow):
         ui = Gtk.Builder()
         ui.add_from_file('./ui/translate.ui')
 
-        mbtn_prf = ui.get_object('mbtn_prf')
-        menu = Gtk.Menu()
-        mbtn_prf.set_popup(menu)
-        for title in self.setting_titles:
-            menuitem = Gtk.MenuItem(title)
-            menuitem.connect("activate", self.on_menuitem_activated)
-            menu.append(menuitem)
-        menu.show_all()
+        ui.get_object('btn_preference').connect("clicked",
+                                                self.open_preference)
 
         self.set_titlebar(ui.get_object('hb'))
 
         self.tv_from = ui.get_object('tv_from')
         self.tv_to = ui.get_object('tv_to')
-        self.currency_combo = ui.get_object('currency_combo')
+
+        self.cbt_server = ui.get_object('cbt_server')
+        self.cbt_server.connect("changed", self.on_cbt_server_changed)
+        for currency in tools.servers_name:
+            self.cbt_server.append_text(currency)
+
         self.cbtn_add_old = ui.get_object('cbtn_add_old')
         # 公式识别
         self.cbtn_tex = ui.get_object('cbtn_tex')
         self.sp_translate = ui.get_object('sp_translate')
 
-        self.currency_combo.connect("changed", self.on_currency_combo_changed)
+        self.cbt_lang = ui.get_object('cbt_lang')
+        self.cbt_lang.connect("changed", self.on_cbt_lang_changed)
         for currency in config.get_translate_to_languages_zh():
-            self.currency_combo.append_text(currency)
+            self.cbt_lang.append_text(currency)
 
         ui.get_object('btn_translate').connect("clicked",
                                                self.update_translate_view)
@@ -55,8 +55,8 @@ class Translate(Gtk.ApplicationWindow):
         self.connect("delete-event", self.close)
 
         # 初始化时载入上次的数据
-        toLang, changeLang = tools.get_to_language()
-        self.currency_combo.set_active(tools.zh2LangPar(toLang))
+        self.cbt_server.set_active(tools.server_par())
+        self.cbt_lang.set_active(tools.to_lang_zh_par())
         self.clipboard = self.getClipboard()
 
     def open(self):
@@ -67,17 +67,25 @@ class Translate(Gtk.ApplicationWindow):
         self.is_hide = True
         self.destroy()
 
-    def on_menuitem_activated(self, menuitem):
-        title = menuitem.get_label()
-        i = self.setting_titles.index(title)
-        window = Preference(title, self.setting_title_types[i])
-        window.open()
+    def open_preference(self, view=None):
+        Preference()
 
-    def on_currency_combo_changed(self, combo):
+    def on_cbt_lang_changed(self, combo):
         text = combo.get_active_text()
         if text is None:
             text = config.get_translate_to_languages_zh()[0]
-        tools.set_to_language(text)
+        tools.set_to_lang_zh(text)
+        if (not self.isFirsts[1]):
+            self.translate_by_s()
+        else:
+            self.isFirsts[1] = False
+        return text
+
+    def on_cbt_server_changed(self, combo):
+        text = combo.get_active_text()
+        if text is None:
+            text = translate.servers_name[0]
+        tools.set_server_name(text)
         if (not self.isFirsts[0]):
             self.translate_by_s()
         else:
@@ -103,9 +111,9 @@ class Translate(Gtk.ApplicationWindow):
         self.sp_translate.start()
         if (clipboard_ is not None):
             s_from = self.get_text_by_clipboard(clipboard_)
-        elif (not self.isFirsts[1]):
+        elif (not self.isFirsts[2]):
             s_from = self.get_text_by_clipboard(self.clipboard)
-            self.isFirsts[1] = False
+            self.isFirsts[2] = False
 
         if(self.cbtn_tex.get_active()):
             if(s_from is None):

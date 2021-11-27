@@ -31,7 +31,7 @@ def translate_text(s, fromLang="auto", toLangZh=""):
 
     # fromLang = 'auto'   # 原文语种
     # toLang = 'zh'   # 译文语种
-    toLang = translate_to_languages[tools.zh2LangPar(toLangZh)]
+    toLang = translate_to_languages[tools.to_lang_zh2par(toLangZh)]
 
     text, ok = translate(s, secret_id, secret_key, fromLang, toLang)
     return text
@@ -166,6 +166,7 @@ def tencent_get_url_encoded_params(secret_id, secret_key):
     params_data = '&'.join(temp_list)
     return params_data
 
+
 def tencent_parse(query_text):
     url_with_args = 'https://tmt.tencentcloudapi.com/?' + self.tencent_get_url_encoded_params(
         query_text)
@@ -173,6 +174,14 @@ def tencent_parse(query_text):
     json_res = res.json()
     trans_text = json_res['Response']['TargetText']
     return trans_text
+
+
+def ocr(img_data, latex=False):
+    pass
+
+
+def check():
+    pass
 
 
 def test():

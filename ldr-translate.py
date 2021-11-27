@@ -17,6 +17,7 @@ from pathlib import Path
 # # 在import之后直接添加以下启用代码即可 python3 -X faulthandler ldr-translate.py
 # faulthandler.enable()
 from api import config
+from preferences import Preference
 config.old2new()
 
 gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
@@ -53,13 +54,6 @@ class LdrTranlate(Gtk.Application):
                                     self._active_translate_windows)
         self.menu_auto_translate.set_active(True)
 
-    def get_version_data(self):
-        # 这个会卡，外网
-        s, self.update = config.get_update_version()
-        self.help_menu.set_label(s)
-        if (self.update):
-            self.indicator.set_label("有更新", "")
-
     def _create_menu(self):
         menu = Gtk.Menu()
 
@@ -73,19 +67,17 @@ class LdrTranlate(Gtk.Application):
                                          self._active_auto_translate)
         menu.add(self.menu_auto_translate)
 
-
-        pref_menu_auto_start_up = Gtk.CheckMenuItem(
-            label='开机自启', active=self.get_autostart())
-        pref_menu_auto_start_up.connect('activate', self.update_autostart)
-        menu.add(pref_menu_auto_start_up)
-
         menu.add(Gtk.SeparatorMenuItem())
 
         config_version = config.get_config_version()
 
-        self.help_menu = Gtk.MenuItem(label="关于：V" + config_version["name"])
-        self.help_menu.connect('activate', self._on_help)
-        menu.add(self.help_menu)
+        menu_prf = Gtk.MenuItem(label="设置")
+        menu_prf.connect('activate', self._on_preference)
+        menu.add(menu_prf)
+
+        help_menu = Gtk.MenuItem(label="关于：V" + config_version["name"])
+        help_menu.connect('activate', self._on_help)
+        menu.add(help_menu)
 
         exit_menu = Gtk.MenuItem(label='完全退出')
         exit_menu.connect('activate', self.on_exit)
@@ -101,7 +93,7 @@ class LdrTranlate(Gtk.Application):
             pass
 
     def _on_preference(self, event=None, data=None):
-        pass
+        Preference()
 
     def _on_help(self, event=None, data=None):
 
@@ -167,8 +159,8 @@ class LdrTranlate(Gtk.Application):
                     self.translate_win = Translate()
                     self.translate_win.open()
                     self.translate_win.copy_auto_translate()
-            elif (not windows_is_closed):
-                self.translate_win.close()
+            # elif (not windows_is_closed):
+            #     self.translate_win.close()
         elif(is_active_windows):
             if (windows_is_closed):
                 self.translate_win = Translate()
@@ -182,23 +174,6 @@ class LdrTranlate(Gtk.Application):
             return Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         else:
             return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
-
-    def update_autostart(self, menu_check):
-        if not menu_check.get_active():
-            try:
-                os.remove(self.AUTOSTART_PATH)
-            except Exception as e:
-                print(e)
-        else:
-            try:
-                if not os.path.exists(self.AUTOSTART_DIR):
-                    os.makedirs(self.AUTOSTART_DIR)
-                shutil.copy(self.DESKTOP_PATH, self.AUTOSTART_PATH)
-            except Exception as ex:
-                print(ex)
-
-    def get_autostart(self):
-        return os.path.exists(self.AUTOSTART_PATH)
 
 
 if __name__ == "__main__":

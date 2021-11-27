@@ -18,24 +18,31 @@ def load_configs():
     config_data = json.load(open(config_path, "r"))
 
 
-def get_update_version():
+def check_update_version(url):
+    print("更新：" + url)
     update = False
     version_config_old = get_config_version()
 
-    s = "关于：V " + version_config_old["name"]
-
+    old_version_name = "v%s.%d" % (version_config_old["name"], version_config_old["code"])
+    s = "<a href='%s'>已是最新：v%s</a>" % (version_config_old["home_url"], old_version_name)
+    msg = version_config_old["msg"]
     try:
-        url = version_config_old["url"]
-        request = requests.get(url)
+        request = requests.get(url, timeout=2)
         if (request.status_code == 200):
             json_config = request.json()
             update = json_config["version"]["code"] > version_config_old["code"]
+
+            version_name = "v%s.%d" % (json_config["version"]["name"],
+                                       json_config["version"]["code"])
             if (update):
-                s = "软件有更新！"
+                s = "<a href='%s'>软件有更新：%s -> %s</a>" % (
+                    json_config["version"]["home_url"], old_version_name,
+                    version_name)
+                msg = json_config["version"]["msg"]
     except Exception as e:
         print(e)
 
-    return s, update
+    return update, s, msg
 
 
 def get_config_section(section):

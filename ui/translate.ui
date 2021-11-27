@@ -27,7 +27,7 @@
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="position">0</property>
       </packing>
     </child>
     <child>
@@ -36,44 +36,8 @@
         <property name="can-focus">False</property>
         <property name="spacing">8</property>
         <child>
-          <object class="GtkButton" id="btn_translate">
-            <property name="label" translatable="yes">翻译</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="currency_combo">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSpinner" id="sp_translate">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="active">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkCheckButton" id="cbtn_add_old">
-            <property name="label" translatable="yes">追加模式</property>
+            <property name="label" translatable="yes">追加</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -83,12 +47,12 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack-type">end</property>
-            <property name="position">3</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="cbtn_tex">
-            <property name="label" translatable="yes">latex识别</property>
+            <property name="label" translatable="yes">latex</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -97,14 +61,37 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">4</property>
+            <property name="pack-type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="cbt_server">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="cbt_lang">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="position">1</property>
       </packing>
     </child>
     <child>
@@ -131,22 +118,48 @@
       </packing>
     </child>
   </object>
+  <object class="GtkImage" id="img_setting">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">document-properties</property>
+  </object>
+  <object class="GtkImage" id="img_translate">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">system-reboot-symbolic</property>
+  </object>
   <object class="GtkHeaderBar" id="hb">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">兰译</property>
     <property name="show-close-button">True</property>
     <child>
-      <object class="GtkMenuButton" id="mbtn_prf">
-        <property name="name">兰</property>
+      <object class="GtkButton" id="btn_preference">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
-        <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
-        <child>
-          <placeholder/>
-        </child>
+        <property name="image">img_setting</property>
       </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="btn_translate">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="image">img_translate</property>
+      </object>
+      <packing>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSpinner" id="sp_translate">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="position">2</property>
+      </packing>
     </child>
   </object>
 </interface>

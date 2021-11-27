@@ -29,7 +29,7 @@ def translate_text(s, fromLang="auto", toLangZh=""):
 
     # fromLang = 'auto'   # 原文语种
     # toLang = 'zh'   # 译文语种
-    toLang = translate_to_languages[tools.zh2LangPar(toLangZh)]
+    toLang = translate_to_languages[tools.to_lang_zh2par(toLangZh)]
 
     text, ok = translate(s, appId, secretKey, fromLang, toLang)
     return text
@@ -141,6 +141,10 @@ def ocr(img_data, latex=False):
                 s += word["words"]
                 if(latex):
                     s += "\n"
+                else:
+                    s_ = word["words"]
+                    if(s_[len(s_)-1: len(s_)] != "-"):
+                        s += " "
 
     else:
         print(response.text)
