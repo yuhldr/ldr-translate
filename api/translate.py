@@ -73,6 +73,7 @@ def ocr(img_path, latex=False):
 
 def check_server_translate(server, a, b):
     ok = False
+    print(server)
     if (server == tools.server_tencent):
         ok = tencent.check(a, b)
     else:

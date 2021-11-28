@@ -1,7 +1,7 @@
 # 兰译
 
  <img src="ui/icon.png" width = "36" height = "36" alt="图片名称" align=center />
-一个ubuntu的翻译软件，使用Gtk3开发，python语言，翻译用的百度接口
+一个ubuntu的翻译软件，使用Gtk3开发，python语言，翻译用的百度、腾讯接口
 
 > 已打包deb，真实环境安装（非最小安装）ubuntu20.04、ubuntu 21.10桌面版，都可以正常使用该软件
 
@@ -11,13 +11,13 @@
 - 可修改复制内容，重新翻译
 - 多语言互译支持，自动识别当前语言
 - 设置中自定义接口账号
-- （待完善）支持多平台api接口，目前仅支持百度api，足够了……
+- （完善中）支持多平台api接口，目前仅支持百度、腾讯api，足够了……
 - （测试中）截图公式，自动识别为latex代码，目前使用百度接口，效果不太好
 - 页面随着系统主题（gnome）自动变化
 
-|系统默认主题 yaru-dark|第三方主题layan|第三方主题kimi-dark|
-|:-:|:-:|:-:|
-![主题2](images/lt.png)|![主题1](images/lt-layan.png)|![主题1](images/lt-kimi.png)
+|系统默认主题 yaru-dark|第三方主题layan|
+|:-:|:-:|
+![主题2](images/lt.png)|![主题1](images/lt_other.png)
 
 ## 安装
 
@@ -61,9 +61,7 @@ sudo apt remove ldr-translate -y
 
 翻译页面左上角，可以设置百度的翻译API以及图片识别API，默认账号用的人太多，容易报错
 
-|设置|百度api设置|
-|:-:|:-:|
-![设置](images/prf_api.png)|![百度api设置](images/api_baidu.png)|
+![百度api设置](images/prf.png)
 
 ## 功能
 

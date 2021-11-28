@@ -153,5 +153,7 @@ def ocr(img_path,
 
 def check(secret_id, secret_key):
     text, ok = translate("test", secret_id, secret_key, "auto", "zh")
+    print(text)
+    print(ok)
 
     return ok

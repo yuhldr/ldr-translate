@@ -113,7 +113,7 @@ class Preference(Gtk.ApplicationWindow):
 
     def save_baidu_ocr(self, btn=None):
         ok = False
-        server = "baidu"
+        server = tools.server_baidu
 
         text_a = self.get_text(self.tv_baidu_ocr_app_key)
         text_b = self.get_text(self.tv_baidu_ocr_secret_key)
@@ -134,7 +134,24 @@ class Preference(Gtk.ApplicationWindow):
         self.lb_baidu_ocr_msg.set_text(msg)
 
     def save_tencent(self, btn=None):
-        self.lb_tencnet_msg.set_text("暂不支持")
+        ok = False
+        server = tools.server_tencent
+        text_a = self.get_text(self.tv_tencent_secret_id)
+        text_b = self.get_text(self.tv_tencent_secret_key)
+
+        msg = "超时或账号密码错误"
+
+        if (len(text_a) == 0 or len(text_b) == 0):
+            msg = "已恢复默认（不推荐）"
+        else:
+            ok = translate.check_server_translate(server, text_a, text_b)
+            if (ok):
+                msg = "成功，已保存"
+                config.set_config(server, "translate_app_id", text_a)
+                config.set_config(server, "translate_secret_key", text_b)
+        print(msg)
+        self.lb_tencnet_msg.set_text(msg)
+
 
     def get_text(self, text_view):
         tb = text_view.get_buffer()

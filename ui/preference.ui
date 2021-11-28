@@ -366,7 +366,7 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=4 n-rows=6 -->
+          <!-- n-columns=4 n-rows=4 -->
           <object class="GtkGrid" id="api_tencent">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -460,33 +460,6 @@
                 <property name="left-attach">1</property>
                 <property name="top-attach">3</property>
                 <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="lb_tencent_notice">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-top">8</property>
-                <property name="label" translatable="yes">&lt;a href='https://console.cloud.tencent.com/ocr/settings'&gt;请在ocr设置中关闭“自动转入后付费”&lt;/a&gt;</property>
-                <property name="use-markup">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">4</property>
-                <property name="width">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">否则每月OCR1000次免费额度使用完毕后，腾讯将会自动扣费</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">5</property>
-                <property name="width">4</property>
               </packing>
             </child>
             <child>
