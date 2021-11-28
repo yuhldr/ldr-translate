@@ -43,7 +43,8 @@ class Preference(Gtk.ApplicationWindow):
         self.lb_version_msg.set_markup(config_version["msg"])
         self.lb_update_msg.set_markup(
             "<a href='%s'>当前版本：v%s.%d</a>" %
-            (config_version["home_url"], config_version["name"], config_version["code"]))
+            (config_version["home_url"], config_version["name"],
+             config_version["code"]))
 
         ui.get_object('btn_update').connect('clicked', self.check_update)
 
@@ -149,9 +150,7 @@ class Preference(Gtk.ApplicationWindow):
                 msg = "成功，已保存"
                 config.set_config(server, "translate_app_id", text_a)
                 config.set_config(server, "translate_secret_key", text_b)
-        print(msg)
         self.lb_tencnet_msg.set_text(msg)
-
 
     def get_text(self, text_view):
         tb = text_view.get_buffer()
@@ -189,8 +188,6 @@ class Preference(Gtk.ApplicationWindow):
         while not update and i < len(urls):
             update, s, msg = config.check_update_version(urls[i])
             i += 1
-
-        print(s)
 
         self.lb_update_msg.set_markup(s)
         self.lb_version_msg.set_markup(msg)

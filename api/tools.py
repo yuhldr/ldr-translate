@@ -11,10 +11,10 @@ server_name = config.get_config_setting(
 )["server_name"]
 
 
-server_baidu = "baidu"
+server_baidu = config.config_sections_baidu
 server_baidu_name = "百度"
 
-server_tencent = "tencent"
+server_tencent = config.config_sections_tencent
 server_tencent_name = "腾讯"
 
 servers = {"百度": server_baidu, "腾讯": server_tencent}
@@ -46,7 +46,7 @@ def server_par():
 def server_name2par(server_name):
     if (server_name is None or len(server_name) == 0):
         return 0
-    print(servers_name)
+
     i = servers_name.index(server_name)
     if (i < 0):
         i = 0
@@ -87,8 +87,6 @@ def get_to_lang_zh_():
 
     to_language_zh = config.get_config_setting()["to_long"]
     last_to_language_zh = to_language_zh
-
-    print("1 " + to_language_zh)
 
     return to_language_zh, change_language
 

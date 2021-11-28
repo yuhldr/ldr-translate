@@ -28,7 +28,7 @@
         <property name="margin-bottom">16</property>
         <property name="interpolate-size">True</property>
         <child>
-          <!-- n-columns=3 n-rows=4 -->
+          <!-- n-columns=3 n-rows=3 -->
           <object class="GtkGrid" id="prf">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -86,15 +86,6 @@
                 <property name="top-attach">1</property>
                 <property name="width">2</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>

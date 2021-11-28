@@ -15,7 +15,7 @@
 - （测试中）截图公式，自动识别为latex代码，目前使用百度接口，效果不太好
 - 页面随着系统主题（gnome）自动变化
 
-|系统默认主题 yaru-dark|第三方主题layan|
+|系统默认主题 yaru-dark|第三方主题|
 |:-:|:-:|
 ![主题2](images/lt.png)|![主题1](images/lt_other.png)
 
@@ -57,9 +57,9 @@ sudo apt remove ldr-translate -y
 - snap打包，一直失败，如果您熟悉snap，希望一起完善
 - ppa 发布，我设置了，但是不熟悉，目前未能完成
 
-## API账号
+## 设置
 
-翻译页面左上角，可以设置百度的翻译API以及图片识别API，默认账号用的人太多，容易报错
+可以检查更新，可以开机自启，可以设置自己的百度腾讯api
 
 ![百度api设置](images/prf.png)
 
@@ -68,13 +68,13 @@ sudo apt remove ldr-translate -y
 运行以后，弹出翻译窗口，自动置顶窗口，5大功能
 
 1. 自动翻译
-  
+
     复制时自动翻译。如需划词翻译，[config.json](./config.json) 里修改 `"translate_way_copy": false,`，不建议划词翻译，有时候有问题
 
     ![运行](images/lt_more.png)
 
 2. 图片翻译
-  
+
     截图到系统剪贴板，会自动识别并翻译，为了方便将ubuntu2004系统设置的快捷键，修改为一个自己习惯的。
 
     ![图片翻译](images/ocr.png)
@@ -87,7 +87,7 @@ sudo apt remove ldr-translate -y
 
 4. 修改编辑
 
-    可以修改复制或者OCR的内容，然后点击右上角重新翻译
+    可以修改复制或者OCR的内容，然后点击左上角刷新按钮，重新翻译
 
 5. 追加模式
 

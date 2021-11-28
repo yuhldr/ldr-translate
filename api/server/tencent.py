@@ -1,15 +1,11 @@
 import hashlib
-import os
 import random
 import requests
-import urllib
 import time
 import base64
 import hmac
-from urllib.parse import quote
 
 from api import config, tools
-import hmac
 
 config_server = "tencent"
 default_secret_id = "AKIDsiHacNr52j9IBpDJ8gyyh9LGuJSKvFI5"
@@ -68,12 +64,14 @@ def translate(query_text,
         "Target": lang_to
     }
     s = get_string_to_sign(query_method, endpoint, data)
-    print(s)
+
     data["Signature"] = sign_str(secret_key, s, hashlib.sha1)
-    print(data)
+
     try:
-        request = requests.get("https://" + endpoint, params=data)
-        print(request.text)
+        request = requests.get("https://" + endpoint,
+                               params=data,
+                               timeout=config.time_out)
+
         if (request.status_code == 200):
             result = request.json()["Response"]
             if ("Error" in result):
@@ -115,7 +113,7 @@ def ocr(img_path,
     img_data = open(img_path, 'rb').read()
 
     img = base64.b64encode(img_data)
-    print(img)
+
     ok = False
     data = {
         "Action": action,
@@ -132,8 +130,10 @@ def ocr(img_path,
     data["Signature"] = sign_str(secret_key, s, hashlib.sha1)
 
     try:
-        request = requests.get("https://" + endpoint, params=data)
-        print(request.text)
+        request = requests.get("https://" + endpoint,
+                               params=data,
+                               timeout=config.time_out)
+
         if (request.status_code == 200):
             result = request.json()["Response"]
             if ("Error" in result):
@@ -153,7 +153,5 @@ def ocr(img_path,
 
 def check(secret_id, secret_key):
     text, ok = translate("test", secret_id, secret_key, "auto", "zh")
-    print(text)
-    print(ok)
 
     return ok

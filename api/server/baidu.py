@@ -44,7 +44,7 @@ def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
     url = "https://api.fanyi.baidu.com/api/trans/vip/translate?appid=%s&q=%s&from=%s&to=%s&salt=%s&sign=%s"
     url = url % (appId, urllib.parse.quote(s), fromLang, toLang, salt, sign)
     try:
-        request = requests.get(url)
+        request = requests.get(url, timeout=config.time_out)
         if(request.status_code == 200):
             result = request.json()
             if ("error_code" in result):
@@ -70,7 +70,7 @@ def get_token_by_url(ocr_api_key, ocr_secret_key):
     host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s' % (
         ocr_api_key, ocr_secret_key)
     try:
-        request = requests.get(host)
+        request = requests.get(host, timeout=config.time_out)
 
         jsons = request.json()
         if ("access_token" not in jsons):
@@ -124,17 +124,20 @@ def ocr(img_path, latex=False):
         request_url += "formula"
     else:
         request_url += "general_basic"
-    print(request_url)
+
     img = base64.b64encode(img_data)
     ok, token = get_token()
     params = {"image": img}
     request_url = request_url + "?access_token=" + token
     headers = {'content-type': 'application/x-www-form-urlencoded'}
-    response = requests.post(request_url, data=params, headers=headers)
+    response = requests.post(request_url,
+                             data=params,
+                             headers=headers,
+                             timeout=config.time_out)
 
     if response:
         jsons = (response.json())
-        print(jsons)
+
         if ("error_code" in jsons):
             return str(jsons["error_code"]) + jsons["error_msg"]
         else:

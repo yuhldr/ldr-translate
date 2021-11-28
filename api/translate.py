@@ -16,7 +16,7 @@ config_section = "setting"
 def text(s_from, fromLang="auto", add_old=True):
     global last_s, last_s2, last_time
     toLangZh, changeLang = tools.get_to_lang_zh_()
-    print("2" + toLangZh)
+
     server, changeServer = tools.get_server_()
 
     config_setting = config.get_config_section(config_section)
@@ -49,7 +49,7 @@ def text(s_from, fromLang="auto", add_old=True):
 
 
 def translate(s, toLangZh, server, fromLang="auto"):
-    print(server + "  " + s)
+
     if (server == tools.server_tencent):
         s = tencent.translate_text(s, fromLang, toLangZh)
     else:
@@ -66,14 +66,13 @@ def ocr(img_path, latex=False):
         ok, s = baidu.ocr(img_path, latex=latex)
     else:
         ok, s = baidu.ocr(img_path, latex=latex)
-    print("\n\nocr\n")
-    print(s)
+
     return ok, s
 
 
 def check_server_translate(server, a, b):
     ok = False
-    print(server)
+
     if (server == tools.server_tencent):
         ok = tencent.check(a, b)
     else:

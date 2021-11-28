@@ -3,33 +3,30 @@
 #
 # A simple indicator applet displaying cpu and memory information
 #
-# Author: Alex Eftimie <alex@eftimie.ro>
-# Fork Author: fossfreedom <foss.freedom@gmail.com>
-# Original Homepage: http://launchpad.net/indicator-sysmonitor
-# Fork Homepage: https://github.com/fossfreedom/indicator-sysmonitor
+# Author: yuh <yuhldr@gmail.com>
+# Original Homepage: https://yuhldr.github.io/
+# Fork Homepage: https://github.com/yuhldr/ldr-translate
 # License: GPL v3
-#
+
 import gi
 import os
-import shutil
-from pathlib import Path
 # import faulthandler
 # # 在import之后直接添加以下启用代码即可 python3 -X faulthandler ldr-translate.py
 # faulthandler.enable()
 from api import config
-from preferences import Preference
+
 config.old2new()
 
 gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
 
 from ui_translate import Translate
+from preferences import Preference
 
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gtk, Gdk, GdkPixbuf
 
 
 class LdrTranlate(Gtk.Application):
-
     def __init__(self):
         self.translate_win = None
         self._help_dialog = None
@@ -125,9 +122,7 @@ class LdrTranlate(Gtk.Application):
 
         self._active_translate_windows()
 
-    def _active_translate_windows(self,
-                                  clipboard=None,
-                                  event=None):
+    def _active_translate_windows(self, clipboard=None, event=None):
         # 3种情况会调用这个函数
         #   复制
         is_copy = clipboard is not None and event is not None
@@ -138,13 +133,13 @@ class LdrTranlate(Gtk.Application):
 
         windows_is_closed = self.translate_win is None or self.translate_win.is_hide
 
-        if(is_copy):
+        if (is_copy):
             if (self.menu_auto_translate.get_active()):
                 if (windows_is_closed):
                     self.translate_win = Translate()
                     self.translate_win.open()
                 self.translate_win.copy_auto_translate(clipboard)
-        elif(is_active_auto):
+        elif (is_active_auto):
             if (self.menu_auto_translate.get_active()):
                 if (windows_is_closed):
                     self.translate_win = Translate()
@@ -152,7 +147,7 @@ class LdrTranlate(Gtk.Application):
                     self.translate_win.copy_auto_translate()
             # elif (not windows_is_closed):
             #     self.translate_win.close()
-        elif(is_active_windows):
+        elif (is_active_windows):
             if (windows_is_closed):
                 self.translate_win = Translate()
                 self.translate_win.open()
