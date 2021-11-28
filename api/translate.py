@@ -58,15 +58,17 @@ def translate(s, toLangZh, server, fromLang="auto"):
     return s
 
 
-def ocr(img, latex=False):
+def ocr(img_path, latex=False):
 
     if (tools.get_server() == tools.server_tencent):
-        s = tencent.ocr(img, latex=latex)
+        # 这个有问题，暂时用百度的
+        # ok, s = tencent.ocr(img_path, latex=latex)
+        ok, s = baidu.ocr(img_path, latex=latex)
     else:
-        s = baidu.ocr(img, latex=latex)
+        ok, s = baidu.ocr(img_path, latex=latex)
     print("\n\nocr\n")
     print(s)
-    return s
+    return ok, s
 
 
 def check_server_translate(server, a, b):

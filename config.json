@@ -51,10 +51,10 @@
         "msg": "填写你的appid 密钥，这个我自己的被人用的比较多，可能会有问题",
         "translate_to_languages": [
             "zh",
-            "wy",
+            "zh",
             "en",
             "jp",
-            "ko",
+            "kr",
             "de",
             "fr"
         ]

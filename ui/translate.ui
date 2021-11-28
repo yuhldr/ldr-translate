@@ -37,7 +37,7 @@
         <property name="spacing">8</property>
         <child>
           <object class="GtkCheckButton" id="cbtn_add_old">
-            <property name="label" translatable="yes">追加</property>
+            <property name="label" translatable="yes">追加模式</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -52,7 +52,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="cbtn_tex">
-            <property name="label" translatable="yes">latex</property>
+            <property name="label" translatable="yes">latex识别</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>

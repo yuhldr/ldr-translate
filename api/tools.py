@@ -18,8 +18,8 @@ server_tencent = "tencent"
 server_tencent_name = "腾讯"
 
 servers = {"百度": server_baidu, "腾讯": server_tencent}
-# servers_name = ["百度", "腾讯"]
-servers_name = ["百度"]
+servers_name = ["百度", "腾讯"]
+# servers_name = ["百度"]
 
 
 def set_server_name(name):

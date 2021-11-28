@@ -96,7 +96,7 @@ def get_token():
     if (expires_in_date - time.time() > 0):
         access_token = config_baidu["access_token"]
         if(len(access_token) != 0):
-            return ok, access_token
+            return True, access_token
 
     ocr_api_key = config_baidu["ocr_api_key"]
     ocr_secret_key = config_baidu["ocr_secret_key"]
@@ -112,7 +112,8 @@ def get_token():
     return ok, access_token
 
 
-def ocr(img_data, latex=False):
+def ocr(img_path, latex=False):
+    img_data = open(img_path, 'rb').read()
     # open('./images/lt.png', 'rb').read()
     '''
     通用文字识别
@@ -151,7 +152,7 @@ def ocr(img_data, latex=False):
 
     if(latex):
         s = s.replace(" _ ", "_")
-    return s
+    return ok, s
 
 
 def check_translate(appId, secretKey):

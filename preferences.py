@@ -5,7 +5,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 
-class Preference(Gtk.Window):
+class Preference(Gtk.ApplicationWindow):
 
     DESKTOP_NAME = "ldr-translate.desktop"
     HOME_PATH = os.getenv("HOME")
@@ -14,27 +14,29 @@ class Preference(Gtk.Window):
     DESKTOP_PATH = "/usr/share/applications/" + DESKTOP_NAME
 
     def __init__(self):
+        Gtk.Window.__init__(self)
+        self.set_border_width(10)
+        self.set_default_size(400, 360)
+        self.set_keep_above(True)
+        self.set_title("设置")
 
         ui = Gtk.Builder()
         ui.add_from_file('./ui/preference.ui')
 
-        window = ui.get_object("windows_peference")
-        window.set_keep_above(True)
-        window.set_default_size(400, 360)
-
         self.init_other(ui)
         self.init_baidu_api(ui)
         self.init_tencent(ui)
-        window.show_all()
+        self.add(ui.get_object('gd_prf'))
+        self.show_all()
 
     def init_other(self, ui):
+
         config_version = config.get_config_version()
 
         cbtn_auto_start = ui.get_object('cbtn_auto_start')
         cbtn_auto_start.set_active(self.get_autostart())
         cbtn_auto_start.connect('activate', self.update_autostart)
 
-        self.sp_update = ui.get_object('sp_update')
         self.lb_update_msg = ui.get_object('lb_update_msg')
         self.lb_version_msg = ui.get_object('lb_version_msg')
 
@@ -91,6 +93,7 @@ class Preference(Gtk.Window):
         ui.get_object('btn_tencnet_save').connect("clicked", self.save_tencent)
 
     def save_baidu_translate(self, btn=None):
+
         ok = False
         server = "baidu"
         text_a = self.get_text(self.tv_baidu_translate_app_id)
@@ -107,8 +110,6 @@ class Preference(Gtk.Window):
                 config.set_config(server, "translate_app_id", text_a)
                 config.set_config(server, "translate_secret_key", text_b)
         self.lb_baidu_translate_msg.set_text(msg)
-
-        return ok, text_a, text_b
 
     def save_baidu_ocr(self, btn=None):
         ok = False
@@ -131,8 +132,6 @@ class Preference(Gtk.Window):
                 config.set_config(server, "expires_in_date", 0)
 
         self.lb_baidu_ocr_msg.set_text(msg)
-
-        return ok, text_a, text_b
 
     def save_tencent(self, btn=None):
         self.lb_tencnet_msg.set_text("暂不支持")
@@ -163,8 +162,6 @@ class Preference(Gtk.Window):
         return os.path.exists(self.AUTOSTART_PATH)
 
     def check_update(self, view=None):
-        print(view)
-        self.sp_update.start()
         urls = [
             "https://raw.githubusercontent.com/yuhldr/ldr-translate/master/config.json",
             "https://gitee.com/yuhldr/ldr-translate/raw/master/config.json",
@@ -180,5 +177,3 @@ class Preference(Gtk.Window):
 
         self.lb_update_msg.set_markup(s)
         self.lb_version_msg.set_markup(msg)
-
-        self.sp_update.stop()

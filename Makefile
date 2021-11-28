@@ -31,7 +31,7 @@ build: clear
 	cp debian/ldr-translate.desktop build/deb/ldr-translate/usr/share/applications/
 	cp debian/control/* build/deb/ldr-translate/DEBIAN/
 
-	cd build/deb && sudo dpkg -b  ldr-translate ldr-translate.deb && ls -l  --block-size=k *.deb
+	cd build/deb && sudo dpkg -b  ldr-translate ldr-translate.deb && ls -l  --block-size=k *.deb && rm -r ldr-translate
 
 check:
 	sudo apt install python3-pip gir1.2-appindicator3-0.1

@@ -29,13 +29,6 @@ from gi.repository import Gtk, Gdk, GdkPixbuf
 
 
 class LdrTranlate(Gtk.Application):
-    update = False
-
-    DESKTOP_NAME = "ldr-translate.desktop"
-    HOME_PATH = os.getenv("HOME")
-    AUTOSTART_DIR = HOME_PATH + '/.config/autostart'
-    AUTOSTART_PATH = AUTOSTART_DIR + "/" + DESKTOP_NAME
-    DESKTOP_PATH = "/usr/share/applications/" + DESKTOP_NAME
 
     def __init__(self):
         self.translate_win = None
@@ -127,8 +120,6 @@ class LdrTranlate(Gtk.Application):
         ind_label = "翻译中"
         if (not view.get_active()):
             ind_label = "暂停翻译"
-        elif (self.update):
-            ind_label = "有更新"
 
         self.indicator.set_label(ind_label, "")
 

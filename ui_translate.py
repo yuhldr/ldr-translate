@@ -94,25 +94,25 @@ class Translate(Gtk.ApplicationWindow):
 
     def get_text_by_clipboard(self, clipboard_):
         text = ""
+        ok = False
         image_pixbuf = clipboard_.wait_for_image()
         if image_pixbuf is not None:
             img_path = config.app_home_dir + "/copy_img"
             image_pixbuf.savev(img_path, "png", "", "")
 
-            text = translate.ocr(open(img_path, 'rb').read(),
-                                    latex=self.cbtn_tex.get_active())
+            ok, text = translate.ocr(img_path, latex=self.cbtn_tex.get_active())
         else:
             text = clipboard_.wait_for_text()
 
-        return text
+        return ok, text
 
     def copy_auto_translate(self, clipboard_=None):
         s_from = None
         self.sp_translate.start()
         if (clipboard_ is not None):
-            s_from = self.get_text_by_clipboard(clipboard_)
+            ok, s_from = self.get_text_by_clipboard(clipboard_)
         elif (not self.isFirsts[2]):
-            s_from = self.get_text_by_clipboard(self.clipboard)
+            ok, s_from = self.get_text_by_clipboard(self.clipboard)
             self.isFirsts[2] = False
 
         if(self.cbtn_tex.get_active()):
