@@ -1,2 +1,1 @@
 echo "要卸载啦"
-cd /opt/ldr-translate && rm -rf __pycache__
