@@ -1,1 +1,3 @@
-echo "已经解包（安装完）啦"
+echo "已经解包（安装完）啦：$SUDO_USER"
+cd /opt/ldr-translate && python3 -c "from api import config; config.old2new()"
+chown -R $SUDO_USER:$SUDO_USER "/home/$SUDO_USER/.config/ldr-translate"

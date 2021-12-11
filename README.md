@@ -40,7 +40,7 @@ sudo apt install -f
 # 再安装
 sudo dpkg -i ./下载的deb文件名
 
-# 终端输入 sudo ldr 或直接点击“兰译”图标即可运行
+# 终端输入 ldr 或直接点击“兰译”图标即可运行
 # 如果翻译过程中出现错误，请安装python3依赖库requests（目前测试无需安装）
 ```
 

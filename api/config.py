@@ -7,7 +7,12 @@ from pathlib import Path
 config_data = None
 config_file_name = "config.json"
 config_file_name_bak = "config.json_bak"
-app_home_dir = os.getenv("HOME") + "/.config/ldr-translate"
+
+usr = os.getenv("SUDO_USER")
+if(usr is None):
+    usr = os.getenv("USER")
+
+app_home_dir = "/home/" + usr + "/.config/ldr-translate"
 config_path = app_home_dir + "/" + config_file_name
 
 config_baidu_keys = [
