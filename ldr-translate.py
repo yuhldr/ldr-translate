@@ -15,9 +15,6 @@ import os
 # faulthandler.enable()
 from api import config
 
-# 放在打包postinst里了
-# config.old2new()
-
 gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
 
 from ui_translate import Translate

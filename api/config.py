@@ -6,7 +6,6 @@ from pathlib import Path
 
 config_data = None
 config_file_name = "config.json"
-config_file_name_bak = "config.json_bak"
 
 usr = os.getenv("SUDO_USER")
 if(usr is None):
@@ -33,6 +32,7 @@ time_out = 2
 
 
 def load_configs():
+    check_config_data()
     global config_data
     config_data = json.load(open(config_path, "r"))
     print(get_config_version()["name"])
@@ -98,7 +98,19 @@ def set_config(section, key, value):
         json.dump(config_data, file, ensure_ascii=False)
 
 
-# 更新时数据迁移
+def check_dir(dir):
+    if not Path(dir).exists():
+        os.makedirs(dir)
+
+
+def check_config_data():
+    if (not os.path.exists(config_path)):
+        check_dir(app_home_dir)
+        if(os.path.exists(config_file_name)):
+            shutil.copy(config_file_name, config_path)
+
+
+# 更新时数据迁移，必须sudo执行
 def old2new():
     print(config_path)
     if (os.path.exists(config_file_name)):
@@ -122,19 +134,9 @@ def old2new():
                     key] = config_data_old[config_sections_setting][key]
 
         else:
-            if not Path(app_home_dir).exists():
-                os.makedirs(app_home_dir)
+            check_dir(app_home_dir)
 
         with open(config_path, 'w') as file:
             json.dump(config_data_new, file, ensure_ascii=False)
-        shutil.move(config_file_name, config_file_name_bak)
 
         print("数据迁移完毕")
-    elif (not os.path.exists(config_path)):
-        print("旧数据被删除了，恢复中……")
-
-        if not Path(app_home_dir).exists():
-            os.makedirs(app_home_dir)
-        shutil.copy(config_file_name_bak, config_path)
-
-    load_configs()

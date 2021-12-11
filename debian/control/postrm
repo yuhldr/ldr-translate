@@ -1,2 +1,1 @@
 echo "已经卸载完啦"
-cd /opt/ && rm -rf ldr-translate

@@ -19,7 +19,7 @@ build: clear
 	mkdir -p build/deb/ldr-translate/usr/bin
 	mkdir -p build/deb/ldr-translate/usr/share/applications
 	mkdir -p build/deb/ldr-translate/usr/share/icons
-	mkdir -p build/deb/ldr-translate$(DEB_PATH)/ldr-translate/cache
+	mkdir -p build/deb/ldr-translate$(DEB_PATH)/ldr-translate
 
 	cp -r ui api ui_translate.py ldr-translate.py preferences.py config.json build/deb/ldr-translate$(DEB_PATH)/ldr-translate/
 
@@ -31,7 +31,7 @@ build: clear
 	cp debian/ldr-translate.desktop build/deb/ldr-translate/usr/share/applications/
 	cp debian/control/* build/deb/ldr-translate/DEBIAN/
 
-	cd build/deb && sudo dpkg -b  ldr-translate ldr-translate.deb && ls -l  --block-size=k *.deb && rm -r ldr-translate
+	cd build/deb && dpkg -b  ldr-translate ldr-translate.deb && ls -l  --block-size=k *.deb && rm -r ldr-translate
 
 check:
 	sudo apt install python3-pip gir1.2-appindicator3-0.1
