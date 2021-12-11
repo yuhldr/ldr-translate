@@ -61,6 +61,8 @@ def check_update_version(url):
     except Exception as e:
         print(e)
 
+    print(s)
+    print(update)
     return update, s, msg
 
 

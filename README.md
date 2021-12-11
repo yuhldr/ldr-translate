@@ -3,7 +3,7 @@
  <img src="ui/icon.png" width = "36" height = "36" alt="图片名称" align=center />
 一个ubuntu的翻译软件，使用Gtk3开发，python语言，翻译用的百度、腾讯接口
 
-> 已打包deb，真实环境安装（非最小安装）ubuntu20.04、ubuntu 21.10桌面版，都可以正常使用该软件
+> 已打包deb，真实环境安装（非最小安装）ubuntu20.04、ubuntu 21.10桌面版，虚拟机测试ubuntu18.04，都可以正常使用该软件
 
 - 复制文本自动翻译(可划词翻译)
 - 截图自动识别、并翻译
@@ -40,7 +40,7 @@ sudo apt install -f
 # 再安装
 sudo dpkg -i ./下载的deb文件名
 
-# 终端输入 ldr 或直接点击“兰译”图标即可运行
+# 终端输入 sudo ldr 或直接点击“兰译”图标即可运行
 # 如果翻译过程中出现错误，请安装python3依赖库requests（目前测试无需安装）
 ```
 
@@ -101,6 +101,7 @@ sudo apt remove ldr-translate -y
 
 - [The Python GTK+ 3 Tutorial &mdash; Python GTK+ 3 Tutorial 3.4 documentation](https://python-gtk-3-tutorial.readthedocs.io/en/latest/index.html)
 - [linux下deb包的管理及制作 | 一次成功 - Marathon-Davis - 博客园](https://www.cnblogs.com/davis12/p/14365981.html)
+- [iconfont-阿里巴巴矢量图标库](https://www.iconfont.cn/)
 
 ## 开发工具
 

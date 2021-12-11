@@ -1,2 +1,1 @@
 requests>=2.22.0
-PyGObject>=3.36.0

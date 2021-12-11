@@ -1,6 +1,6 @@
 package: ldr-translate
 Section: net
-version: 1.2.0
+version: 1.2.1
 Depends: gir1.2-appindicator3-0.1,python3
 architecture: amd64
 Maintainer: yuhldr <yuhldr@qq.com>

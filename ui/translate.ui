@@ -121,12 +121,12 @@
   <object class="GtkImage" id="img_setting">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="icon-name">document-properties</property>
+    <property name="pixbuf">setting.svg</property>
   </object>
   <object class="GtkImage" id="img_translate">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="icon-name">system-reboot-symbolic</property>
+    <property name="pixbuf">translate.svg</property>
   </object>
   <object class="GtkHeaderBar" id="hb">
     <property name="visible">True</property>
