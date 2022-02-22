@@ -21,7 +21,7 @@ class Preference(Gtk.ApplicationWindow):
         self.set_title("设置")
 
         ui = Gtk.Builder()
-        ui.add_from_file('./ui/preference.ui')
+        ui.add_from_file('./preference.ui')
 
         self.init_other(ui)
         self.init_baidu_api(ui)

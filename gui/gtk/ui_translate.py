@@ -19,11 +19,11 @@ class Translate(Gtk.ApplicationWindow):
         Gtk.Window.__init__(self)
         self.set_border_width(10)
         self.set_default_size(400, 360)
-        self.set_icon_from_file('./ui/icon.png')
+        self.set_icon_from_file('./icon/icon.png')
         self.set_keep_above(True)
 
         ui = Gtk.Builder()
-        ui.add_from_file('./ui/translate.ui')
+        ui.add_from_file('./translate.ui')
 
         ui.get_object('btn_preference').connect("clicked",
                                                 self.open_preference)
