@@ -7,6 +7,32 @@ from pathlib import Path
 config_data = None
 config_file_name = "config.json"
 
+
+DESKTOP_NAME = "ldr-translate.desktop"
+HOME_PATH = os.getenv("HOME")
+AUTOSTART_DIR = HOME_PATH + '/.config/autostart'
+AUTOSTART_PATH = AUTOSTART_DIR + "/" + DESKTOP_NAME
+DESKTOP_PATH = HOME_PATH + "/.local/share/applications/" + DESKTOP_NAME
+
+
+def update_autostart(autostart):
+    if not autostart:
+        try:
+            os.remove(AUTOSTART_PATH)
+        except Exception as e:
+            print(e)
+    else:
+        try:
+            if not os.path.exists(AUTOSTART_DIR):
+                os.makedirs(AUTOSTART_DIR)
+            shutil.copy(DESKTOP_PATH, AUTOSTART_PATH)
+        except Exception as ex:
+            print(ex)
+
+def get_autostart():
+    return os.path.exists(AUTOSTART_PATH)
+
+
 usr = os.getenv("SUDO_USER")
 if(usr is None):
     usr = os.getenv("USER")

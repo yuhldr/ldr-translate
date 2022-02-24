@@ -54,8 +54,7 @@ debug: check
 	python3 ./ldr-translate.py
 
 
-install:
-	sudo rm -rf $(PREFIX)/ldr-translate
+install: uninstall
 	sudo cp -r ./build/ldr-translate$(PREFIX)/ldr-translate $(PREFIX)/
 	cp build/ldr-translate/usr/bin/* ~/.local/bin/
 	cp build/ldr-translate/usr/share/icons/* ~/.local/share/icons/
@@ -63,7 +62,8 @@ install:
 
 
 uninstall:
-	sudo apt remove ldr-translate 
+	sudo rm -rf $(PREFIX)/ldr-translate
+	rm -rf ~/.local/bin/ldr ~/.local/share/icons/ldr-translate.png ~/.local/share/applications/ldr-translate.desktop
 
 reinstall: uninstall install
 

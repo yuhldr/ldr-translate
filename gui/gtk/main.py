@@ -30,7 +30,7 @@ class LdrTranlate(Gtk.Application):
         self._help_dialog = None
 
         self.indicator = appindicator.Indicator.new(
-            "ldr-tranlate", os.path.abspath('ui/icon.svg'),
+            "ldr-tranlate", os.path.abspath('icon/tray_dark.svg'),
             appindicator.IndicatorCategory.SYSTEM_SERVICES)
         self.indicator.set_label("翻译中", "")
         self.indicator.set_ordering_index(1)

@@ -27,7 +27,7 @@ class SystemTray(object):
     def quitApp(self):
         # 退出程序
         self.w.show()  # w.hide() #设置退出时是否显示主窗口
-        re = QMessageBox.warning(self.w, "提示", "退出系统",
+        re = QMessageBox.warning(self.w, "提示", "退出兰译",
                                  QMessageBox.Yes | QMessageBox.No,
                                  QMessageBox.No)
         if re == QMessageBox.Yes:
@@ -48,17 +48,27 @@ class SystemTray(object):
         global isAuto
         isAuto = self.auto.isChecked()
 
+    def update_autostart(self):
+        config.update_autostart(self.autostart.isChecked())
+
     def run(self):
         self.auto = QAction('自动翻译', triggered=self.setAuto)
         self.auto.setEnabled(True)
         self.auto.setCheckable(True)
         self.auto.setChecked(True)
 
-        a1 = QAction('显示', triggered=self.w.show)
-        a2 = QAction('退出', triggered=self.quitApp)
+        self.autostart = QAction('开机自启',
+                                        triggered=self.update_autostart)
+        self.autostart.setEnabled(True)
+        self.autostart.setCheckable(True)
+        self.autostart.setChecked(config.get_autostart())
+
+        a1 = QAction('显示兰译', triggered=self.w.show)
+        a2 = QAction('退出兰译', triggered=self.quitApp)
 
         tpMenu = QMenu()
         tpMenu.addAction(self.auto)
+        tpMenu.addAction(self.autostart)
         tpMenu.addAction(a1)
         tpMenu.addAction(a2)
         self.tp.setContextMenu(tpMenu)

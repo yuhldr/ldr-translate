@@ -7,11 +7,6 @@ from gi.repository import Gtk
 
 class Preference(Gtk.ApplicationWindow):
 
-    DESKTOP_NAME = "ldr-translate.desktop"
-    HOME_PATH = os.getenv("HOME")
-    AUTOSTART_DIR = HOME_PATH + '/.config/autostart'
-    AUTOSTART_PATH = AUTOSTART_DIR + "/" + DESKTOP_NAME
-    DESKTOP_PATH = "/usr/share/applications/" + DESKTOP_NAME
 
     def __init__(self):
         Gtk.Window.__init__(self)
@@ -161,21 +156,7 @@ class Preference(Gtk.ApplicationWindow):
         return text
 
     def update_autostart(self, menu_check):
-        if not menu_check.get_active():
-            try:
-                os.remove(self.AUTOSTART_PATH)
-            except Exception as e:
-                print(e)
-        else:
-            try:
-                if not os.path.exists(self.AUTOSTART_DIR):
-                    os.makedirs(self.AUTOSTART_DIR)
-                shutil.copy(self.DESKTOP_PATH, self.AUTOSTART_PATH)
-            except Exception as ex:
-                print(ex)
-
-    def get_autostart(self):
-        return os.path.exists(self.AUTOSTART_PATH)
+        config.cbtn_auto_start(menu_check.get_active)
 
     def check_update(self, view=None):
         urls = [
