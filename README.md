@@ -1,6 +1,6 @@
 # 兰译
 
- <img src="ui/icon.png" width = "36" height = "36" alt="图片名称" align=center />
+ <img src="data/icon/icon.png" width = "36" height = "36" alt="图片名称" align=center />
 一个ubuntu的翻译软件，使用Gtk3开发，python语言，翻译用的百度、腾讯接口
 
 > 已打包deb，真实环境安装（非最小安装）ubuntu20.04、ubuntu 21.10桌面版，虚拟机测试ubuntu18.04，都可以正常使用该软件

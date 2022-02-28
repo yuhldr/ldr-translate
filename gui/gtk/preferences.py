@@ -1,4 +1,4 @@
-import gi, os, shutil, requests
+import gi
 from api import config, translate, tools
 
 gi.require_version('Gtk', '3.0')
@@ -29,7 +29,7 @@ class Preference(Gtk.ApplicationWindow):
         config_version = config.get_config_version()
 
         cbtn_auto_start = ui.get_object('cbtn_auto_start')
-        cbtn_auto_start.set_active(self.get_autostart())
+        cbtn_auto_start.set_active(config.get_autostart())
         cbtn_auto_start.connect('activate', self.update_autostart)
 
         self.lb_update_msg = ui.get_object('lb_update_msg')

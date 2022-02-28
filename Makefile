@@ -31,7 +31,7 @@ build: clear
 
 
 gtk: build
-	cp gui/gtk/* build/ldr-translate$(APP_PATH)/ldr-translate/
+	cp -r gui/gtk/* build/ldr-translate$(APP_PATH)/ldr-translate/
 
 qt: build
 	cp gui/qt/* build/ldr-translate$(APP_PATH)/ldr-translate/
@@ -55,6 +55,8 @@ debug: check
 
 
 install: uninstall
+	mkdir -p ~/.local/bin/
+	mkdir -p ~/.local/share/icons/
 	sudo cp -r ./build/ldr-translate$(PREFIX)/ldr-translate $(PREFIX)/
 	cp build/ldr-translate/usr/bin/* ~/.local/bin/
 	cp build/ldr-translate/usr/share/icons/* ~/.local/share/icons/
@@ -63,7 +65,7 @@ install: uninstall
 
 uninstall:
 	sudo rm -rf $(PREFIX)/ldr-translate
-	rm -rf ~/.local/bin/ldr ~/.local/share/icons/ldr-translate.png ~/.local/share/applications/ldr-translate.desktop
+	rm -rf ~/.local/bin/ldr ~/.local/share/icons/ldr-translate.png ~/.local/share/applications/ldr-translate.desktop ~/.config/autostart/ldr-translate.desktop
 
 reinstall: uninstall install
 
