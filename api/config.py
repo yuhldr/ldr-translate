@@ -7,15 +7,28 @@ from pathlib import Path
 config_data = None
 config_file_name = "config.json"
 
+usr = os.getenv("SUDO_USER")
+if (usr is None):
+    usr = os.getenv("USER")
 
 DESKTOP_NAME = "ldr-translate.desktop"
-HOME_PATH = os.getenv("HOME")
-AUTOSTART_DIR = HOME_PATH + '/.config/autostart'
+HOME_PATH = "/home/" + usr
+
+DIR_CONFIG = HOME_PATH + "/.config"
+
+AUTOSTART_DIR = DIR_CONFIG + '/autostart'
 AUTOSTART_PATH = AUTOSTART_DIR + "/" + DESKTOP_NAME
-DESKTOP_PATH = HOME_PATH + "/.local/share/applications/" + DESKTOP_NAME
+
+app_home_dir = DIR_CONFIG + "/ldr-translate"
+config_path = app_home_dir + "/" + config_file_name
+
+DESKTOP_PATH = "/usr/share/applications/" + DESKTOP_NAME
+
+print(AUTOSTART_PATH)
 
 
 def update_autostart(autostart):
+    print(autostart)
     if not autostart:
         try:
             os.remove(AUTOSTART_PATH)
@@ -25,20 +38,18 @@ def update_autostart(autostart):
         try:
             if not os.path.exists(AUTOSTART_DIR):
                 os.makedirs(AUTOSTART_DIR)
+            print(DESKTOP_PATH)
+            print(AUTOSTART_PATH)
             shutil.copy(DESKTOP_PATH, AUTOSTART_PATH)
         except Exception as ex:
             print(ex)
 
 def get_autostart():
+    print(AUTOSTART_PATH)
     return os.path.exists(AUTOSTART_PATH)
 
 
-usr = os.getenv("SUDO_USER")
-if(usr is None):
-    usr = os.getenv("USER")
 
-app_home_dir = "/home/" + usr + "/.config/ldr-translate"
-config_path = app_home_dir + "/" + config_file_name
 
 config_baidu_keys = [
     "translate_app_id", "translate_secret_key", "ocr_api_key",

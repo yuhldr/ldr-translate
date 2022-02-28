@@ -30,7 +30,7 @@ class Preference(Gtk.ApplicationWindow):
 
         cbtn_auto_start = ui.get_object('cbtn_auto_start')
         cbtn_auto_start.set_active(config.get_autostart())
-        cbtn_auto_start.connect('activate', self.update_autostart)
+        cbtn_auto_start.connect('toggled', self.update_autostart)
 
         self.lb_update_msg = ui.get_object('lb_update_msg')
         self.lb_version_msg = ui.get_object('lb_version_msg')
@@ -156,7 +156,8 @@ class Preference(Gtk.ApplicationWindow):
         return text
 
     def update_autostart(self, menu_check):
-        config.cbtn_auto_start(menu_check.get_active)
+        print(menu_check.get_active())
+        config.update_autostart(menu_check.get_active())
 
     def check_update(self, view=None):
         urls = [

@@ -19,9 +19,10 @@ import json
 
 from gi.repository import Gtk
 from gi.repository import Gio
+from api.config import DIR_CONFIG
 
-from indicator_sysmonitor.sensors import SensorManager
-from indicator_sysmonitor.sensors import ISMError
+from sensors import SensorManager
+from sensors import ISMError
 
 __version__ = '0.9.1'
 
@@ -211,15 +212,10 @@ class SensorsListModel(object):
 
 class Preferences(Gtk.ApplicationWindow):
     """It define the the Preferences Dialog and its operations."""
-    AUTOSTART_DIR = '{}/.config/autostart' \
-        .format(os.getenv("HOME"))
-    AUTOSTART_PATH = '{}/.config/autostart/indicator-sysmonitor.desktop' \
-        .format(os.getenv("HOME"))
-    DESKTOP_PATH = '/usr/share/applications/indicator-sysmonitor.desktop'
+
     sensors_regex = re.compile("{.+?}")
 
-    SETTINGS_FILE = os.getenv(
-        "HOME") + '/.cache/indicator-sysmonitor/preferences.json'
+    SETTINGS_FILE = DIR_CONFIG + '/preferences_sm.json'
     settings = {}
     print(SETTINGS_FILE)
 
@@ -241,7 +237,7 @@ class Preferences(Gtk.ApplicationWindow):
 
     def _create_content(self):
         ui = Gtk.Builder()
-        ui.add_from_file('./indicator_sysmonitor/preferences.ui')
+        ui.add_from_file('./preferences_sm.ui')
 
         self.custom_entry = ui.get_object('custom_entry')
         self.interval_entry = ui.get_object('interval_entry')
@@ -285,19 +281,17 @@ class Preferences(Gtk.ApplicationWindow):
         pass
 
     def on_test(self, evnt=None, data=None):
-        self.update_parent()
-
-        # try:
-            # self.update_parent()
-        # except Exception as ex:
-        #     print(ex)
-        #     error_dialog = Gtk.MessageDialog(
-        #         None, Gtk.DialogFlags.DESTROY_WITH_PARENT,
-        #         Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, ex)
-        #     error_dialog.set_title("Error")
-        #     error_dialog.run()
-        #     error_dialog.destroy()
-        #     return False
+        try:
+            self.update_parent()
+        except Exception as ex:
+            print(ex)
+            error_dialog = Gtk.MessageDialog(
+                None, Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, ex)
+            error_dialog.set_title("Error")
+            error_dialog.run()
+            error_dialog.destroy()
+            return False
 
     def on_save(self, evnt=None, data=None):
         """The action of the save button."""

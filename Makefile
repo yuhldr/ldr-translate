@@ -36,7 +36,9 @@ gtk: build
 qt: build
 	cp gui/qt/* build/ldr-translate$(APP_PATH)/ldr-translate/
 
-deb:
+deb:gtk
+	mkdir -p build/deb
+	cp -r build/ldr-translate$(APP_PATH)/ldr-translate/ build/deb/
 	mkdir -p build/deb/ldr-translate/DEBIAN
 	cp -r build/ldr-translate/* build/deb/ldr-translate/
 	cp data/pkg/debian/control/* build/deb/ldr-translate/DEBIAN/

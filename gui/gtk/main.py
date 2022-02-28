@@ -31,18 +31,12 @@ gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
 
 from ui_translate import Translate
 from preferences import Preference
-from indicator_sysmonitor.preferences import Preferences as isPreference
-from indicator_sysmonitor.sensors import SensorManager
+from preferences_sm import Preferences as PreferenceSM
+from sensors import SensorManager
 
 
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gtk, Gdk, GdkPixbuf
-
-
-textdomain("indicator-sysmonitor")
-bindtextdomain("indicator-sysmonitor", "./lang")
-
-logging.basicConfig(level=logging.INFO)
 
 
 class LdrTranlate(Gtk.Application):
@@ -147,7 +141,7 @@ class LdrTranlate(Gtk.Application):
         dialog.show_all()
 
     def _active_auto_translate(self, view=None):
-        self.auto_translate = not self.auto_translate
+        self.auto_translate = view.get_active()
         self._active_translate_windows()
 
     def _active_translate_windows(self, clipboard=None, event=None):
@@ -222,10 +216,9 @@ class LdrTranlate(Gtk.Application):
             self._preferences_dialog.present()
             return
 
-        self.indicator_sysmonitor_preferences = isPreference(self)
+        self.indicator_sysmonitor_preferences = PreferenceSM(self)
         self.indicator_sysmonitor_preferences = None
 # ******* 监测  *******
-
 
 
 if __name__ == "__main__":
@@ -242,12 +235,10 @@ if __name__ == "__main__":
                         help='Show version and exit.')
 
     options = parser.parse_args()
-
-    if options.version:
-        print(__version__)
-        exit(0)
+    print(options)
 
     logging.info("start")
+    logging.info(options.config)
     if options.config:
         if not os.path.exists(options.config):
             logging.error(_("{} does not exist!").format(options.config))
@@ -255,10 +246,13 @@ if __name__ == "__main__":
         logging.info(_("Using config file: {}").format(options.config))
         SensorManager.SETTINGS_FILE = options.config
 
+    print(SensorManager.SETTINGS_FILE)
     if not os.path.exists(SensorManager.SETTINGS_FILE):
+        print("无设置")
         sensor_mgr = SensorManager()
         sensor_mgr.save_settings()
-
+    else:
+        print("you")
 
     try:
         Gtk.main()

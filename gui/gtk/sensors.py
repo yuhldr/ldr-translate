@@ -271,7 +271,7 @@ class SensorManager(object):
             """Return a dict whose element are the sensors
             and their values"""
             res = {}
-            from indicator_sysmonitor.preferences import Preferences
+            from preferences_sm import Preferences
 
             # We call this only once per update
             global cpu_load
