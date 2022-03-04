@@ -14,6 +14,13 @@ snap:
 	cp snapcraft.yaml build/snap
 
 
+check-gtk:
+	sudo apt install gir1.2-appindicator3-0.1 python3-psutil python3-requests
+
+check-qt:
+	pip3 install pyQt5
+
+
 build: clear
 	mkdir -p build/ldr-translate/usr/bin
 	mkdir -p build/ldr-translate/usr/share/applications
@@ -38,38 +45,28 @@ qt: build
 
 deb:gtk
 	mkdir -p build/deb
-	cp -r build/ldr-translate$(APP_PATH)/ldr-translate/ build/deb/
 	mkdir -p build/deb/ldr-translate/DEBIAN
 	cp -r build/ldr-translate/* build/deb/ldr-translate/
 	cp data/pkg/debian/control/* build/deb/ldr-translate/DEBIAN/
 	cd build/deb && dpkg -b  ldr-translate ldr-translate.deb && ls -l  --block-size=k *.deb && rm -r ldr-translate
 
-rpm:
-
-
-check:
-	sudo apt install python3-pip gir1.2-appindicator3-0.1
-	pip3 install -r requirements.txt
-
-
-debug: check
-	python3 ./ldr-translate.py
+rpm:qt
+	echo 暂不支持
 
 
 install: uninstall
-	mkdir -p ~/.local/bin/
-	mkdir -p ~/.local/share/icons/
+	sudo mkdir -p /usr/bin/
+	sudo mkdir -p /usr/share/icons/
 	sudo cp -r ./build/ldr-translate$(PREFIX)/ldr-translate $(PREFIX)/
-	cp build/ldr-translate/usr/bin/* ~/.local/bin/
-	cp build/ldr-translate/usr/share/icons/* ~/.local/share/icons/
-	cp build/ldr-translate/usr/share/applications/* ~/.local/share/applications/
+	sudo cp build/ldr-translate/usr/bin/* /usr/bin/
+	sudo cp build/ldr-translate/usr/share/icons/* /usr/share/icons/
+	sudo cp build/ldr-translate/usr/share/applications/* /usr/share/applications/
 
 
 uninstall:
 	sudo rm -rf $(PREFIX)/ldr-translate
-	rm -rf ~/.local/bin/ldr ~/.local/share/icons/ldr-translate.png ~/.local/share/applications/ldr-translate.desktop ~/.config/autostart/ldr-translate.desktop
+	sudo rm -rf /usr/bin/ldr /usr/share/icons/ldr-translate.png /usr/share/applications/ldr-translate.desktop ~/.config/autostart/ldr-translate.desktop
 
-reinstall: uninstall install
 
 clear:
 	rm -rf ./build

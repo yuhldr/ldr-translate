@@ -345,7 +345,7 @@ class BaseSensor(object):
 
 class NvGPUSensor(BaseSensor):
     name = 'nvgpu'
-    desc = _('Nvidia GPU utilization')
+    desc = _('Nvidia GPU使用量')
 
     def get_value(self, sensor):
         if sensor == 'nvgpu':
@@ -362,7 +362,7 @@ class NvGPUTemp(BaseSensor):
     """Return GPU temperature expressed in Celsius
     """
     name = 'nvgputemp'
-    desc = _('Nvidia GPU Temperature')
+    desc = _('Nvidia GPU温度')
 
     def get_value(self, sensor):
         # degrees symbol is unicode U+00B0
@@ -376,7 +376,7 @@ class NvGPUTemp(BaseSensor):
 
 class CPUSensor(BaseSensor):
     name = 'cpu\d*'
-    desc = _('Average CPU usage')
+    desc = _('CPU 平均使用率，如cpu或cpu1')
     cpus = re.compile("\Acpu\d*\Z")
     last = None
     if ps_v1_api:
@@ -392,9 +392,9 @@ class CPUSensor(BaseSensor):
                 nber = int(sensor[3:]) if len(sensor) > 3 else 999
 
             if nber >= self.cpu_count:
-                print(sensor)
-                print(self.cpu_count)
-                print(len(sensor))
+                # print(sensor)
+                # print(self.cpu_count)
+                # print(len(sensor))
                 raise ISMError(_("Invalid number of CPUs."))
 
             return True
@@ -423,7 +423,7 @@ class CPUSensor(BaseSensor):
 
 class MemSensor(BaseSensor):
     name = 'mem'
-    desc = _('Physical memory in use.')
+    desc = _('物理内存使用率')
 
     def get_value(self, sensor_data):
         return '{:02.0f}%'.format(self._fetch_mem())
@@ -458,7 +458,7 @@ class MemSensor(BaseSensor):
 
 class NetSensor(BaseSensor):
     name = 'net'
-    desc = _('Network activity.')
+    desc = _('上传下载网速')
     _last_net_usage = [0, 0]  # (up, down)
 
     def get_value(self, sensor_data):
@@ -482,7 +482,7 @@ class NetSensor(BaseSensor):
 
 class NetCompSensor(BaseSensor):
     name = 'netcomp'
-    desc = _('Network activity in Compact form.')
+    desc = _('网速')
     _last_net_usage = [0, 0]  # (up, down)
 
     def get_value(self, sensor_data):
@@ -506,7 +506,7 @@ class NetCompSensor(BaseSensor):
 
 class TotalNetSensor(BaseSensor):
     name = 'totalnet'
-    desc = _('Total Network activity.')
+    desc = _('网速流量使用量')
 
     def get_value(self, sensor_data):
         return self._fetch_net()
@@ -525,7 +525,7 @@ class TotalNetSensor(BaseSensor):
 
 class BatSensor(BaseSensor):
     name = 'bat\d*'
-    desc = _('Battery capacity.')
+    desc = _('剩余电量')
     bat = re.compile("\Abat\d*\Z")
 
     def check(self, sensor):
@@ -560,7 +560,7 @@ class BatSensor(BaseSensor):
 
 class FSSensor(BaseSensor):
     name = 'fs//.+'
-    desc = _('Available space in file system.')
+    desc = _('剩余磁盘，如fd///opt可查看/opt的磁盘剩余')
 
     def check(self, sensor):
         if sensor.startswith("fs//"):
@@ -594,7 +594,7 @@ class FSSensor(BaseSensor):
 
 class SwapSensor(BaseSensor):
     name = 'swap'
-    desc = _("Average swap usage")
+    desc = _("交换内存使用量")
 
     def get_value(self, sensor):
         return '{:02.0f}%'.format(self._fetch_swap())
@@ -622,7 +622,7 @@ class SwapSensor(BaseSensor):
 
 class UporDownSensor(BaseSensor):
     name = 'upordown'
-    desc = _("Display if your internet connection is up or down")
+    desc = _("国内不可用，可能会卡死")
 
     command = 'if wget -qO /dev/null google.com > /dev/null; then echo "☺"; else echo "☹"; fi'
 
@@ -639,7 +639,7 @@ class UporDownSensor(BaseSensor):
 
 class PublicIPSensor(BaseSensor):
     name = 'publicip'
-    desc = _("Display your public IP address")
+    desc = _("此网络对外显示的ip地址")
 
     command = 'curl ipv4.icanhazip.com'
 
@@ -656,7 +656,7 @@ class PublicIPSensor(BaseSensor):
 
 class PublicCountrySensor(BaseSensor):
     name = "publiccountry"
-    desc = _("Display your public country")
+    desc = _("此网络对外显示的国家")
 
     command = 'curl ifconfig.co/country'
 
@@ -673,7 +673,7 @@ class PublicCountrySensor(BaseSensor):
 
 class PublicCountryISOCodeSensor(BaseSensor):
     name = "publiccountryiso"
-    desc = _("Display your public country ISO code")
+    desc = _("此网络对外显示的国家ISO编码")
 
     command = 'curl ifconfig.co/country-iso'
 
@@ -693,7 +693,7 @@ class CPUTemp(BaseSensor):
     """
 
     name = 'cputemp'
-    desc = _('CPU temperature')
+    desc = _('CPU温度')
 
     def get_value(self, sensor):
         # degrees symbol is unicode U+00B0

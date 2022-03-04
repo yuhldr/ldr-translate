@@ -19,15 +19,14 @@ from api import config
 import logging
 import os
 import sys
-import tempfile
 from argparse import ArgumentParser
 from gettext import gettext as _
-from gettext import bindtextdomain, textdomain
 from threading import Event
 
 
 
-gi.require_versions({"Gtk": "3.0", "AppIndicator3": "0.1"})
+gi.require_version("AppIndicator3", "0.1")
+gi.require_version("Gtk", "3.0")
 
 from ui_translate import Translate
 from preferences import Preference
@@ -195,8 +194,8 @@ class LdrTranlate(Gtk.Application):
         ind_label = "翻译中"
         if (not self.auto_translate):
             ind_label = "暂停翻译"
-        ind_label += label.strip()
-        print(ind_label)
+        ind_label += " | " + label.strip()
+        # print(ind_label)
 
         self.indicator.set_label(ind_label, "")
 

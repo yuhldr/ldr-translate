@@ -1,9 +1,20 @@
 # 兰译
 
  <img src="data/icon/icon.png" width = "36" height = "36" alt="图片名称" align=center />
-一个ubuntu的翻译软件，使用Gtk3开发，python语言，翻译用的百度、腾讯接口
+一个翻译软件，顺带可以查看GPU等信息，使用Gtk3开发（最近开发了QT版本比较简洁，测试中），python语言，翻译用的百度、腾讯接口
+
+## 安装
+
+- ubuntu等使用gnome桌面的，建议[gtk版本](#gtk版本)，功能较为完善，包括GPU、CPU、内存等信息使用情况
+- opensuse等kde桌面的，建议[qt版本](#qt版本)，测试中，功能暂时不完善，基本上只能翻译，比如自定义api帐号密码暂不支持，KDE自带系统信息小部件，暂时不会开发 `GPU、CPU、内存等信息使用情况` 的功能
+
+### GTk版本
+
+建议gnome等桌面使用这个
 
 > 已打包deb，真实环境安装（非最小安装）ubuntu20.04、ubuntu 21.10桌面版，虚拟机测试ubuntu18.04，都可以正常使用该软件
+
+#### GTk功能
 
 - 复制文本自动翻译(可划词翻译)
 - 截图自动识别、并翻译
@@ -19,7 +30,9 @@
 |:-:|:-:|
 ![主题2](images/lt.png)|![主题1](images/lt_other.png)
 
-## 安装
+#### 安装deb版本
+
+> 此为稳定版，测试功能请手动编译，很简单
 
 在 releases下载`.deb` 的安装包，只有20+k
 
@@ -32,7 +45,7 @@
 sudo dpkg -i ./下载的deb文件名
 
 # 如果报错，输入下面的
-# 因为此软件依赖：gir1.2-appindicator3-0.1，后续将尽可能摆脱此依赖
+# 因为此软件依赖：gir1.2-appindicator3-0.1
 # https://packages.debian.org/buster/gir1.2-appindicator3-0.1
 
 sudo apt install -f
@@ -48,6 +61,34 @@ sudo dpkg -i ./下载的deb文件名
 
 ```bash
 sudo apt remove ldr-translate -y
+```
+
+#### 手动编译安装
+
+一些新功能（比如显示系统流量、cpu等信息），暂时不会发布，还在测试，只有自己编译才能使用
+
+以ubuntu为例
+
+```bash
+sudo apt install cmake
+
+make deb
+```
+
+安装包在 `build/deb` 这里
+
+### QT版本
+
+KDE等桌面建议使用这个，还没打包，但是也容易用
+
+以opensuse为例，下载源码，解压，打开终端，进入解压以后的文件夹
+
+```bash
+# 安装编译软件
+sudo zypper in cmake
+
+# 安装依赖并安装
+make check-qt && make qt && make install
 ```
 
 ## 其他
@@ -94,6 +135,8 @@ sudo apt remove ldr-translate -y
     有时候一句话在文献里分成上下两页，复制半句翻译有问题，这时候勾选 `追加模式`，接下来复制的内容，会和前一次的复制内容，一起翻译
 
 ## 资料
+
+- [ndicator-sysmonitor](https://github.com/fossfreedom/indicator-sysmonitor)
 
 - [Python Gtk+3 API &#xB7; Python GTK+ 3 API](https://athenajc.gitbooks.io/python-gtk-3-api/content/)
 
