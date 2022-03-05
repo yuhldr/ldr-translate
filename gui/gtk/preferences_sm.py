@@ -226,6 +226,7 @@ class Preferences(Gtk.ApplicationWindow):
         self.set_size_request(600, 600)
         self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.set_keep_above(True)
+        self.set_title("监测设置")
 
         self.ind_parent = parent
         self.custom_entry = None

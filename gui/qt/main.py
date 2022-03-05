@@ -7,6 +7,8 @@ import ui_translate
 from api import translate
 from api import config
 
+import ui_preferences
+
 
 class SystemTray(object):
     # 程序托盘类
@@ -51,6 +53,14 @@ class SystemTray(object):
     def update_autostart(self):
         config.update_autostart(self.autostart.isChecked())
 
+    def _on_prefrrence(self):
+        self.preferences = ui_preferences.Ui_MainWindow()
+
+        self.preferences.setupUi(self.preferences)
+
+
+        self.preferences.show()
+
     def run(self):
         self.auto = QAction('自动翻译', triggered=self.setAuto)
         self.auto.setEnabled(True)
@@ -63,12 +73,15 @@ class SystemTray(object):
         self.autostart.setCheckable(True)
         self.autostart.setChecked(config.get_autostart())
 
+        a0 = QAction('翻译设置', triggered=self._on_prefrrence)
+
         a1 = QAction('显示兰译', triggered=self.w.show)
         a2 = QAction('退出兰译', triggered=self.quitApp)
 
         tpMenu = QMenu()
         tpMenu.addAction(self.auto)
         tpMenu.addAction(self.autostart)
+        tpMenu.addAction(a0)
         tpMenu.addAction(a1)
         tpMenu.addAction(a2)
         self.tp.setContextMenu(tpMenu)

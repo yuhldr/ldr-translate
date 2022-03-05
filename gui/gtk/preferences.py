@@ -13,7 +13,7 @@ class Preference(Gtk.ApplicationWindow):
         self.set_border_width(10)
         self.set_default_size(400, 360)
         self.set_keep_above(True)
-        self.set_title("设置")
+        self.set_title("翻译设置")
 
         ui = Gtk.Builder()
         ui.add_from_file('./preference.ui')
