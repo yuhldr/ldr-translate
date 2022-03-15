@@ -59,7 +59,7 @@ class SensorManager(object):
     class __impl:
 
         settings = {
-            'custom_text': 'cpu: {cpu} mem: {mem}',
+            'custom_text': ' | net: {net} | mem: {mem}',
             'interval': 2,
             'on_startup': False,
             'sensors': {

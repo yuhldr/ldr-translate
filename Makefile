@@ -44,14 +44,17 @@ qt: build
 	cp gui/qt/* build/ldr-translate$(APP_PATH)/ldr-translate/
 
 deb:gtk
+	rm -rf build/deb
 	mkdir -p build/deb
 	mkdir -p build/deb/ldr-translate/DEBIAN
 	cp -r build/ldr-translate/* build/deb/ldr-translate/
 	cp data/pkg/debian/control/* build/deb/ldr-translate/DEBIAN/
 	cd build/deb && dpkg -b  ldr-translate ldr-translate.deb && ls -l  --block-size=k *.deb && rm -r ldr-translate
 
-rpm:qt
-	echo 暂不支持
+rpm:
+	@echo 暂不支持，请输入以下命令，即可安装
+	@echo 'make check-qt && make qt && make install'
+
 
 
 install: uninstall

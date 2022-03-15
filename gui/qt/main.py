@@ -1,6 +1,7 @@
 import sys
+import os
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QAction, QMenu, QSystemTrayIcon, QApplication, QMessageBox, QCheckBox
+from PyQt5.QtWidgets import QMainWindow, QAction, QMenu, QSystemTrayIcon, QApplication, QMessageBox
 
 import ui_translate
 

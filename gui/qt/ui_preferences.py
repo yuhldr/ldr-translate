@@ -17,6 +17,9 @@ class Ui_MainWindow(QMainWindow):
     def setupUi(self, MainWindow):
         MainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("icon/setting.svg"))
+        MainWindow.setWindowIcon(icon)
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(360, 280)
         MainWindow.setMinimumSize(QtCore.QSize(360, 280))
