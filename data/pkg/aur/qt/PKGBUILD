@@ -1,0 +1,47 @@
+# Maintainer=yuh <yuhldr@qq.com>
+
+pkgname=ldr-translate-qt
+pkgdata=ldr-translate
+pkgver=1.3.0
+pkgrel=7
+epoch=
+pkgdesc="一个翻译软件，专注文献翻译，可以截图翻译、复制翻译"
+arch=('x86_64')
+url="https://github.com/yuhldr/ldr-translate"
+license=('GPL')
+groups=(ldr)
+depends=(python python-pip)
+makedepends=()
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=("https://github.com/yuhldr/$pkgdata/archive/refs/tags/v$pkgver.tar.gz")
+noextract=()
+md5sums=(ecd764e9ff0b4b9e33a06e1b33027f63)
+validpgpkeys=()
+
+prepare() {
+	cd "$pkgdata-$pkgver"
+	echo "ldr"
+}
+
+build() {
+	cd "$pkgdata-$pkgver"
+	make qt
+}
+
+check() {
+	cd "$pkgdata-$pkgver"
+	make check-qt
+}
+
+package() {
+	cd "$pkgdata-$pkgver"
+	make install
+}

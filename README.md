@@ -92,6 +92,18 @@ sudo zypper in cmake
 make check-qt && make qt && make install
 ```
 
+### 系统
+
+#### arch打包
+
+其实是 `aur` ，有两个版本，一个 `kde` 版本，一个 `gnome` 版本，如果你用的是 `yay`
+
+```bash
+yay ldr-translate
+```
+
+然后选择适合自己桌面的版本：`gnome` 和 `kde`
+
 ## 其他
 
 > 希望一起完善 snap 打包和 ppa 发布，可联系 yuhldr@qq.com
@@ -146,6 +158,7 @@ make check-qt && make qt && make install
 - [The Python GTK+ 3 Tutorial &mdash; Python GTK+ 3 Tutorial 3.4 documentation](https://python-gtk-3-tutorial.readthedocs.io/en/latest/index.html)
 - [linux下deb包的管理及制作 | 一次成功 - Marathon-Davis - 博客园](https://www.cnblogs.com/davis12/p/14365981.html)
 - [iconfont-阿里巴巴矢量图标库](https://www.iconfont.cn/)
+- [ArchLinux aur打包简易指南](https://segmentfault.com/a/1190000010991745)
 
 ## 开发工具
 

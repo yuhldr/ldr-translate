@@ -15,7 +15,7 @@ snap:
 
 
 check-gtk:
-	sudo apt install gir1.2-appindicator3-0.1 python3-psutil python3-requests
+	pip3 install requests psutil
 
 check-qt:
 	pip3 install pyQt5
@@ -49,7 +49,7 @@ deb:gtk
 	mkdir -p build/deb/ldr-translate/DEBIAN
 	cp -r build/ldr-translate/* build/deb/ldr-translate/
 	cp data/pkg/debian/control/* build/deb/ldr-translate/DEBIAN/
-	cd build/deb && dpkg -b  ldr-translate ldr-translate.deb && ls -l  --block-size=k *.deb && rm -r ldr-translate
+	cd build/deb && dpkg -b ldr-translate ldr-translate.deb && ls -l --block-size=k *.deb && rm -r ldr-translate
 
 rpm:
 	@echo 暂不支持，请输入以下命令，即可安装
@@ -64,6 +64,13 @@ install: uninstall
 	sudo cp build/ldr-translate/usr/bin/* /usr/bin/
 	sudo cp build/ldr-translate/usr/share/icons/* /usr/share/icons/
 	sudo cp build/ldr-translate/usr/share/applications/* /usr/share/applications/
+
+
+aur:
+	mkdir -p build/aur/gtk
+	mkdir -p build/aur/qt
+	cp data/pkg/aur/qt/PKGBUILD  build/aur/qt
+	cp data/pkg/aur/gtk/PKGBUILD  build/aur/gtk
 
 
 uninstall:
