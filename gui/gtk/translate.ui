@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.00"/>
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="box_translate">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -51,6 +51,28 @@
           </packing>
         </child>
         <child>
+          <object class="GtkComboBoxText" id="cbt_server">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="cbt_lang">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkCheckButton" id="cbtn_tex">
             <property name="label" translatable="yes">latex识别</property>
             <property name="visible">True</property>
@@ -62,29 +84,20 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack-type">end</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="cbt_server">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="cbt_lang">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btn_translate">
+            <property name="label" translatable="yes">翻译</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>
@@ -115,50 +128,6 @@
         <property name="expand">True</property>
         <property name="fill">True</property>
         <property name="position">3</property>
-      </packing>
-    </child>
-  </object>
-  <object class="GtkImage" id="img_setting">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="pixbuf">icon/setting.svg</property>
-  </object>
-  <object class="GtkImage" id="img_translate">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="pixbuf">icon/translate.svg</property>
-  </object>
-  <object class="GtkHeaderBar" id="hb">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="title" translatable="yes">兰译</property>
-    <property name="show-close-button">True</property>
-    <child>
-      <object class="GtkButton" id="btn_preference">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="image">img_setting</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkButton" id="btn_translate">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="image">img_translate</property>
-      </object>
-      <packing>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkSpinner" id="sp_translate">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-      </object>
-      <packing>
-        <property name="position">2</property>
       </packing>
     </child>
   </object>

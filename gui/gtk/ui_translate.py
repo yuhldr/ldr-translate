@@ -2,9 +2,8 @@
 # coding: utf-8
 from api import translate, config, tools
 from api.server import baidu
-from preferences import Preference
 
-from gi.repository import Gtk, Gdk, Gio
+from gi.repository import Gtk, Gdk
 
 
 class Translate(Gtk.ApplicationWindow):
@@ -24,11 +23,6 @@ class Translate(Gtk.ApplicationWindow):
 
         ui = Gtk.Builder()
         ui.add_from_file('./translate.ui')
-
-        ui.get_object('btn_preference').connect("clicked",
-                                                self.open_preference)
-
-        self.set_titlebar(ui.get_object('hb'))
 
         self.tv_from = ui.get_object('tv_from')
         self.tv_to = ui.get_object('tv_to')
@@ -66,9 +60,6 @@ class Translate(Gtk.ApplicationWindow):
     def close(self, a=None, b=None):
         self.is_hide = True
         self.destroy()
-
-    def open_preference(self, view=None):
-        Preference()
 
     def on_cbt_lang_changed(self, combo):
         text = combo.get_active_text()
