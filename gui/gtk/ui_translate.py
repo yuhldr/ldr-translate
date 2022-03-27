@@ -20,6 +20,7 @@ class Translate(Gtk.ApplicationWindow):
         self.set_default_size(400, 360)
         self.set_icon_from_file('./icon/icon.png')
         self.set_keep_above(True)
+        self.set_title("兰译")
 
         ui = Gtk.Builder()
         ui.add_from_file('./translate.ui')
@@ -35,7 +36,6 @@ class Translate(Gtk.ApplicationWindow):
         self.cbtn_add_old = ui.get_object('cbtn_add_old')
         # 公式识别
         self.cbtn_tex = ui.get_object('cbtn_tex')
-        self.sp_translate = ui.get_object('sp_translate')
 
         self.cbt_lang = ui.get_object('cbt_lang')
         self.cbt_lang.connect("changed", self.on_cbt_lang_changed)
@@ -99,7 +99,6 @@ class Translate(Gtk.ApplicationWindow):
 
     def copy_auto_translate(self, clipboard_=None):
         s_from = None
-        self.sp_translate.start()
         if (clipboard_ is not None):
             ok, s_from = self.get_text_by_clipboard(clipboard_)
         elif (not self.isFirsts[2]):
@@ -115,7 +114,6 @@ class Translate(Gtk.ApplicationWindow):
 
 # 按钮再次翻译（可能修改了文本）
     def update_translate_view(self, view=None):
-        self.sp_translate.start()
 
         textbuffer_from = self.tv_from.get_buffer()
 
@@ -137,7 +135,6 @@ class Translate(Gtk.ApplicationWindow):
 
         textbuffer_from.set_text(s_from.strip())
         textbuffer_to.set_text(s_to.strip())
-        self.sp_translate.stop()
 
     def getClipboard(self):
         if (config.get_config_setting()["translate_way_copy"]):

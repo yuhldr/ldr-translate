@@ -7,7 +7,6 @@ from gi.repository import Gtk
 
 class Preference(Gtk.ApplicationWindow):
 
-
     def __init__(self):
         Gtk.Window.__init__(self)
         self.set_border_width(10)

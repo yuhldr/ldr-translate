@@ -18,7 +18,7 @@ check-gtk:
 	pip3 install requests psutil
 
 check-qt:
-	pip3 install pyQt5
+	pip3 install requests pyQt5
 
 
 build: clear

@@ -7,6 +7,7 @@
 
 - ubuntu等使用gnome桌面的，建议[gtk版本](#gtk版本)，功能较为完善，包括GPU、CPU、内存等信息使用情况，已经打包deb安装包
 - opensuse等kde桌面的，建议[qt版本](#qt版本)，测试中，功能暂时不完善，基本上只能翻译(含截图翻译、追加模式、自定义百度api)，KDE自带系统信息小部件，暂时不会开发 `GPU、CPU、内存等信息使用情况` 的功能
+- archlinux系统：已经发布在aur，可以使用 `yay ldr-translate` 根据自己的桌面选择合适的即可，`kde` 桌面选择`ldr-translate-qt`，`gnome` 桌面选择`ldr-translate-gtk`
 
 ### GTk版本
 
