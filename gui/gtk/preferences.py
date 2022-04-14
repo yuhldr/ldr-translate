@@ -99,7 +99,10 @@ class Preference(Gtk.ApplicationWindow):
         if (len(text_a) == 0 or len(text_b) == 0):
             msg = "已恢复默认（不推荐）"
         else:
-            ok = translate.check_server_translate(server, text_a, text_b)
+            ok, a, b = translate.check_server_translate(server, text_a, text_b)
+            self.tv_baidu_translate_app_id.set_text(a)
+            self.tv_baidu_translate_secret_key.set_text(b)
+
             if (ok):
                 msg = "成功，已保存"
                 config.set_config(server, "translate_app_id", text_a)
@@ -118,7 +121,9 @@ class Preference(Gtk.ApplicationWindow):
         if (len(text_a) == 0 or len(text_b) == 0):
             msg = "已恢复默认（不推荐）"
         else:
-            ok = translate.check_server_ocr(server, text_a, text_b)
+            ok, a, b = translate.check_server_ocr(server, text_a, text_b)
+            self.tv_baidu_ocr_app_key.set_text(a)
+            self.tv_baidu_ocr_secret_key.set_text(b)
             if (ok):
                 msg = "成功，已保存"
                 config.set_config(server, "ocr_api_key", text_a)
@@ -139,7 +144,7 @@ class Preference(Gtk.ApplicationWindow):
         if (len(text_a) == 0 or len(text_b) == 0):
             msg = "已恢复默认（不推荐）"
         else:
-            ok = translate.check_server_translate(server, text_a, text_b)
+            ok, a, b = translate.check_server_translate(server, text_a, text_b)
             if (ok):
                 msg = "成功，已保存"
                 config.set_config(server, "translate_app_id", text_a)

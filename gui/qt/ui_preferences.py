@@ -78,12 +78,12 @@ class Ui_MainWindow(QMainWindow):
         self.horizontalLayout2.addWidget(self.lb_msg_translate)
         spacerItem = QtWidgets.QSpacerItem(40, 18, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout2.addItem(spacerItem)
-        self.lb_how_ai = QtWidgets.QLabel(self.centralwidget)
-        self.lb_how_ai.setMinimumSize(QtCore.QSize(0, 18))
-        self.lb_how_ai.setMaximumSize(QtCore.QSize(16777215, 18))
-        self.lb_how_ai.setOpenExternalLinks(False)
-        self.lb_how_ai.setObjectName("lb_how_ai")
-        self.horizontalLayout2.addWidget(self.lb_how_ai)
+        self.lb_how_translate = QtWidgets.QLabel(self.centralwidget)
+        self.lb_how_translate.setMinimumSize(QtCore.QSize(0, 18))
+        self.lb_how_translate.setMaximumSize(QtCore.QSize(16777215, 18))
+        self.lb_how_translate.setOpenExternalLinks(False)
+        self.lb_how_translate.setObjectName("lb_how_ai")
+        self.horizontalLayout2.addWidget(self.lb_how_translate)
         self.verticalLayout.addLayout(self.horizontalLayout2)
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setMinimumSize(QtCore.QSize(0, 18))
@@ -136,10 +136,10 @@ class Ui_MainWindow(QMainWindow):
         self.horizontalLayout_2.addWidget(self.lb_msg_ocr)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
-        self.lb_how_ak = QtWidgets.QLabel(self.centralwidget)
-        self.lb_how_ak.setOpenExternalLinks(False)
-        self.lb_how_ak.setObjectName("lb_how_ak")
-        self.horizontalLayout_2.addWidget(self.lb_how_ak)
+        self.lb_how_ocr = QtWidgets.QLabel(self.centralwidget)
+        self.lb_how_ocr.setOpenExternalLinks(False)
+        self.lb_how_ocr.setObjectName("lb_how_ak")
+        self.horizontalLayout_2.addWidget(self.lb_how_ocr)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -153,19 +153,19 @@ class Ui_MainWindow(QMainWindow):
         self.lb_ai.setText(_translate("MainWindow", "AppId"))
         self.label_2.setText(_translate("MainWindow", "SecretKey"))
         self.btn_save1.setText(_translate("MainWindow", "保存"))
-        self.lb_how_ai.setText(_translate("MainWindow", "如何获取"))
+        self.lb_how_translate.setText(_translate("MainWindow", "如何获取"))
         self.label_3.setText(_translate("MainWindow", "图片识别api"))
         self.label_21.setText(_translate("MainWindow", "ApiKey"))
         self.label_22.setText(_translate("MainWindow", "SecretKey"))
         self.btn_save2.setText(_translate("MainWindow", "保存"))
-        self.lb_how_ak.setText(_translate("MainWindow", "如何获取"))
+        self.lb_how_ocr.setText(_translate("MainWindow", "如何获取"))
 
         self.load_data()
         self._listen()
 
     def load_data(self):
-        self.lb_how_ak.setOpenExternalLinks(True)
-        self.lb_how_ai.setOpenExternalLinks(True)
+        self.lb_how_translate.setOpenExternalLinks(True)
+        self.lb_how_ocr.setOpenExternalLinks(True)
 
         config_api = config.get_config_section(tools.server_baidu)
 
@@ -178,8 +178,8 @@ class Ui_MainWindow(QMainWindow):
             "translate_url"] + "'>如何获取？</a>"
         url_ocr = "<a href='" + config_api["ocr_url"] + "'>如何获取？</a>"
 
-        self.lb_how_ak.setText(url_translate)
-        self.lb_how_ai.setText(url_ocr)
+        self.lb_how_translate.setText(url_translate)
+        self.lb_how_ocr.setText(url_ocr)
 
     def _listen(self):
         self.btn_save1.clicked.connect(self.save_baidu_translate)
@@ -197,7 +197,9 @@ class Ui_MainWindow(QMainWindow):
         if (len(text_a) == 0 or len(text_b) == 0):
             msg = "已恢复默认（不推荐）"
         else:
-            ok = translate.check_server_translate(server, text_a, text_b)
+            ok, a, b = translate.check_server_translate(server, text_a, text_b)
+            self.pte_ai.setPlainText(a)
+            self.pte_sk1.setPlainText(b)
             if (ok):
                 msg = "成功，已保存"
                 config.set_config(server, "translate_app_id", text_a)
@@ -217,7 +219,9 @@ class Ui_MainWindow(QMainWindow):
         if (len(text_a) == 0 or len(text_b) == 0):
             msg = "已恢复默认（不推荐）"
         else:
-            ok = translate.check_server_ocr(server, text_a, text_b)
+            ok, a, b = translate.check_server_ocr(server, text_a, text_b)
+            self.pte_ak.setPlainText(a)
+            self.pte_sk2.setPlainText(b)
             if (ok):
                 msg = "成功，已保存"
                 config.set_config(server, "ocr_api_key", text_a)

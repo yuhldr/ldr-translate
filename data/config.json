@@ -26,7 +26,7 @@
     "baidu": {
         "translate_app_id": "",
         "translate_secret_key": "",
-        "translate_url": "https://ripperhe.gitee.io/bob/#/service/translate/baidu",
+        "translate_url": "http://api.fanyi.baidu.com/product/11",
         "translate_msg": "填写你的appid 密钥，这个我自己的被人用的比较多，可能会有问题",
         "ocr_api_key": "",
         "ocr_secret_key": "",
@@ -47,7 +47,7 @@
     "tencent": {
         "secret_id": "",
         "secret_key": "",
-        "url": "https://ripperhe.gitee.io/bob/#/service/translate/tencent",
+        "url": "https://cloud.tencent.com/product/tmt",
         "msg": "填写你的appid 密钥，这个我自己的被人用的比较多，可能会有问题",
         "translate_to_languages": [
             "zh",

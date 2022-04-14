@@ -72,21 +72,25 @@ def ocr(img_path, latex=False):
 
 def check_server_translate(server, a, b):
     ok = False
+    a = a.strip().replace("\n"," ")
+    b = b.strip().replace("\n"," ")
 
     if (server == tools.server_tencent):
         ok = tencent.check(a, b)
     else:
         ok = baidu.check_translate(a, b)
 
-    return ok
+    return ok, a, b
 
 
 def check_server_ocr(server, a, b):
     ok = False
+    a = a.strip().replace("\n"," ")
+    b = b.strip().replace("\n"," ")
 
     if (server == tools.server_tencent):
         ok = tencent.check(a, b)
     else:
         ok = baidu.check_ocr(a, b)
 
-    return ok
+    return ok, a, b

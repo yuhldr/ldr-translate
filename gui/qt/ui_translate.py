@@ -66,7 +66,7 @@ class Ui_MainWindow(object):
         self.cbb_to.currentIndexChanged.connect(self.on_cbt_server_changed)
 
         self.te_to.setText(_translate("MainWindow", "选中“追加模式”后，累加翻译"))
-        self.te_from.setText(_translate("MainWindow", "复制自动翻译"))
+        self.te_from.setText(_translate("MainWindow", "复制自动翻译\n\n建议设置自己的api"))
         self.pushButton.clicked.connect(self.btnTranslate)
 
     def on_cbt_server_changed(self):

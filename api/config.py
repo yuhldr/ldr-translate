@@ -53,9 +53,9 @@ def get_autostart():
 
 config_baidu_keys = [
     "translate_app_id", "translate_secret_key", "ocr_api_key",
-    "ocr_secret_key", "access_token", "expires_in_date"
+    "ocr_secret_key", "access_token", "expires_in_date", "translate_url", "ocr_url"
 ]
-config_tencent_keys = ["secret_id", "secret_key"]
+config_tencent_keys = ["secret_id", "secret_key", "url"]
 
 config_setting_keys = ["translate_way_copy", "to_long", "server_name"]
 
