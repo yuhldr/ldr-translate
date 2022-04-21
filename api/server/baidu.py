@@ -7,12 +7,16 @@ import urllib
 import time
 from api import config, tools
 
-
 config_server = "baidu"
 default_translate_app_id = "20211109000995303"
 default_translate_secret_key = "qLFDFx7fLRrioaa6CTnk"
 default_ocr_app_key = "S1NHCzzzBhL2TUMx5iGpOSUu"
 default_ocr_secret_key = "709INHX6GCLsAXXZPLhKGVMmra7bEwGl"
+
+error_msg2zh = {
+    "Access token invalid or no longer valid": "密钥有问题，请重新设置api密钥",
+    "Invalid Access Limit": "公钥使用人数过多，请在设置中，更换为自己的api密钥（可免费申请，更安全）"
+}
 
 
 def translate_text(s, fromLang="auto", toLangZh=""):
@@ -21,7 +25,7 @@ def translate_text(s, fromLang="auto", toLangZh=""):
     appId = config_baidu["translate_app_id"]
     secretKey = config_baidu["translate_secret_key"]
 
-    if(len(appId) == 0 or len(secretKey) == 0):
+    if (len(appId) == 0 or len(secretKey) == 0):
         appId = default_translate_app_id
         secretKey = default_translate_secret_key
 
@@ -45,10 +49,11 @@ def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
     url = url % (appId, urllib.parse.quote(s), fromLang, toLang, salt, sign)
     try:
         request = requests.get(url, timeout=config.time_out)
-        if(request.status_code == 200):
+        if (request.status_code == 200):
             result = request.json()
             if ("error_code" in result):
-                s1 = "百度翻译请求错误：" + result["error_code"] + " " + result["error_msg"]
+                s1 = "百度翻译请求错误：" + result["error_code"] + " " + result[
+                    "error_msg"]
             else:
                 ok = True
                 s1 = result["trans_result"][0]["dst"]
@@ -92,23 +97,30 @@ def get_token():
 
     config_baidu = config.get_config_section(config_server)
     expires_in_date = config_baidu["expires_in_date"]
+    print(expires_in_date - time.time())
 
     if (expires_in_date - time.time() > 0):
         access_token = config_baidu["access_token"]
-        if(len(access_token) != 0):
+        if (len(access_token) != 0):
             return True, access_token
 
     ocr_api_key = config_baidu["ocr_api_key"]
     ocr_secret_key = config_baidu["ocr_secret_key"]
 
+    print(ocr_api_key)
+    print(ocr_secret_key)
+
     if (len(ocr_api_key) == 0 or len(ocr_secret_key) == 0):
         ocr_api_key = default_ocr_app_key
         ocr_secret_key = default_ocr_secret_key
 
-    ok, access_token, expires_in_date = get_token_by_url(ocr_api_key, ocr_secret_key)
-    if(ok):
+    ok, access_token, expires_in_date = get_token_by_url(
+        ocr_api_key, ocr_secret_key)
+    if (ok):
         config.set_config(config_server, "access_token", access_token)
         config.set_config(config_server, "expires_in_date", expires_in_date)
+    print(ok)
+    print(access_token)
     return ok, access_token
 
 
@@ -120,7 +132,7 @@ def ocr(img_path, latex=False):
     '''
     s = ""
     request_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/"
-    if(latex):
+    if (latex):
         request_url += "formula"
     else:
         request_url += "general_basic"
@@ -139,21 +151,24 @@ def ocr(img_path, latex=False):
         jsons = (response.json())
 
         if ("error_code" in jsons):
-            return str(jsons["error_code"]) + jsons["error_msg"]
+            error_msg = jsons["error_msg"]
+            s = error_msg + "错误码：" + str(jsons["error_code"])
+
+            return False, tools.error2zh(s, error_msg2zh)
         else:
             for word in jsons["words_result"]:
                 s += word["words"]
-                if(latex):
+                if (latex):
                     s += "\n"
                 else:
                     s_ = word["words"]
-                    if(s_[len(s_)-1: len(s_)] != "-"):
+                    if (s_[len(s_) - 1:len(s_)] != "-"):
                         s += " "
 
     else:
         print(response.text)
 
-    if(latex):
+    if (latex):
         s = s.replace(" _ ", "_")
     return ok, s
 

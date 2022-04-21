@@ -10,7 +10,6 @@
 # License: GPL v3
 #
 
-import shutil
 import re
 import logging
 import os
@@ -18,7 +17,6 @@ from gettext import gettext as _
 import json
 
 from gi.repository import Gtk
-from gi.repository import Gio
 from api.config import DIR_CONFIG
 
 from sensors import SensorManager
@@ -217,6 +215,7 @@ class Preferences(Gtk.ApplicationWindow):
 
     SETTINGS_FILE = DIR_CONFIG + '/preferences_sm.json'
     settings = {}
+
     # print(SETTINGS_FILE)
 
     def __init__(self, parent):

@@ -22,14 +22,10 @@ import platform
 from gettext import gettext as _
 from gi.repository import GLib
 
-
-
-
-
 import psutil as ps
+from api import config
 
 ps_v1_api = int(ps.__version__.split('.')[0]) <= 1
-
 
 B_UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB']
 cpu_load = []
@@ -42,6 +38,7 @@ def bytes_to_human(num):
         num /= 1000.0
     return "%.2f %s" % (num, 'YB')
 
+
 class ISMError(Exception):
     """General exception."""
 
@@ -53,7 +50,7 @@ class SensorManager(object):
     """Singleton"""
     _instance = None
 
-    SETTINGS_FILE = os.getenv("HOME") + '/.indicator-sysmonitor.json'
+    SETTINGS_FILE = config.SETTINGS_FILE
     digit_regex = re.compile(r'''\d+''')
 
     class __impl:
@@ -70,24 +67,27 @@ class SensorManager(object):
         supported_sensors = None
 
         def __init__(self):
-            self.sensor_instances = [CPUSensor(),
-                                     NvGPUSensor(),
-                                     MemSensor(),
-                                     NetSensor(),
-                                     NetCompSensor(),
-                                     TotalNetSensor(),
-                                     BatSensor(),
-                                     FSSensor(),
-                                     SwapSensor(),
-                                     UporDownSensor(),
-                                     PublicCountrySensor(),
-                                     PublicCountryISOCodeSensor(),
-                                     PublicIPSensor(),
-                                     CPUTemp(),
-                                     NvGPUTemp()]
+            self.sensor_instances = [
+                CPUSensor(),
+                NvGPUSensor(),
+                MemSensor(),
+                NetSensor(),
+                NetCompSensor(),
+                TotalNetSensor(),
+                BatSensor(),
+                FSSensor(),
+                SwapSensor(),
+                UporDownSensor(),
+                PublicCountrySensor(),
+                PublicCountryISOCodeSensor(),
+                PublicIPSensor(),
+                CPUTemp(),
+                NvGPUTemp()
+            ]
 
             for sensor in self.sensor_instances:
-                self.settings['sensors'][sensor.name] = (sensor.desc, sensor.cmd)
+                self.settings['sensors'][sensor.name] = (sensor.desc,
+                                                         sensor.cmd)
 
             self._last_net_usage = [0, 0]  # (up, down)
             self._fetcher = None
@@ -164,8 +164,8 @@ class SensorManager(object):
 
             sensors[newname] = (desc, cmd)
             del sensors[name]
-            self.settings["custom_text"] = self.settings["custom_text"].replace(
-                name, newname)
+            self.settings["custom_text"] = self.settings[
+                "custom_text"].replace(name, newname)
             self.update_regex()
 
         def load_settings(self):
@@ -201,6 +201,7 @@ class SensorManager(object):
                     f.write(json.dumps(self.settings))
 
             except Exception as ex:
+                print(ex)
                 logging.exception(ex)
                 logging.error('Writing settings failed')
 
@@ -290,7 +291,8 @@ class SensorManager(object):
                         res[sensor] = value
 
                 else:  # custom sensor
-                    res[sensor] = BaseSensor.script_exec(self.settings["sensors"][sensor][1])
+                    res[sensor] = BaseSensor.script_exec(
+                        self.settings["sensors"][sensor][1])
 
             return res
 
@@ -334,7 +336,8 @@ class BaseSensor(object):
     def script_exec(command):
         """Execute a custom command."""
         try:
-            output = subprocess.Popen(command, stdout=subprocess.PIPE,
+            output = subprocess.Popen(command,
+                                      stdout=subprocess.PIPE,
                                       shell=True).communicate()[0].strip()
         except:
             output = _("Error")
@@ -352,7 +355,8 @@ class NvGPUSensor(BaseSensor):
             return "{:02.0f}%".format(self._fetch_gpu())
 
     def _fetch_gpu(self, percpu=False):
-        result = subprocess.check_output(['nvidia-smi', '--query-gpu=utilization.gpu', '--format=csv'])
+        result = subprocess.check_output(
+            ['nvidia-smi', '--query-gpu=utilization.gpu', '--format=csv'])
         perc = result.splitlines()[1]
         perc = perc[:-2]
         return int(perc)
@@ -369,7 +373,8 @@ class NvGPUTemp(BaseSensor):
         return "{}\u00B0C".format(self._fetch_gputemp())
 
     def _fetch_gputemp(self):
-        result = subprocess.check_output(['nvidia-smi', '--query-gpu=temperature.gpu', '--format=csv'])
+        result = subprocess.check_output(
+            ['nvidia-smi', '--query-gpu=temperature.gpu', '--format=csv'])
         perc = result.splitlines()[1]
         return int(perc)
 
@@ -448,10 +453,10 @@ class MemSensor(BaseSensor):
                 grep("MemAvailable", meminfo))[0]
             return 100 - 100 * int(available) / float(total)
         else:
-            free = SensorManager.digit_regex.findall(
-                grep("MemFree", meminfo))[0]
-            cached = SensorManager.digit_regex.findall(
-                grep("Cached", meminfo))[0]
+            free = SensorManager.digit_regex.findall(grep("MemFree",
+                                                          meminfo))[0]
+            cached = SensorManager.digit_regex.findall(grep("Cached",
+                                                            meminfo))[0]
             free = int(free) + int(cached)
             return 100 - 100 * free / float(total)
 
@@ -478,7 +483,9 @@ class NetSensor(BaseSensor):
         mgr = SensorManager()
         current[0] /= mgr.get_interval()
         current[1] /= mgr.get_interval()
-        return '↓{:>9s}/s ↑{:>9s}/s'.format(bytes_to_human(current[0]), bytes_to_human(current[1]))
+        return '↓{:>9s}/s ↑{:>9s}/s'.format(bytes_to_human(current[0]),
+                                            bytes_to_human(current[1]))
+
 
 class NetCompSensor(BaseSensor):
     name = 'netcomp'
@@ -504,6 +511,7 @@ class NetCompSensor(BaseSensor):
         current[1] /= mgr.get_interval()
         return '⇵{:>9s}/s'.format(bytes_to_human(current[0] + current[1]))
 
+
 class TotalNetSensor(BaseSensor):
     name = 'totalnet'
     desc = _('网速流量使用量')
@@ -523,6 +531,7 @@ class TotalNetSensor(BaseSensor):
         current[1] /= mgr.get_interval()
         return ' Σ{:>9s}'.format(bytes_to_human(current[0] + current[1]))
 
+
 class BatSensor(BaseSensor):
     name = 'bat\d*'
     desc = _('剩余电量')
@@ -531,8 +540,10 @@ class BatSensor(BaseSensor):
     def check(self, sensor):
         if self.bat.match(sensor):
             bat_id = int(sensor[3:]) if len(sensor) > 3 else 0
-            if not os.path.exists("/sys/class/power_supply/BAT{}".format(bat_id)):
-                raise ISMError(_("Invalid number returned for the Battery sensor."))
+            if not os.path.exists(
+                    "/sys/class/power_supply/BAT{}".format(bat_id)):
+                raise ISMError(
+                    _("Invalid number returned for the Battery sensor."))
 
             return True
 
@@ -547,7 +558,8 @@ class BatSensor(BaseSensor):
         """Fetch the the amount of remaining battery"""
         capacity = 0
         try:
-            with open("/sys/class/power_supply/BAT{}/capacity".format(batid)) as state:
+            with open("/sys/class/power_supply/BAT{}/capacity".format(
+                    batid)) as state:
                 while True:
                     capacity = int(state.readline())
                     break
@@ -630,7 +642,8 @@ class UporDownSensor(BaseSensor):
     lasttime = 0  # we refresh this every 10 seconds
 
     def get_value(self, sensor):
-        if self.current_val == "" or self.lasttime == 0 or (time.time() - self.lasttime) > 10:
+        if self.current_val == "" or self.lasttime == 0 or (
+                time.time() - self.lasttime) > 10:
             self.current_val = self.script_exec(self.command)
             self.lasttime = time.time()
 
@@ -647,7 +660,8 @@ class PublicIPSensor(BaseSensor):
     lasttime = 0  # we refresh this every 10 minutes
 
     def get_value(self, sensor):
-        if self.current_ip == "" or self.lasttime == 0 or (time.time() - self.lasttime) > 600:
+        if self.current_ip == "" or self.lasttime == 0 or (
+                time.time() - self.lasttime) > 600:
             self.current_ip = self.script_exec(self.command)
             self.lasttime = time.time()
 
@@ -664,7 +678,8 @@ class PublicCountrySensor(BaseSensor):
     lasttime = 0  # we refresh this every 10 minutes
 
     def get_value(self, sensor):
-        if self.current_country == "" or self.lasttime == 0 or (time.time() - self.lasttime) > 600:
+        if self.current_country == "" or self.lasttime == 0 or (
+                time.time() - self.lasttime) > 600:
             self.current_country = self.script_exec(self.command)
             self.lasttime = time.time()
 
@@ -681,7 +696,8 @@ class PublicCountryISOCodeSensor(BaseSensor):
     lasttime = 0  # we refresh this every 10 minutes
 
     def get_value(self, sensor):
-        if self.current_country_iso == "" or self.lasttime == 0 or (time.time() - self.lasttime) > 600:
+        if self.current_country_iso == "" or self.lasttime == 0 or (
+                time.time() - self.lasttime) > 600:
             self.current_country_iso = self.script_exec(self.command)
             self.lasttime = time.time()
 

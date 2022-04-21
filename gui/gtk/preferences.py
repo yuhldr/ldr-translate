@@ -72,6 +72,10 @@ class Preference(Gtk.ApplicationWindow):
         url_translate = "<a href='" + config_api[
             "translate_url"] + "'>如何获取？</a>"
         url_ocr = "<a href='" + config_api["ocr_url"] + "'>如何获取？</a>"
+
+        print(url_translate)
+        print(url_ocr)
+
         ui.get_object('lb_baidu_tanslate_way').set_markup(url_translate)
         ui.get_object('lb_baidu_ocr_way').set_markup(url_ocr)
 
@@ -105,8 +109,8 @@ class Preference(Gtk.ApplicationWindow):
 
             if (ok):
                 msg = "成功，已保存"
-                config.set_config(server, "translate_app_id", text_a)
-                config.set_config(server, "translate_secret_key", text_b)
+                config.set_config(server, "translate_app_id", a)
+                config.set_config(server, "translate_secret_key", b)
         self.lb_baidu_translate_msg.set_text(msg)
 
     def save_baidu_ocr(self, btn=None):
@@ -126,8 +130,8 @@ class Preference(Gtk.ApplicationWindow):
             self.tv_baidu_ocr_secret_key.set_text(b)
             if (ok):
                 msg = "成功，已保存"
-                config.set_config(server, "ocr_api_key", text_a)
-                config.set_config(server, "ocr_secret_key", text_b)
+                config.set_config(server, "ocr_api_key", a)
+                config.set_config(server, "ocr_secret_key", b)
                 config.set_config(server, "access_token", "")
                 config.set_config(server, "expires_in_date", 0)
 
@@ -164,16 +168,8 @@ class Preference(Gtk.ApplicationWindow):
         config.update_autostart(menu_check.get_active())
 
     def check_update(self, view=None):
-        urls = [
-            "https://raw.githubusercontent.com/yuhldr/ldr-translate/master/config.json",
-            "https://gitee.com/yuhldr/ldr-translate/raw/master/config.json",
-            config.get_config_version()["url"]
-        ]
-        update = False
-        i = 0
-        while not update and i < len(urls):
-            update, s, msg = config.check_update_version(urls[i])
-            i += 1
+
+        s, msg = config.check_update()
 
         self.lb_update_msg.set_markup(s)
         self.lb_version_msg.set_markup(msg)

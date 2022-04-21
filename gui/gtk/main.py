@@ -15,15 +15,13 @@ import os
 # faulthandler.enable()
 from api import config
 
+config.old2new()
 
 import logging
-import os
 import sys
 from argparse import ArgumentParser
 from gettext import gettext as _
 from threading import Event
-
-
 
 gi.require_version("AppIndicator3", "0.1")
 gi.require_version("Gtk", "3.0")
@@ -33,12 +31,12 @@ from preferences import Preference
 from preferences_sm import Preferences as PreferenceSM
 from sensors import SensorManager
 
-
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gtk, Gdk, GdkPixbuf
 
 
 class LdrTranlate(Gtk.Application):
+
     def __init__(self):
         self.translate_win = None
         self._help_dialog = None
@@ -63,7 +61,6 @@ class LdrTranlate(Gtk.Application):
 
         self.sensor_mgr = SensorManager()
         self.load_settings()
-
 
     def _create_menu(self):
         menu = Gtk.Menu()
@@ -182,8 +179,8 @@ class LdrTranlate(Gtk.Application):
         else:
             return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
 
-
 # ******* 监测 https://github.com/fossfreedom/indicator-sysmonitor.git  *******
+
     def update_indicator_guide(self):
         guide = self.sensor_mgr.get_guide()
 
@@ -217,11 +214,14 @@ class LdrTranlate(Gtk.Application):
 
         self.indicator_sysmonitor_preferences = PreferenceSM(self)
         self.indicator_sysmonitor_preferences = None
+
+
 # ******* 监测  *******
 
-
 if __name__ == "__main__":
+
     print("启动")
+
     app = LdrTranlate()
 
     parser = ArgumentParser()

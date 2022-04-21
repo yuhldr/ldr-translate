@@ -7,20 +7,21 @@ from pathlib import Path
 config_data = None
 config_file_name = "config.json"
 
-usr = os.getenv("SUDO_USER")
-if (usr is None):
-    usr = os.getenv("USER")
+HOME_PATH = os.getenv("SUDO_HOME")
+if (HOME_PATH is None):
+    HOME_PATH = os.getenv("HOME")
 
 DESKTOP_NAME = "ldr-translate.desktop"
-HOME_PATH = "/home/" + usr
 
 DIR_CONFIG = HOME_PATH + "/.config"
+
 
 AUTOSTART_DIR = DIR_CONFIG + '/autostart'
 AUTOSTART_PATH = AUTOSTART_DIR + "/" + DESKTOP_NAME
 
 app_home_dir = DIR_CONFIG + "/ldr-translate"
 config_path = app_home_dir + "/" + config_file_name
+SETTINGS_FILE = app_home_dir + '/indicator-sysmonitor.json'
 
 DESKTOP_PATH = "/usr/share/applications/" + DESKTOP_NAME
 
@@ -44,16 +45,15 @@ def update_autostart(autostart):
         except Exception as ex:
             print(ex)
 
+
 def get_autostart():
     print(AUTOSTART_PATH)
     return os.path.exists(AUTOSTART_PATH)
 
 
-
-
 config_baidu_keys = [
     "translate_app_id", "translate_secret_key", "ocr_api_key",
-    "ocr_secret_key", "access_token", "expires_in_date", "translate_url", "ocr_url"
+    "ocr_secret_key", "access_token", "expires_in_date"
 ]
 config_tencent_keys = ["secret_id", "secret_key", "url"]
 
@@ -72,7 +72,22 @@ def load_configs():
     check_config_data()
     global config_data
     config_data = json.load(open(config_path, "r"))
+    print(config_data)
     print(get_config_version()["name"])
+
+
+def check_update():
+    urls = [
+        "https://raw.githubusercontent.com/yuhldr/ldr-translate/master/data/config.json",
+        "https://gitee.com/yuhldr/ldr-translate/raw/master/data/config.json",
+        get_config_version()["url"]
+    ]
+    update = False
+    i = 0
+    while not update and i < len(urls):
+        update, s, msg = check_update_version(urls[i])
+        i += 1
+    return s, msg
 
 
 def check_update_version(url):
@@ -143,13 +158,13 @@ def check_dir(dir):
 def check_config_data():
     if (not os.path.exists(config_path)):
         check_dir(app_home_dir)
-        if(os.path.exists(config_file_name)):
+        if (os.path.exists(config_file_name)):
             shutil.copy(config_file_name, config_path)
 
 
 # 更新时数据迁移，必须sudo执行
 def old2new():
-    print(config_path)
+    print("准备迁移")
     if (os.path.exists(config_file_name)):
         config_data_new = json.load(open(config_file_name, "r"))
         if os.path.exists(config_path):
@@ -171,6 +186,7 @@ def old2new():
                     key] = config_data_old[config_sections_setting][key]
 
         else:
+            print("没有旧文件？")
             check_dir(app_home_dir)
 
         with open(config_path, 'w') as file:

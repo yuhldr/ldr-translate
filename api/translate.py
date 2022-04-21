@@ -72,8 +72,8 @@ def ocr(img_path, latex=False):
 
 def check_server_translate(server, a, b):
     ok = False
-    a = a.strip().replace("\n"," ")
-    b = b.strip().replace("\n"," ")
+    a = a.strip().replace("\n", " ")
+    b = b.strip().replace("\n", " ")
 
     if (server == tools.server_tencent):
         ok = tencent.check(a, b)
@@ -85,8 +85,8 @@ def check_server_translate(server, a, b):
 
 def check_server_ocr(server, a, b):
     ok = False
-    a = a.strip().replace("\n"," ")
-    b = b.strip().replace("\n"," ")
+    a = a.strip().replace("\n", " ")
+    b = b.strip().replace("\n", " ")
 
     if (server == tools.server_tencent):
         ok = tencent.check(a, b)

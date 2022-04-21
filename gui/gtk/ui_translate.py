@@ -91,7 +91,8 @@ class Translate(Gtk.ApplicationWindow):
             img_path = config.app_home_dir + "/copy_img"
             image_pixbuf.savev(img_path, "png", "", "")
 
-            ok, text = translate.ocr(img_path, latex=self.cbtn_tex.get_active())
+            ok, text = translate.ocr(img_path,
+                                     latex=self.cbtn_tex.get_active())
         else:
             text = clipboard_.wait_for_text()
 
@@ -105,14 +106,16 @@ class Translate(Gtk.ApplicationWindow):
             ok, s_from = self.get_text_by_clipboard(self.clipboard)
             self.isFirsts[2] = False
 
-        if(self.cbtn_tex.get_active()):
-            if(s_from is None):
+        if (self.cbtn_tex.get_active()):
+            if (s_from is None):
                 s_from = "测试功能：\n勾选latex识别，可将图片公式转化为latex代码"
             self.set_text_view(s_from, "测试功能：\n勾选latex识别，可将图片公式转化为latex代码")
         else:
             self.translate_by_s(s_from)
 
+
 # 按钮再次翻译（可能修改了文本）
+
     def update_translate_view(self, view=None):
 
         textbuffer_from = self.tv_from.get_buffer()
@@ -125,7 +128,8 @@ class Translate(Gtk.ApplicationWindow):
 
     def translate_by_s(self, s_from=None):
 
-        s_from, s_to = translate.text(s_from, add_old=self.cbtn_add_old.get_active())
+        s_from, s_to = translate.text(s_from,
+                                      add_old=self.cbtn_add_old.get_active())
         self.set_text_view(s_from, s_to)
 
     def set_text_view(self, s_from, s_to):
