@@ -103,10 +103,10 @@ def to_lang_zh_par():
     return to_lang_zh2par(get_to_lang_zh())
 
 
-def error2zh(error_msg, dict):
+def error2zh(error_code, error_msg, dict):
     s = ""
-    for key, value in dict.items():
-        if (error_msg.find(key) > -1):
-            s = value
-    s += "\n\n" + error_msg
+    if (error_code in dict):
+        s = dict[error_code]
+
+    s == "%s\n\n错误码：%d，%s" % (s, error_code, error_msg)
     return s.strip()

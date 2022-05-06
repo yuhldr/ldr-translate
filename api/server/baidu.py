@@ -151,10 +151,8 @@ def ocr(img_path, latex=False):
         jsons = (response.json())
 
         if ("error_code" in jsons):
-            error_msg = jsons["error_msg"]
-            s = error_msg + "错误码：" + str(jsons["error_code"])
-
-            return False, tools.error2zh(s, error_msg2zh)
+            return False, tools.error2zh(jsons["error_code"],
+                                         jsons["error_msg"], error_msg2zh)
         else:
             for word in jsons["words_result"]:
                 s += word["words"]
