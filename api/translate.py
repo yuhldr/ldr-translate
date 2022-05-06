@@ -7,6 +7,8 @@ last_s = None
 last_s2 = None
 last_time = 0
 
+no_translate_this = False
+
 path_next_s = "s_next"
 config_section = "setting"
 
@@ -14,7 +16,13 @@ config_section = "setting"
 
 
 def text(s_from, fromLang="auto", add_old=True):
-    global last_s, last_s2, last_time
+    global last_s, last_s2, last_time, no_translate_this
+
+    if (no_translate_this):
+        print("不翻译")
+        no_translate_this = False
+        return last_s, last_s2
+
     toLangZh, changeLang = tools.get_to_lang_zh_()
 
     server, changeServer = tools.get_server_()
@@ -94,3 +102,8 @@ def check_server_ocr(server, a, b):
         ok = baidu.check_ocr(a, b)
 
     return ok, a, b
+
+
+def set_no_translate_this():
+    global no_translate_this
+    no_translate_this = True

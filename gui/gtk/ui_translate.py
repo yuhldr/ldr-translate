@@ -28,6 +28,11 @@ class Translate(Gtk.ApplicationWindow):
         self.tv_from = ui.get_object('tv_from')
         self.tv_to = ui.get_object('tv_to')
 
+        self.tv_from.connect("copy-clipboard", self.copy_)
+        self.tv_from.connect("cut-clipboard", self.copy_)
+        self.tv_to.connect("copy-clipboard", self.copy_)
+        self.tv_to.connect("cut-clipboard", self.copy_)
+
         self.cbt_server = ui.get_object('cbt_server')
         self.cbt_server.connect("changed", self.on_cbt_server_changed)
         for currency in tools.servers_name:
@@ -52,6 +57,9 @@ class Translate(Gtk.ApplicationWindow):
         self.cbt_server.set_active(tools.server_par())
         self.cbt_lang.set_active(tools.to_lang_zh_par())
         self.clipboard = self.getClipboard()
+
+    def copy_(self, a):
+        translate.set_no_translate_this()
 
     def open(self):
         self.is_hide = False

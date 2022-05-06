@@ -62,7 +62,7 @@ class SystemTray(object):
         self.preferences.show()
 
     def run(self):
-        self.auto = QAction('自动翻译', triggered=self.setAuto)
+        self.auto = QAction('复制即翻译', triggered=self.setAuto)
         self.auto.setEnabled(True)
         self.auto.setCheckable(True)
         self.auto.setChecked(True)
