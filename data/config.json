@@ -14,6 +14,7 @@
         "translate_span": 1.0,
         "ocr_span": 1.0,
         "translate_to_languages_zh": [
+            "自动",
             "中文",
             "文言",
             "英语",
@@ -33,6 +34,7 @@
         "ocr_url": "https://cloud.baidu.com/doc/OCR/s/dk3iqnq51",
         "ocr_msg": "OCR图片识别并翻译，按照下面的教程修改为自己的，一个人一月1000次",
         "translate_to_languages": [
+            "auto",
             "zh",
             "wyw",
             "en",
@@ -50,6 +52,7 @@
         "url": "https://cloud.tencent.com/product/tmt",
         "msg": "填写你的appid 密钥，这个我自己的被人用的比较多，可能会有问题",
         "translate_to_languages": [
+            "auto",
             "zh",
             "zh",
             "en",

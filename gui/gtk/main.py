@@ -70,7 +70,7 @@ class LdrTranlate(Gtk.Application):
         menu.add(pref_menu)
         menu.add(Gtk.SeparatorMenuItem())
 
-        self.menu_auto_translate = Gtk.CheckMenuItem(label="自动翻译")
+        self.menu_auto_translate = Gtk.CheckMenuItem(label="复制翻译")
         self.menu_auto_translate.connect('activate',
                                          self._active_auto_translate)
         menu.add(self.menu_auto_translate)
