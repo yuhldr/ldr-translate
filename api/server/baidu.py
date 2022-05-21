@@ -42,26 +42,37 @@ def translate_text(s, fromLang="auto", toLangZh=""):
 def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
     ok = False
 
+    retry_num = 2
+
     salt = random.randint(32768, 65536)
     sign = appId + s + str(salt) + secretKey
     sign = hashlib.md5(sign.encode()).hexdigest()
     url = "https://api.fanyi.baidu.com/api/trans/vip/translate?appid=%s&q=%s&from=%s&to=%s&salt=%s&sign=%s"
     url = url % (appId, urllib.parse.quote(s), fromLang, toLang, salt, sign)
-    try:
-        request = requests.get(url, timeout=config.time_out)
-        if (request.status_code == 200):
-            result = request.json()
-            if ("error_code" in result):
-                s1 = "百度翻译请求错误：" + result["error_code"] + " " + result[
-                    "error_msg"]
+    for i in range(retry_num):
+        try:
+            request = requests.get(url, timeout=config.time_out)
+            if (request.status_code == 200):
+                result = request.json()
+                if ("error_code" in result):
+                    if (result["error_msg"] in error_msg2zh.keys()):
+                        s1 = "百度翻译请求错误：" + result["error_code"] + " " + error_msg2zh[result[
+                            "error_msg"]]
+                    else:
+                        s1 = "百度翻译请求错误：" + result["error_code"] + " " + result[
+                            "error_msg"]
+                    os.system("notify-send -a '兰译' 'Warning' '{}'".format(s1))
+                else:
+                    ok = True
+                    s1 = result["trans_result"][0]["dst"]
+                    break
             else:
-                ok = True
-                s1 = result["trans_result"][0]["dst"]
-        else:
-            s1 = "请求错误：" + request.content
-
-    except Exception as e:
-        s1 = "网络错误：" + str(e)
+                s1 = "请求错误：" + request.content
+                break
+            time.sleep(random.random() + 1)
+        except Exception as e:
+            s1 = "网络错误：" + str(e)
+            break
 
     return s1, ok
 
