@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>450</height>
+    <height>511</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,13 +20,19 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QTextEdit" name="te_from"/>
+     <widget class="QTextEdit" name="te_from">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QComboBox" name="cbb_to">
-       </widget>
+       <widget class="QComboBox" name="cbb_to"/>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton">
