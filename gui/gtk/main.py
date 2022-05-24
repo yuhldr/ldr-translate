@@ -99,7 +99,7 @@ class LdrTranlate(Gtk.Application):
             pass
 
     def _on_preference(self, event=None, data=None):
-        Preference()
+        Preference(self)
 
     def _on_help(self, event=None, data=None):
 

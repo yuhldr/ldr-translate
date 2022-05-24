@@ -8,12 +8,14 @@ from preferences_sm import Preferences as PreferenceSM
 
 class Preference(Gtk.ApplicationWindow):
 
-    def __init__(self):
+    def __init__(self, parent):
         Gtk.Window.__init__(self)
         self.set_border_width(10)
         self.set_default_size(400, 360)
         self.set_keep_above(True)
         self.set_title("翻译设置")
+        self.set_icon_from_file('./icon/setting.svg')
+        self.ind_parent = parent
 
         ui = Gtk.Builder()
         ui.add_from_file('./preference.ui')
@@ -26,11 +28,19 @@ class Preference(Gtk.ApplicationWindow):
 
     def init_other(self, ui):
 
+        self.handler_id_show_sm = None
+
         config_version = config.get_config_version()
 
         cbtn_auto_start = ui.get_object('cbtn_auto_start')
         cbtn_auto_start.set_active(config.get_autostart())
         cbtn_auto_start.connect('toggled', self.update_autostart)
+
+        self.btn_set_sm = ui.get_object('btn_set_sm')
+
+        if (config.isShowSM()):
+            self.handler_id_show_sm = self.btn_set_sm.connect(
+                'clicked', self._on_indicator_sysmonitor_preferences)
 
         cbtn_sys = ui.get_object('cbtn_sys')
         cbtn_sys.set_active(config.isShowSM())
@@ -49,8 +59,6 @@ class Preference(Gtk.ApplicationWindow):
         )
 
         ui.get_object('btn_update').connect('clicked', self.check_update)
-        ui.get_object('btn_set_sm').connect(
-            'clicked', self._on_indicator_sysmonitor_preferences)
 
     def init_baidu_api(self, ui):
 
@@ -180,6 +188,11 @@ class Preference(Gtk.ApplicationWindow):
     def set_show_sm(self, menu_check):
         print(menu_check.get_active())
         config.setShowSM(menu_check.get_active())
+        if(menu_check.get_active()):
+            self.handler_id_show_sm = self.btn_set_sm.connect(
+                'clicked', self._on_indicator_sysmonitor_preferences)
+        elif(self.handler_id_show_sm is not None):
+            self.btn_set_sm.disconnect(self.handler_id_show_sm)
 
     def check_update(self, view=None):
 
@@ -193,5 +206,18 @@ class Preference(Gtk.ApplicationWindow):
             self._preferences_dialog.present()
             return
 
-        self.indicator_sysmonitor_preferences = PreferenceSM(self)
+        self.indicator_sysmonitor_preferences = PreferenceSM(
+            self)
         self.indicator_sysmonitor_preferences = None
+
+    def load_settings(self):
+        self.ind_parent.load_settings()
+
+    def save_settings(self):
+        self.ind_parent.save_settings()
+
+    def update_settings(self):
+        self.ind_parent.update_settings()
+
+    def update_indicator_guide(self):
+        self.ind_parent.update_indicator_guide()

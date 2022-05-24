@@ -38,6 +38,7 @@ class SensorsListModel(object):
     add/edit/delete custom sensors."""
 
     def __init__(self, parent):
+
         self.ind_parent = parent
         self._list_store = Gtk.ListStore(str, str)
         self._tree_view = Gtk.TreeView(self._list_store)

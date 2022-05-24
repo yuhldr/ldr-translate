@@ -18,7 +18,7 @@ class Translate(Gtk.ApplicationWindow):
         Gtk.Window.__init__(self)
         self.set_border_width(10)
         self.set_default_size(400, 360)
-        self.set_icon_from_file('./icon/icon.png')
+        self.set_icon_from_file('./icon/icon.svg')
         self.set_keep_above(True)
         self.set_title("兰译")
 

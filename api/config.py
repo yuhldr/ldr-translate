@@ -65,7 +65,9 @@ config_baidu_keys = [
 ]
 config_tencent_keys = ["secret_id", "secret_key", "url"]
 
-config_setting_keys = ["translate_way_copy", "to_long", "server_name"]
+config_setting_keys = [
+    "translate_way_copy", "to_long", "server_name", "show_sm"
+]
 
 config_sections_setting = "setting"
 config_sections_version = "version"
