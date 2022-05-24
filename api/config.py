@@ -28,6 +28,14 @@ DESKTOP_PATH = "/usr/share/applications/" + DESKTOP_NAME
 print(AUTOSTART_PATH)
 
 
+def isShowSM():
+    return get_config_setting()["show_sm"]
+
+
+def setShowSM(b):
+    return set_config(config_sections_setting, "show_sm", b)
+
+
 def update_autostart(autostart):
     print(autostart)
     if not autostart:

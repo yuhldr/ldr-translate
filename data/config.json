@@ -22,7 +22,8 @@
             "韩语",
             "德语",
             "法语"
-        ]
+        ],
+        "show_sm":true
     },
     "baidu": {
         "translate_app_id": "",

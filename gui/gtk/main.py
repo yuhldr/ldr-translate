@@ -10,6 +10,11 @@
 
 import gi
 import os
+import logging
+import sys
+from argparse import ArgumentParser
+from gettext import gettext as _
+from threading import Event
 # import faulthandler
 # # 在import之后直接添加以下启用代码即可 python3 -X faulthandler ldr-translate.py
 # faulthandler.enable()
@@ -17,18 +22,11 @@ from api import config
 
 config.old2new()
 
-import logging
-import sys
-from argparse import ArgumentParser
-from gettext import gettext as _
-from threading import Event
-
 gi.require_version("AppIndicator3", "0.1")
 gi.require_version("Gtk", "3.0")
 
 from ui_translate import Translate
 from preferences import Preference
-from preferences_sm import Preferences as PreferenceSM
 from sensors import SensorManager
 
 from gi.repository import AppIndicator3 as appindicator
@@ -41,7 +39,6 @@ class LdrTranlate(Gtk.Application):
         self.translate_win = None
         self._help_dialog = None
         self.auto_translate = True
-        self.indicator_sysmonitor_preferences = None
 
         self.indicator = appindicator.Indicator.new(
             "ldr-tranlate", os.path.abspath('icon/tray_dark.svg'),
@@ -56,11 +53,12 @@ class LdrTranlate(Gtk.Application):
                                     self._active_translate_windows)
         self.menu_auto_translate.set_active(True)
 
-        self.alive = Event()
-        self.alive.set()
+        if(config.isShowSM()):
+            self.alive = Event()
+            self.alive.set()
 
-        self.sensor_mgr = SensorManager()
-        self.load_settings()
+            self.sensor_mgr = SensorManager()
+            self.load_settings()
 
     def _create_menu(self):
         menu = Gtk.Menu()
@@ -79,13 +77,9 @@ class LdrTranlate(Gtk.Application):
 
         config_version = config.get_config_version()
 
-        menu_prf = Gtk.MenuItem(label="翻译设置")
+        menu_prf = Gtk.MenuItem(label="兰译设置")
         menu_prf.connect('activate', self._on_preference)
         menu.add(menu_prf)
-
-        menu_is = Gtk.MenuItem(label="监测设置")
-        menu_is.connect('activate', self._on_indicator_sysmonitor_preferences)
-        menu.add(menu_is)
 
         help_menu = Gtk.MenuItem(label="关于：V" + config_version["name"])
         help_menu.connect('activate', self._on_help)
@@ -187,11 +181,15 @@ class LdrTranlate(Gtk.Application):
         self.indicator.set_property("label-guide", guide)
 
     def update(self, data):
-        label = self.sensor_mgr.get_label(data)
         ind_label = "翻译中"
         if (not self.auto_translate):
             ind_label = "暂停翻译"
-        ind_label += " | " + label.strip()
+
+        if(config.isShowSM()):
+            label = self.sensor_mgr.get_label(data).strip()
+            if(len(label) == 0):
+                label = "请在“兰译设置”中关闭"
+            ind_label += " | " + label
         # print(ind_label)
 
         self.indicator.set_label(ind_label, "")
@@ -207,14 +205,6 @@ class LdrTranlate(Gtk.Application):
     def update_settings(self):
         self.sensor_mgr.initiate_fetcher(self)
 
-    def _on_indicator_sysmonitor_preferences(self, event=None):
-        if self.indicator_sysmonitor_preferences is not None:
-            self._preferences_dialog.present()
-            return
-
-        self.indicator_sysmonitor_preferences = PreferenceSM(self)
-        self.indicator_sysmonitor_preferences = None
-
 
 # ******* 监测  *******
 
@@ -224,34 +214,29 @@ if __name__ == "__main__":
 
     app = LdrTranlate()
 
-    parser = ArgumentParser()
-    parser.add_argument("--config",
-                        default=None,
-                        help="Use custom config file.")
-    parser.add_argument("--version",
-                        default=False,
-                        action='store_true',
-                        help='Show version and exit.')
+    if(config.isShowSM()):
 
-    options = parser.parse_args()
-    print(options)
+        parser = ArgumentParser()
+        parser.add_argument("--config",
+                            default=None,
+                            help="Use custom config file.")
+        parser.add_argument("--version",
+                            default=False,
+                            action='store_true',
+                            help='Show version and exit.')
 
-    logging.info("start")
-    logging.info(options.config)
-    if options.config:
-        if not os.path.exists(options.config):
-            logging.error(_("{} does not exist!").format(options.config))
-            sys.exit(-1)
-        logging.info(_("Using config file: {}").format(options.config))
-        SensorManager.SETTINGS_FILE = options.config
+        options = parser.parse_args()
 
-    print(SensorManager.SETTINGS_FILE)
-    if not os.path.exists(SensorManager.SETTINGS_FILE):
-        print("无设置")
-        sensor_mgr = SensorManager()
-        sensor_mgr.save_settings()
-    else:
-        print("you")
+        if options.config:
+            if not os.path.exists(options.config):
+                logging.error(_("{} does not exist!").format(options.config))
+                sys.exit(-1)
+            logging.info(_("Using config file: {}").format(options.config))
+            SensorManager.SETTINGS_FILE = options.config
+
+        if not os.path.exists(SensorManager.SETTINGS_FILE):
+            sensor_mgr = SensorManager()
+            sensor_mgr.save_settings()
 
     try:
         Gtk.main()

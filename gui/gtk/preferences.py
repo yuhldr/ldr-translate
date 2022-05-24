@@ -3,6 +3,7 @@ from api import config, translate, tools
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from preferences_sm import Preferences as PreferenceSM
 
 
 class Preference(Gtk.ApplicationWindow):
@@ -16,7 +17,7 @@ class Preference(Gtk.ApplicationWindow):
 
         ui = Gtk.Builder()
         ui.add_from_file('./preference.ui')
-
+        self.indicator_sysmonitor_preferences = None
         self.init_other(ui)
         self.init_baidu_api(ui)
         self.init_tencent(ui)
@@ -31,6 +32,10 @@ class Preference(Gtk.ApplicationWindow):
         cbtn_auto_start.set_active(config.get_autostart())
         cbtn_auto_start.connect('toggled', self.update_autostart)
 
+        cbtn_sys = ui.get_object('cbtn_sys')
+        cbtn_sys.set_active(config.isShowSM())
+        cbtn_sys.connect('toggled', self.set_show_sm)
+
         self.lb_update_msg = ui.get_object('lb_update_msg')
         self.lb_version_msg = ui.get_object('lb_version_msg')
 
@@ -39,8 +44,13 @@ class Preference(Gtk.ApplicationWindow):
             "<a href='%s'>当前版本：v%s.%d</a>" %
             (config_version["home_url"], config_version["name"],
              config_version["code"]))
+        ui.get_object('lb_sm_github').set_markup(
+            "<a href='https://github.com/fossfreedom/indicator-sysmonitor'>开源地址</a>"
+        )
 
         ui.get_object('btn_update').connect('clicked', self.check_update)
+        ui.get_object('btn_set_sm').connect(
+            'clicked', self._on_indicator_sysmonitor_preferences)
 
     def init_baidu_api(self, ui):
 
@@ -167,9 +177,21 @@ class Preference(Gtk.ApplicationWindow):
         print(menu_check.get_active())
         config.update_autostart(menu_check.get_active())
 
+    def set_show_sm(self, menu_check):
+        print(menu_check.get_active())
+        config.setShowSM(menu_check.get_active())
+
     def check_update(self, view=None):
 
         s, msg = config.check_update()
 
         self.lb_update_msg.set_markup(s)
         self.lb_version_msg.set_markup(msg)
+
+    def _on_indicator_sysmonitor_preferences(self, event=None):
+        if self.indicator_sysmonitor_preferences is not None:
+            self._preferences_dialog.present()
+            return
+
+        self.indicator_sysmonitor_preferences = PreferenceSM(self)
+        self.indicator_sysmonitor_preferences = None
