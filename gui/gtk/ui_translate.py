@@ -121,9 +121,7 @@ class Translate(Gtk.ApplicationWindow):
         else:
             self.translate_by_s(s_from)
 
-
-# 按钮再次翻译（可能修改了文本）
-
+    # 按钮再次翻译（可能修改了文本）
     def update_translate_view(self, view=None):
 
         textbuffer_from = self.tv_from.get_buffer()

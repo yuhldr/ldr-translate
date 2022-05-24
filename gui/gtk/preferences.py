@@ -37,6 +37,7 @@ class Preference(Gtk.ApplicationWindow):
         cbtn_auto_start.connect('toggled', self.update_autostart)
 
         self.btn_set_sm = ui.get_object('btn_set_sm')
+        self.lb_sys_msg = ui.get_object('lb_sys_msg')
 
         if (config.isShowSM()):
             self.handler_id_show_sm = self.btn_set_sm.connect(
@@ -78,13 +79,13 @@ class Preference(Gtk.ApplicationWindow):
                                                     self.save_baidu_ocr)
         config_api = config.get_config_section(tools.server_baidu)
 
-        self.tv_baidu_translate_app_id.get_buffer().set_text(
+        self.tv_baidu_translate_app_id.set_text(
             config_api["translate_app_id"])
-        self.tv_baidu_translate_secret_key.get_buffer().set_text(
+        self.tv_baidu_translate_secret_key.set_text(
             config_api["translate_secret_key"])
-        self.tv_baidu_ocr_app_key.get_buffer().set_text(
+        self.tv_baidu_ocr_app_key.set_text(
             config_api["ocr_api_key"])
-        self.tv_baidu_ocr_secret_key.get_buffer().set_text(
+        self.tv_baidu_ocr_secret_key.set_text(
             config_api["ocr_secret_key"])
 
         url_translate = "<a href='" + config_api[
@@ -175,9 +176,7 @@ class Preference(Gtk.ApplicationWindow):
 
     def get_text(self, text_view):
         tb = text_view.get_buffer()
-        start_iter = tb.get_start_iter()
-        end_iter = tb.get_end_iter()
-        text = tb.get_text(start_iter, end_iter, True).strip()
+        text = tb.get_text().strip()
 
         return text
 
@@ -186,6 +185,7 @@ class Preference(Gtk.ApplicationWindow):
         config.update_autostart(menu_check.get_active())
 
     def set_show_sm(self, menu_check):
+        self.lb_sys_msg.set_markup("重新打开软件生效")
         print(menu_check.get_active())
         config.setShowSM(menu_check.get_active())
         if(menu_check.get_active()):
@@ -207,17 +207,5 @@ class Preference(Gtk.ApplicationWindow):
             return
 
         self.indicator_sysmonitor_preferences = PreferenceSM(
-            self)
+            self, self.ind_parent)
         self.indicator_sysmonitor_preferences = None
-
-    def load_settings(self):
-        self.ind_parent.load_settings()
-
-    def save_settings(self):
-        self.ind_parent.save_settings()
-
-    def update_settings(self):
-        self.ind_parent.update_settings()
-
-    def update_indicator_guide(self):
-        self.ind_parent.update_indicator_guide()

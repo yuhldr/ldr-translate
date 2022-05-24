@@ -47,18 +47,18 @@ class LdrTranlate(Gtk.Application):
         self.indicator.set_ordering_index(1)
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 
-        self._create_menu()
-
-        self.getClipboard().connect("owner-change",
-                                    self._active_translate_windows)
-        self.menu_auto_translate.set_active(True)
-
         if(config.isShowSM()):
             self.alive = Event()
             self.alive.set()
 
             self.sensor_mgr = SensorManager()
             self.load_settings()
+
+        self._create_menu()
+
+        self.getClipboard().connect("owner-change",
+                                    self._active_translate_windows)
+        self.menu_auto_translate.set_active(True)
 
     def _create_menu(self):
         menu = Gtk.Menu()
@@ -132,6 +132,7 @@ class LdrTranlate(Gtk.Application):
 
     def _active_auto_translate(self, view=None):
         self.auto_translate = view.get_active()
+        self.update(None)
         self._active_translate_windows()
 
     def _active_translate_windows(self, clipboard=None, event=None):
@@ -144,6 +145,9 @@ class LdrTranlate(Gtk.Application):
         is_active_windows = clipboard is not None and event is None
 
         windows_is_closed = self.translate_win is None or self.translate_win.is_hide
+
+        print(is_active_auto, windows_is_closed,
+              self.menu_auto_translate.get_active())
 
         if (is_copy):
             if (self.menu_auto_translate.get_active()):
@@ -181,11 +185,12 @@ class LdrTranlate(Gtk.Application):
         self.indicator.set_property("label-guide", guide)
 
     def update(self, data):
+        print(data)
         ind_label = "翻译中"
         if (not self.auto_translate):
             ind_label = "暂停翻译"
 
-        if(config.isShowSM()):
+        if(config.isShowSM() and data is not None):
             label = self.sensor_mgr.get_label(data).strip()
             if(len(label) == 0):
                 label = "请在“兰译设置”中关闭"

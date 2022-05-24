@@ -104,7 +104,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="lb_sys_msg">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-top">8</property>
@@ -193,14 +193,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTextView" id="tv_baidu_translate_app_id">
+              <object class="GtkEntry" id="tv_baidu_translate_app_id">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="wrap-mode">char</property>
-                <property name="left-margin">5</property>
-                <property name="right-margin">5</property>
-                <property name="top-margin">5</property>
-                <property name="bottom-margin">5</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -209,14 +204,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTextView" id="tv_baidu_translate_secret_key">
+              <object class="GtkEntry" id="tv_baidu_translate_secret_key">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="wrap-mode">char</property>
-                <property name="left-margin">5</property>
-                <property name="right-margin">5</property>
-                <property name="top-margin">5</property>
-                <property name="bottom-margin">5</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -237,14 +227,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTextView" id="tv_baidu_ocr_app_key">
+              <object class="GtkEntry" id="tv_baidu_ocr_app_key">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="wrap-mode">char</property>
-                <property name="left-margin">5</property>
-                <property name="right-margin">5</property>
-                <property name="top-margin">5</property>
-                <property name="bottom-margin">5</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -253,14 +238,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTextView" id="tv_baidu_ocr_secret_key">
+              <object class="GtkEntry" id="tv_baidu_ocr_secret_key">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="wrap-mode">char</property>
-                <property name="left-margin">5</property>
-                <property name="right-margin">5</property>
-                <property name="top-margin">5</property>
-                <property name="bottom-margin">5</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -423,14 +403,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTextView" id="tv_tencent_secret_id">
+              <object class="GtkEntry" id="tv_tencent_secret_id">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="wrap-mode">char</property>
-                <property name="left-margin">5</property>
-                <property name="right-margin">5</property>
-                <property name="top-margin">5</property>
-                <property name="bottom-margin">5</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -439,14 +414,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTextView" id="tv_tencent_secret_key">
+              <object class="GtkEntry" id="tv_tencent_secret_key">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="wrap-mode">char</property>
-                <property name="left-margin">5</property>
-                <property name="right-margin">5</property>
-                <property name="top-margin">5</property>
-                <property name="bottom-margin">5</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>

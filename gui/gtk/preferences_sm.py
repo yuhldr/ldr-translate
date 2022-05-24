@@ -219,7 +219,7 @@ class Preferences(Gtk.ApplicationWindow):
 
     # print(SETTINGS_FILE)
 
-    def __init__(self, parent):
+    def __init__(self, parent, ind_parent):
         """It creates the widget of the dialogs"""
         Gtk.Window.__init__(self)
         self.set_border_width(10)
@@ -228,7 +228,7 @@ class Preferences(Gtk.ApplicationWindow):
         self.set_keep_above(True)
         self.set_title("监测设置")
 
-        self.ind_parent = parent
+        self.ind_parent = ind_parent
         self.custom_entry = None
         self.interval_entry = None
         self.sensor_mgr = SensorManager()
