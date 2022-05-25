@@ -1,5 +1,4 @@
 import hashlib
-import os
 import random
 import base64
 import requests
@@ -14,8 +13,13 @@ default_ocr_app_key = "S1NHCzzzBhL2TUMx5iGpOSUu"
 default_ocr_secret_key = "709INHX6GCLsAXXZPLhKGVMmra7bEwGl"
 
 error_msg2zh = {
-    "Access token invalid or no longer valid": "密钥有问题，请重新设置api密钥",
-    "Invalid Access Limit": "公钥使用人数过多，请在设置中，更换为自己的api密钥（可免费申请，更安全）"
+    "54003": "百度翻译公钥使用人数过多，可重试。但建议在设置中，更换为自己的api密钥（可免费申请，更安全）",
+    "54000": "翻译内容为空",
+}
+
+error_msg2zh_ocr = {
+    "17": "图片识别公钥使用人数过多，明日方可使用。建议在设置中，更换为自己的api密钥（可免费申请，更安全，额度更多）",
+    "110": "意外错误，请重试",
 }
 
 
@@ -40,7 +44,7 @@ def translate_text(s, fromLang="auto", toLangZh=""):
 
 
 def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
-    ok = False
+    ok = True
 
     salt = random.randint(32768, 65536)
     sign = appId + s + str(salt) + secretKey
@@ -52,10 +56,9 @@ def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
         if (request.status_code == 200):
             result = request.json()
             if ("error_code" in result):
-                s1 = "百度翻译请求错误：" + result["error_code"] + " " + result[
-                    "error_msg"]
+                s1 = tools.error2zh(result["error_code"], result["error_msg"],
+                                    error_msg2zh)
             else:
-                ok = True
                 s1 = result["trans_result"][0]["dst"]
         else:
             s1 = "请求错误：" + request.content
@@ -97,7 +100,6 @@ def get_token():
 
     config_baidu = config.get_config_section(config_server)
     expires_in_date = config_baidu["expires_in_date"]
-    print(expires_in_date - time.time())
 
     if (expires_in_date - time.time() > 0):
         access_token = config_baidu["access_token"]
@@ -106,9 +108,6 @@ def get_token():
 
     ocr_api_key = config_baidu["ocr_api_key"]
     ocr_secret_key = config_baidu["ocr_secret_key"]
-
-    print(ocr_api_key)
-    print(ocr_secret_key)
 
     if (len(ocr_api_key) == 0 or len(ocr_secret_key) == 0):
         ocr_api_key = default_ocr_app_key
@@ -119,8 +118,7 @@ def get_token():
     if (ok):
         config.set_config(config_server, "access_token", access_token)
         config.set_config(config_server, "expires_in_date", expires_in_date)
-    print(ok)
-    print(access_token)
+
     return ok, access_token
 
 
@@ -151,8 +149,10 @@ def ocr(img_path, latex=False):
         jsons = (response.json())
 
         if ("error_code" in jsons):
+            if(110 == jsons["error_code"]):
+                config.set_config(config_server, "access_token", "")
             return False, tools.error2zh(jsons["error_code"],
-                                         jsons["error_msg"], error_msg2zh)
+                                         jsons["error_msg"], error_msg2zh_ocr)
         else:
             for word in jsons["words_result"]:
                 s += word["words"]

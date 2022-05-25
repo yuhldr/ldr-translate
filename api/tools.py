@@ -104,9 +104,11 @@ def to_lang_zh_par():
 
 
 def error2zh(error_code, error_msg, dict):
+    error_code = str(error_code)
     s = ""
     if (error_code in dict):
         s = dict[error_code]
 
-    s == "%s\n\n错误码：%d，%s" % (s, error_code, error_msg)
+    s == "%s\n\n错误码：%s，%s" % (s, error_code, error_msg)
+
     return s.strip()
