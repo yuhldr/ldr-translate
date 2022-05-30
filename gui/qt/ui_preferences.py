@@ -191,7 +191,7 @@ class Ui_MainWindow(QMainWindow):
 
     def save_baidu_translate(self, btn=None):
 
-        ok = False
+        ok = True
         server = "baidu"
         text_a = self.pte_ai.toPlainText()
         text_b = self.pte_sk1.toPlainText()
@@ -201,18 +201,21 @@ class Ui_MainWindow(QMainWindow):
         if (len(text_a) == 0 or len(text_b) == 0):
             msg = "已恢复默认（不推荐）"
         else:
-            ok, a, b = translate.check_server_translate(server, text_a, text_b)
-            self.pte_ai.setPlainText(a)
-            self.pte_sk1.setPlainText(b)
+            ok, text_a, text_b = translate.check_server_translate(
+                server, text_a, text_b)
+            self.pte_ai.setPlainText(text_a)
+            self.pte_sk1.setPlainText(text_b)
             if (ok):
                 msg = "成功，已保存"
-                config.set_config(server, "translate_app_id", a)
-                config.set_config(server, "translate_secret_key", b)
-        print(msg)
+
+        if (ok):
+
+            config.set_config(server, "translate_app_id", text_a)
+            config.set_config(server, "translate_secret_key", text_b)
         self.lb_msg_translate.setText(msg)
 
     def save_baidu_ocr(self, btn=None):
-        ok = False
+        ok = True
         server = tools.server_baidu
 
         text_a = self.pte_ak.toPlainText()
@@ -223,14 +226,17 @@ class Ui_MainWindow(QMainWindow):
         if (len(text_a) == 0 or len(text_b) == 0):
             msg = "已恢复默认（不推荐）"
         else:
-            ok, a, b = translate.check_server_ocr(server, text_a, text_b)
-            self.pte_ak.setPlainText(a)
-            self.pte_sk2.setPlainText(b)
+            ok, text_a, text_b = translate.check_server_ocr(
+                server, text_a, text_b)
+            self.pte_ak.setPlainText(text_a)
+            self.pte_sk2.setPlainText(text_b)
             if (ok):
                 msg = "成功，已保存"
-                config.set_config(server, "ocr_api_key", a)
-                config.set_config(server, "ocr_secret_key", b)
-                config.set_config(server, "access_token", "")
-                config.set_config(server, "expires_in_date", 0)
-        print(msg)
+
+        if (ok):
+            config.set_config(server, "ocr_api_key", text_a)
+            config.set_config(server, "ocr_secret_key", text_b)
+            config.set_config(server, "access_token", "")
+            config.set_config(server, "expires_in_date", 0)
+
         self.lb_msg_ocr.setText(msg)

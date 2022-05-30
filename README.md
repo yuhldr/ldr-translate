@@ -148,6 +148,21 @@ yay ldr-translate
 
     有时候一句话在文献里分成上下两页，复制半句翻译有问题，这时候勾选 `追加模式`，接下来复制的内容，会和前一次的复制内容，一起翻译
 
+
+## 已知问题
+
+- qt版本，使用fcitx输入法的用户，无法输入中文
+
+    以 `archlinux-2022-05-25` 为例，当前python为 `python3.10`
+
+    ```bash
+    ln -s /usr/lib/qt/plugins/platforminputcontexts/libfcitxplatforminputcontextplugin.so ~/.local/lib/python3.10/site-packages/PyQt5/Qt5/plugins/platforminputcontexts/
+    ```
+
+    重新打开兰朵儿即可
+
+
+
 ## 资料
 
 - [ndicator-sysmonitor](https://github.com/fossfreedom/indicator-sysmonitor)
