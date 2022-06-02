@@ -15,7 +15,6 @@ DESKTOP_NAME = "ldr-translate.desktop"
 
 DIR_CONFIG = HOME_PATH + "/.config"
 
-
 AUTOSTART_DIR = DIR_CONFIG + '/autostart'
 AUTOSTART_PATH = AUTOSTART_DIR + "/" + DESKTOP_NAME
 
@@ -183,17 +182,20 @@ def old2new():
 
             # 百度
             for key in config_baidu_keys:
-                config_data_new[config_sections_baidu][key] = config_data_old[
-                    config_sections_baidu][key]
+                if (key in config_data_old[config_sections_baidu]):
+                    config_data_new[config_sections_baidu][key] = \
+                        config_data_old[config_sections_baidu][key]
 
             # 腾讯
             for key in config_tencent_keys:
-                config_data_new[config_sections_tencent][
-                    key] = config_data_old[config_sections_tencent][key]
+                if (key in config_data_old[config_sections_tencent]):
+                    config_data_new[config_sections_tencent][
+                        key] = config_data_old[config_sections_tencent][key]
 
             for key in config_setting_keys:
-                config_data_new[config_sections_setting][
-                    key] = config_data_old[config_sections_setting][key]
+                if (key in config_data_old[config_sections_setting]):
+                    config_data_new[config_sections_setting][
+                        key] = config_data_old[config_sections_setting][key]
 
         else:
             print("没有旧文件？")
