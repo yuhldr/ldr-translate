@@ -143,8 +143,9 @@ class Translate(Gtk.ApplicationWindow):
         textbuffer_from = self.tv_from.get_buffer()
         textbuffer_to = self.tv_to.get_buffer()
 
-        textbuffer_from.set_text(s_from.strip())
-        textbuffer_to.set_text(s_to.strip())
+        if(len(s_from.strip()) > 0 and len(s_to.strip()) > 0):
+            textbuffer_from.set_text(s_from.strip())
+            textbuffer_to.set_text(s_to.strip())
 
     def getClipboard(self):
         if (config.get_config_setting()["translate_way_copy"]):

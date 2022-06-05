@@ -110,20 +110,15 @@ def change_deal():
 
         isTranslate = True
 
-        print(formats)
-
         # 如果是文本格式，把内容打印出来
         if ('text/uri-list' in formats):
-            print("文件")
             isTranslate = False
         elif ('application/x-qt-image' in formats):
-            print("图片")
             # 必须有.png
             img_path = config.app_home_dir + "/copy_img.png"
             clipboard.image().save(img_path)
             ok, text_from = translate.ocr(img_path)
         else:
-            print("文本")
             text_from = data.text()
 
         if (isTranslate):

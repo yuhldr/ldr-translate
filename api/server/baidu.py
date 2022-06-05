@@ -15,6 +15,7 @@ default_ocr_secret_key = "709INHX6GCLsAXXZPLhKGVMmra7bEwGl"
 error_msg2zh = {
     "54003": "百度翻译公钥使用人数过多，可重试。但建议在设置中，更换为自己的api密钥（可免费申请，更安全）",
     "54000": "翻译内容为空",
+    "52003": "密钥错误，请在设置中重新设置"
 }
 
 error_msg2zh_ocr = {
@@ -51,15 +52,18 @@ def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
     sign = hashlib.md5(sign.encode()).hexdigest()
     url = "https://api.fanyi.baidu.com/api/trans/vip/translate?appid=%s&q=%s&from=%s&to=%s&salt=%s&sign=%s"
     url = url % (appId, urllib.parse.quote(s), fromLang, toLang, salt, sign)
+    s1 = ""
     try:
         request = requests.get(url, timeout=config.time_out)
         if (request.status_code == 200):
             result = request.json()
             if ("error_code" in result):
+                ok = False
                 s1 = tools.error2zh(result["error_code"], result["error_msg"],
                                     error_msg2zh)
             else:
-                s1 = result["trans_result"][0]["dst"]
+                for trans_result in result["trans_result"]:
+                    s1 += trans_result["dst"] + "\n"
         else:
             s1 = "请求错误：" + request.content
 

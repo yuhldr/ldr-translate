@@ -40,7 +40,7 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="lb_translate">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -55,9 +55,6 @@
       </property>
       <property name="text">
        <string>翻译api</string>
-      </property>
-      <property name="openExternalLinks">
-       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -80,16 +77,13 @@
         <property name="text">
          <string>AppId</string>
         </property>
-        <property name="openExternalLinks">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item>
-       <widget class="QPlainTextEdit" name="pte_ai">
+       <widget class="QLineEdit" name="le_ai">
         <property name="minimumSize">
          <size>
-          <width>582</width>
+          <width>200</width>
           <height>30</height>
          </size>
         </property>
@@ -99,17 +93,17 @@
           <height>30</height>
          </size>
         </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
        </widget>
       </item>
      </layout>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="lb_sk">
         <property name="minimumSize">
          <size>
           <width>60</width>
@@ -125,16 +119,13 @@
         <property name="text">
          <string>SecretKey</string>
         </property>
-        <property name="openExternalLinks">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item>
-       <widget class="QPlainTextEdit" name="pte_sk1">
+       <widget class="QLineEdit" name="le_sk1">
         <property name="minimumSize">
          <size>
-          <width>582</width>
+          <width>200</width>
           <height>30</height>
          </size>
         </property>
@@ -144,9 +135,6 @@
           <height>30</height>
          </size>
         </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
        </widget>
       </item>
      </layout>
@@ -154,7 +142,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QPushButton" name="btn_save1">
+       <widget class="QPushButton" name="btn_save_translate">
         <property name="text">
          <string>保存</string>
         </property>
@@ -164,9 +152,6 @@
        <widget class="QLabel" name="lb_msg_translate">
         <property name="text">
          <string/>
-        </property>
-        <property name="openExternalLinks">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -184,31 +169,16 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="lb_how_ai">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>18</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>18</height>
-         </size>
-        </property>
+       <widget class="QLabel" name="lb_how_translate">
         <property name="text">
          <string>如何获取</string>
-        </property>
-        <property name="openExternalLinks">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
      </layout>
     </item>
     <item>
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel" name="lb_ocr">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -224,15 +194,12 @@
       <property name="text">
        <string>图片识别api</string>
       </property>
-      <property name="openExternalLinks">
-       <bool>false</bool>
-      </property>
      </widget>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="lb_ak">
         <property name="minimumSize">
          <size>
           <width>60</width>
@@ -248,19 +215,13 @@
         <property name="text">
          <string>ApiKey</string>
         </property>
-        <property name="openExternalLinks">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item>
-       <widget class="QPlainTextEdit" name="pte_ak">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
+       <widget class="QLineEdit" name="le_ak">
         <property name="minimumSize">
          <size>
-          <width>0</width>
+          <width>200</width>
           <height>30</height>
          </size>
         </property>
@@ -269,12 +230,6 @@
           <width>16777215</width>
           <height>30</height>
          </size>
-        </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
        </widget>
       </item>
@@ -283,32 +238,29 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="lb_sk2">
         <property name="minimumSize">
          <size>
-          <width>0</width>
+          <width>60</width>
           <height>18</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
+          <width>60</width>
           <height>18</height>
          </size>
         </property>
         <property name="text">
          <string>SecretKey</string>
         </property>
-        <property name="openExternalLinks">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item>
-       <widget class="QPlainTextEdit" name="pte_sk2">
+       <widget class="QLineEdit" name="le_sk2">
         <property name="minimumSize">
          <size>
-          <width>0</width>
+          <width>200</width>
           <height>30</height>
          </size>
         </property>
@@ -318,20 +270,14 @@
           <height>30</height>
          </size>
         </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
        </widget>
       </item>
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QPushButton" name="btn_save2">
+       <widget class="QPushButton" name="btn_save_ocr">
         <property name="text">
          <string>保存</string>
         </property>
@@ -342,31 +288,25 @@
         <property name="text">
          <string/>
         </property>
-        <property name="openExternalLinks">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer_2">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>40</width>
-          <height>20</height>
+          <height>18</height>
          </size>
         </property>
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="lb_how_ak">
+       <widget class="QLabel" name="lb_how_ocr">
         <property name="text">
          <string>如何获取</string>
-        </property>
-        <property name="openExternalLinks">
-         <bool>false</bool>
         </property>
        </widget>
       </item>

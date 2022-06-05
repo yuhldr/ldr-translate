@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.te_from = QtWidgets.QTextEdit(self.centralwidget)
+        self.te_from = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.te_from.setObjectName("te_from")
         self.verticalLayout.addWidget(self.te_from)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -45,13 +45,22 @@ class Ui_MainWindow(object):
         self.cb_add.setObjectName("cb_add")
         self.horizontalLayout.addWidget(self.cb_add)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        self.te_to = QtWidgets.QTextEdit(self.centralwidget)
+        self.te_to = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.te_to.setObjectName("te_to")
         self.verticalLayout.addWidget(self.te_to)
         MainWindow.setCentralWidget(self.centralwidget)
 
+        self.te_from.copyAvailable.connect(self.from_copy)
+        self.te_to.copyAvailable.connect(self.to_copy)
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def from_copy(self, is_selected):
+        translate.set_no_translate_this(is_selected)
+
+    def to_copy(self, is_selected):
+        translate.set_no_translate_this(is_selected)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -65,8 +74,8 @@ class Ui_MainWindow(object):
         self.cbb_to.setCurrentText(tools.get_to_lang_zh())
         self.cbb_to.currentIndexChanged.connect(self.on_cbt_server_changed)
 
-        self.te_to.setText(_translate("MainWindow", "选中“追加模式”后，累加翻译"))
-        self.te_from.setText(
+        self.te_to.setPlainText(_translate("MainWindow", "选中“追加模式”后，累加翻译"))
+        self.te_from.setPlainText(
             _translate("MainWindow",
                        "复制自动翻译\n\n可以设置自己的api，使用开发者api,人数过多时，可能出现翻译失败等问题"))
         self.pushButton.clicked.connect(self.btnTranslate)
@@ -85,8 +94,10 @@ class Ui_MainWindow(object):
 
     def translate_text(self, text_from=None, text_to=None):
         text_from, text_to = translate.text(text_from, add_old=self.isAdd())
-        self.te_from.setPlainText(text_from)
-        self.te_to.setPlainText(text_to)
+
+        if (len(text_from.strip()) > 0 and len(text_to.strip()) > 0):
+            self.te_from.setPlainText(text_from)
+            self.te_to.setPlainText(text_to)
 
     def btnTranslate(self):
         text_from = self.te_from.toPlainText()

@@ -20,13 +20,12 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QTextEdit" name="te_from"/>
+     <widget class="QPlainTextEdit" name="te_from"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QComboBox" name="cbb_to">
-       </widget>
+       <widget class="QComboBox" name="cbb_to"/>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton">
@@ -58,7 +57,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QTextEdit" name="te_to"/>
+     <widget class="QPlainTextEdit" name="te_to"/>
     </item>
    </layout>
   </widget>

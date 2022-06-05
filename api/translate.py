@@ -21,7 +21,7 @@ def text(s_from, fromLang="auto", add_old=True):
     if (no_translate_this):
         print("不翻译")
         no_translate_this = False
-        return last_s, last_s2
+        return "", ""
 
     toLangZh, changeLang = tools.get_to_lang_zh_()
 
@@ -33,7 +33,8 @@ def text(s_from, fromLang="auto", add_old=True):
 
     if (s_from is None):
         if (last_s is None):
-            return "复制即可翻译", "系统直接截图到剪贴板，自动识别并翻译" + "\n\n测试功能：\n勾选latex识别，可将图片公式转化为latex代码"
+            return "复制即可翻译", "系统直接截图到剪贴板，自动识别并翻译"\
+                + "\n\n测试功能：\n勾选latex识别，可将图片公式转化为latex代码"
         else:
             s_from = last_s
 
@@ -104,6 +105,6 @@ def check_server_ocr(server, a, b):
     return ok, a, b
 
 
-def set_no_translate_this():
+def set_no_translate_this(ntt=True):
     global no_translate_this
-    no_translate_this = True
+    no_translate_this = ntt
