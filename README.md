@@ -5,15 +5,15 @@
 
 ## 安装
 
-- ubuntu等使用gnome桌面的，建议[gtk版本](#gtk版本)，功能较为完善，包括GPU、CPU、内存等信息使用情况，已经打包deb安装包
-- opensuse等kde桌面的，建议[qt版本](#qt版本)，测试中，功能暂时不完善，基本上只能翻译(含截图翻译、追加模式、自定义百度api)，KDE自带系统信息小部件，暂时不会开发 `GPU、CPU、内存等信息使用情况` 的功能
+- [点我安装deb版本](#安装deb版本): ubuntu等使用gnome桌面的，建议[gtk版本](#gtk版本)，功能较为完善，包括GPU、CPU、内存等信息使用情况，已经打包deb安装包:
+- [点我安装QT版本](#安装QT版本): opensuse等kde桌面的，建议[qt版本](#qt版本)，测试中，功能暂时不完善，基本上只能翻译(含截图翻译、追加模式、自定义百度api)，KDE自带系统信息小部件，暂时不会开发 `GPU、CPU、内存等信息使用情况` 的功能:
 - archlinux系统：已经发布在aur，可以使用 `yay ldr-translate` 根据自己的桌面选择合适的即可，`kde` 桌面选择`ldr-translate-qt`，`gnome` 桌面选择`ldr-translate-gtk`
 
 ### GTk版本
 
 建议gnome等桌面使用这个
 
-> 已打包deb，真实环境安装（非最小安装）ubuntu20.04桌面版，虚拟机测试ubuntu18.04、16.04，都可以正常使用该软件
+> 已打包deb，真实环境安装（非最小安装）ubuntu20.04桌面版，虚拟机测试ubuntu22.04、ubuntu18.04、16.04, popOs,mint-linux，都可以正常使用该软件
 
 #### GTk功能
 
@@ -79,7 +79,7 @@ make deb
 
 安装包在 `build/deb` 这里
 
-### QT版本
+### 安装QT版本
 
 KDE等桌面建议使用这个，还没打包，但是也容易用
 
@@ -165,10 +165,13 @@ yay ldr-translate
 
     请不要使用wayland方式登录，登录输入密码前，右下角，选择 `xorg`
 
+- 部分系统,安装以后找不到图标
+
+    点window图标,然后在系统搜索里,输入ldr,即可看到"兰译"
 
 ## 资料
 
-- [ndicator-sysmonitor](https://github.com/fossfreedom/indicator-sysmonitor)
+- [indicator-sysmonitor](https://github.com/fossfreedom/indicator-sysmonitor)
 
 - [Python Gtk+3 API &#xB7; Python GTK+ 3 API](https://athenajc.gitbooks.io/python-gtk-3-api/content/)
 
