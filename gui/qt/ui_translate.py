@@ -79,10 +79,8 @@ class Ui_MainWindow(object):
         self.cbb_translate_to_lang.currentIndexChanged.connect(
             self.on_cbb_tanslate_lang_changed)
 
-        translate_server_dict = tools.get_translate_server_dict_by_locale()
-
-        for key in translate_server_dict.keys():
-            self.cbb_translate_server.addItem(key, translate_server_dict[key])
+        self.cbb_translate_server.addItems(
+            tools.get_translate_server_dict_by_locale().keys())
         s = tools.get_current_translate_server_locale()
         self.cbb_translate_server.setCurrentText(s)
         self.cbb_translate_server.currentIndexChanged.connect(
@@ -96,24 +94,25 @@ class Ui_MainWindow(object):
         self.pushButton.clicked.connect(self.btnTranslate)
 
     def on_cbb_tanslate_lang_changed(self):
-        tools.set_to_lang(self.cbb_translate_to_lang.currentData())
+        tools.set_to_lang(self.cbb_translate_to_lang.currentText())
 
         # self.btnTranslate()
 
-    def set_cbb_tanslate_to_lang_data(self):
+    def set_cbb_tanslate_to_lang_data(self, i=-1):
         self.cbb_translate_to_lang.clear()
 
-        to_lang_dict = tools.get_to_lang_dict_by_locale()
+        self.cbb_translate_to_lang.addItems(
+            tools.get_to_lang_dict_by_locale().keys())
 
-        for key in to_lang_dict.keys():
-            self.cbb_translate_to_lang.addItem(key, to_lang_dict[key])
-        self.cbb_translate_to_lang.setCurrentText(
-            tools.get_current_to_lang_locale())
+        if (i < 0):
+            i = tools.get_current_to_lang_index()
+        self.cbb_translate_to_lang.setCurrentIndex(i)
 
     def on_cbb_tanslate_server_changed(self):
-        tools.set_translate_server(self.cbb_translate_server.currentData())
+        tools.set_translate_server(self.cbb_translate_server.currentText())
+        i = tools.get_current_to_lang_index(tools.translate_to_lang_cache)
 
-        self.set_cbb_tanslate_to_lang_data()
+        self.set_cbb_tanslate_to_lang_data(i)
 
     def isAdd(self):
         add = self.cb_add.isChecked()

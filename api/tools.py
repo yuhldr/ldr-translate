@@ -26,12 +26,12 @@ def get_translate_server_dict_by_locale():
 
 
 def get_translate_server_dict_by_code():
-    server_dict = get_translate_server_dict_by_code()
+    server_dict = get_translate_server_dict_by_locale()
     return dict(zip(server_dict.values(), server_dict.keys()))
 
 
 # 每次选择翻译服务，保存在本地
-def set_translate_server(translate_server, by_code=True):
+def set_translate_server(translate_server, by_code=False):
     global translate_server_cache
     if (by_code):
         translate_server_cache = translate_server
@@ -99,7 +99,9 @@ def get_to_lang_dict_by_code():
 
 
 # 最终保存的是要翻译的语言的简写编码，不同翻译服务略有不同
-def set_to_lang(to_lang, by_code=True):
+def set_to_lang(to_lang, by_code=False):
+    if(to_lang is None):
+        return
     global translate_to_lang_cache
     if (not by_code):
         translate_to_lang_cache = get_value_by_dict(

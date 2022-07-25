@@ -91,8 +91,7 @@ dict_to_lang = {
         "fra": "fra",
     },
     config_sections_google: {
-        "auto": "auto",
-        "zh": "zh-cn",
+        "zh": "zh",
         "en": "en",
         "jp": "ja",
         "kor": "ko",

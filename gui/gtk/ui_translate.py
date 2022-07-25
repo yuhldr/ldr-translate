@@ -78,13 +78,13 @@ class Translate(Gtk.ApplicationWindow):
 
     def on_cbt_lang_changed(self, combo):
         text = combo.get_active_text()
-        tools.set_to_lang(text, False)
+        tools.set_to_lang(text)
 
         return text
 
     def on_cbt_server_changed(self, combo):
         text = combo.get_active_text()
-        tools.set_translate_server(text, False)
+        tools.set_translate_server(text)
         i = tools.get_current_to_lang_index(tools.translate_to_lang_cache)
         self.set_to_lang_data(i)
 
