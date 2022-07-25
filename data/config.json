@@ -4,8 +4,8 @@
             "https://raw.githubusercontent.com/yuhldr/ldr-translate/master/data/config.json",
             "https://gitee.com/yuhldr/ldr-translate/raw/master/data/config.json"
         ],
-        "code": 10,
-        "name": "1.4.0",
+        "code": 11,
+        "name": "1.5.0",
         "home_url": "https://github.com/yuhldr/ldr-translate"
     },
     "setting": {
