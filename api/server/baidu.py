@@ -7,6 +7,10 @@ import time
 from api import config, tools
 
 config_server = "baidu"
+
+how_get_url_translate = "https://doc.tern.1c7.me/zh/folder/setting/#%E7%99%BE%E5%BA%A6"
+how_get_url_ocr = "https://cloud.baidu.com/doc/OCR/s/dk3iqnq51"
+
 default_translate_app_id = "20211109000995303"
 default_translate_secret_key = "qLFDFx7fLRrioaa6CTnk"
 default_ocr_app_key = "S1NHCzzzBhL2TUMx5iGpOSUu"
@@ -24,21 +28,16 @@ error_msg2zh_ocr = {
 }
 
 
-def translate_text(s, fromLang="auto", toLangZh=""):
-    config_baidu = config.get_config_section(config_server)
+def translate_text(s, fromLang="auto", toLang=""):
+    print("百度" + toLang)
+    config_section = config.get_config_section(config_server)
 
-    appId = config_baidu["translate_app_id"]
-    secretKey = config_baidu["translate_secret_key"]
+    appId = config_section["translate_app_id"]
+    secretKey = config_section["translate_secret_key"]
 
     if (len(appId) == 0 or len(secretKey) == 0):
         appId = default_translate_app_id
         secretKey = default_translate_secret_key
-
-    translate_to_languages = config_baidu["translate_to_languages"]
-
-    # fromLang = 'auto'   # 原文语种
-    # toLang = 'zh'   # 译文语种
-    toLang = translate_to_languages[tools.to_lang_zh2par(toLangZh)]
 
     text, ok = translate(s, appId, secretKey, fromLang, toLang)
     return text
@@ -153,7 +152,7 @@ def ocr(img_path, latex=False):
         jsons = (response.json())
 
         if ("error_code" in jsons):
-            if(110 == jsons["error_code"]):
+            if (110 == jsons["error_code"]):
                 config.set_config(config_server, "access_token", "")
             return False, tools.error2zh(jsons["error_code"],
                                          jsons["error_msg"], error_msg2zh_ocr)

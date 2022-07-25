@@ -1,5 +1,6 @@
 import gi
-from api import config, translate, tools
+from api import config, translate, tools, locale_config
+from api.server import baidu, tencent
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -50,7 +51,8 @@ class Preference(Gtk.ApplicationWindow):
         self.lb_update_msg = ui.get_object('lb_update_msg')
         self.lb_version_msg = ui.get_object('lb_version_msg')
 
-        self.lb_version_msg.set_markup(config_version["msg"])
+        self.lb_version_msg.set_markup(
+            locale_config.get_locale_data("version", "msg"))
         self.lb_update_msg.set_markup(
             "<a href='%s'>当前版本：v%s.%d</a>" %
             (config_version["home_url"], config_version["name"],
@@ -77,20 +79,16 @@ class Preference(Gtk.ApplicationWindow):
             "clicked", self.save_baidu_translate)
         ui.get_object('btn_baidu_ocr_save').connect("clicked",
                                                     self.save_baidu_ocr)
-        config_api = config.get_config_section(tools.server_baidu)
+        config_api = config.get_config_section(config.config_sections_baidu)
 
-        self.tv_baidu_translate_app_id.set_text(
-            config_api["translate_app_id"])
+        self.tv_baidu_translate_app_id.set_text(config_api["translate_app_id"])
         self.tv_baidu_translate_secret_key.set_text(
             config_api["translate_secret_key"])
-        self.tv_baidu_ocr_app_key.set_text(
-            config_api["ocr_api_key"])
-        self.tv_baidu_ocr_secret_key.set_text(
-            config_api["ocr_secret_key"])
+        self.tv_baidu_ocr_app_key.set_text(config_api["ocr_api_key"])
+        self.tv_baidu_ocr_secret_key.set_text(config_api["ocr_secret_key"])
 
-        url_translate = "<a href='" + config_api[
-            "translate_url"] + "'>如何获取？</a>"
-        url_ocr = "<a href='" + config_api["ocr_url"] + "'>如何获取？</a>"
+        url_translate = "<a href='" + baidu.how_get_url_translate + "'>如何获取？</a>"
+        url_ocr = "<a href='" + baidu.how_get_url_ocr + "'>如何获取？</a>"
 
         print(url_translate)
         print(url_ocr)
@@ -104,8 +102,7 @@ class Preference(Gtk.ApplicationWindow):
         self.tv_tencent_secret_key = ui.get_object('tv_tencent_secret_key')
         self.lb_tencnet_msg = ui.get_object('lb_tencnet_msg')
 
-        config_api = config.get_config_section(tools.server_tencent)
-        url = "<a href='" + config_api["url"] + "'>如何获取？</a>"
+        url = "<a href='" + tencent.how_get_url_translate + "'>如何获取？</a>"
         ui.get_object('lb_tencnet_way').set_markup(url)
 
         ui.get_object('btn_tencnet_save').connect("clicked", self.save_tencent)
@@ -135,7 +132,7 @@ class Preference(Gtk.ApplicationWindow):
 
     def save_baidu_ocr(self, btn=None):
         ok = True
-        server = tools.server_baidu
+        server = config.config_sections_baidu
 
         text_a = self.get_text(self.tv_baidu_ocr_app_key)
         text_b = self.get_text(self.tv_baidu_ocr_secret_key)
@@ -162,7 +159,7 @@ class Preference(Gtk.ApplicationWindow):
 
     def save_tencent(self, btn=None):
         ok = True
-        server = tools.server_tencent
+        server = config.config_sections_tencent
         text_a = self.get_text(self.tv_tencent_secret_id)
         text_b = self.get_text(self.tv_tencent_secret_key)
 
@@ -197,10 +194,10 @@ class Preference(Gtk.ApplicationWindow):
         self.lb_sys_msg.set_markup("重新打开软件生效")
         print(menu_check.get_active())
         config.setShowSM(menu_check.get_active())
-        if(menu_check.get_active()):
+        if (menu_check.get_active()):
             self.handler_id_show_sm = self.btn_set_sm.connect(
                 'clicked', self._on_indicator_sysmonitor_preferences)
-        elif(self.handler_id_show_sm is not None):
+        elif (self.handler_id_show_sm is not None):
             self.btn_set_sm.disconnect(self.handler_id_show_sm)
 
     def check_update(self, view=None):

@@ -18,7 +18,7 @@ from threading import Event
 # import faulthandler
 # # 在import之后直接添加以下启用代码即可 python3 -X faulthandler ldr-translate.py
 # faulthandler.enable()
-from api import config
+from api import config, locale_config
 
 config.old2new()
 
@@ -41,13 +41,13 @@ class LdrTranlate(Gtk.Application):
         self.auto_translate = True
 
         self.indicator = appindicator.Indicator.new(
-            "ldr-tranlate", os.path.abspath('icon/tray_dark.svg'),
+            "ldr-tranlate", os.path.abspath('icon/tray.png'),
             appindicator.IndicatorCategory.SYSTEM_SERVICES)
         self.indicator.set_label("翻译中", "")
         self.indicator.set_ordering_index(1)
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 
-        if(config.isShowSM()):
+        if (config.isShowSM()):
             self.alive = Event()
             self.alive.set()
 
@@ -111,14 +111,17 @@ class LdrTranlate(Gtk.Application):
         dialog = Gtk.AboutDialog()
 
         dialog.set_logo(logo)
-        dialog.set_program_name("兰译")
-        dialog.set_version("V " + config_version["name"])
         dialog.set_license_type(Gtk.License.GPL_3_0)
-        dialog.set_comments(config_version["msg"])
 
-        dialog.set_website(config_version["home_url"])
-        dialog.set_website_label(config_version["home_name"])
+        dialog.set_program_name("兰译")
         dialog.set_copyright("© 2021-2022 兰朵儿")
+
+        dialog.set_version("V " + config_version["name"])
+        dialog.set_website(config_version["home_url"])
+
+        dialog.set_comments(locale_config.get_locale_data("version", "msg"))
+        dialog.set_website_label(
+            locale_config.get_locale_data("version", "home_name"))
 
         dialog.set_authors(["yuh"])
         # 翻译
@@ -190,9 +193,9 @@ class LdrTranlate(Gtk.Application):
         if (not self.auto_translate):
             ind_label = "暂停翻译"
 
-        if(config.isShowSM() and data is not None):
+        if (config.isShowSM() and data is not None):
             label = self.sensor_mgr.get_label(data).strip()
-            if(len(label) == 0):
+            if (len(label) == 0):
                 label = "请在“兰译设置”中关闭"
             ind_label += " | " + label
         # print(ind_label)
@@ -219,7 +222,7 @@ if __name__ == "__main__":
 
     app = LdrTranlate()
 
-    if(config.isShowSM()):
+    if (config.isShowSM()):
 
         parser = ArgumentParser()
         parser.add_argument("--config",

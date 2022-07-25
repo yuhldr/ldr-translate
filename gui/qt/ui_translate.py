@@ -9,7 +9,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from api import tools, config, translate
+from api import tools, config, translate, locale_config
+from api.locale_config import get_locale_ui_data as locale_ui
 
 
 class Ui_MainWindow(object):
@@ -31,9 +32,13 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.te_from)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.cbb_to = QtWidgets.QComboBox(self.centralwidget)
-        self.cbb_to.setObjectName("cbb_to")
-        self.horizontalLayout.addWidget(self.cbb_to)
+        self.cbb_translate_server = QtWidgets.QComboBox(self.centralwidget)
+        self.cbb_translate_server.setObjectName("cbb_translate")
+        self.horizontalLayout.addWidget(self.cbb_translate_server)
+
+        self.cbb_translate_to_lang = QtWidgets.QComboBox(self.centralwidget)
+        self.cbb_translate_to_lang.setObjectName("cbb_translate_to_lang")
+        self.horizontalLayout.addWidget(self.cbb_translate_to_lang)
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout.addWidget(self.pushButton)
@@ -66,26 +71,49 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "兰译"))
 
-        self.pushButton.setText(_translate("MainWindow", "翻译"))
-        self.cb_add.setText(_translate("MainWindow", "追加模式"))
-        zhs = config.get_translate_to_languages_zh()
-        print(zhs)
-        self.cbb_to.addItems(zhs)
-        self.cbb_to.setCurrentText(tools.get_to_lang_zh())
-        self.cbb_to.currentIndexChanged.connect(self.on_cbt_server_changed)
+        self.pushButton.setText(
+            _translate("MainWindow", locale_ui("btn_translate_label")))
+        self.cb_add.setText(_translate("MainWindow",
+                                       locale_ui("cb_add_label")))
 
-        self.te_to.setPlainText(_translate("MainWindow", "选中“追加模式”后，累加翻译"))
+        self.cbb_translate_to_lang.currentIndexChanged.connect(
+            self.on_cbb_tanslate_lang_changed)
+
+        translate_server_dict = tools.get_translate_server_dict_by_locale()
+
+        for key in translate_server_dict.keys():
+            self.cbb_translate_server.addItem(key, translate_server_dict[key])
+        s = tools.get_current_translate_server_locale()
+        self.cbb_translate_server.setCurrentText(s)
+        self.cbb_translate_server.currentIndexChanged.connect(
+            self.on_cbb_tanslate_server_changed)
+        self.set_cbb_tanslate_to_lang_data()
+
+        self.te_to.setPlainText(
+            _translate("MainWindow", locale_ui("notice_to")))
         self.te_from.setPlainText(
-            _translate("MainWindow",
-                       "复制自动翻译\n\n可以设置自己的api，使用开发者api,人数过多时，可能出现翻译失败等问题"))
+            _translate("MainWindow", locale_ui("notice_from")))
         self.pushButton.clicked.connect(self.btnTranslate)
 
-    def on_cbt_server_changed(self):
-        st = self.cbb_to.currentText()
-        print(st)
-        tools.set_to_lang_zh(st)
+    def on_cbb_tanslate_lang_changed(self):
+        tools.set_to_lang(self.cbb_translate_to_lang.currentData())
 
-        self.btnTranslate()
+        # self.btnTranslate()
+
+    def set_cbb_tanslate_to_lang_data(self):
+        self.cbb_translate_to_lang.clear()
+
+        to_lang_dict = tools.get_to_lang_dict_by_locale()
+
+        for key in to_lang_dict.keys():
+            self.cbb_translate_to_lang.addItem(key, to_lang_dict[key])
+        self.cbb_translate_to_lang.setCurrentText(
+            tools.get_current_to_lang_locale())
+
+    def on_cbb_tanslate_server_changed(self):
+        tools.set_translate_server(self.cbb_translate_server.currentData())
+
+        self.set_cbb_tanslate_to_lang_data()
 
     def isAdd(self):
         add = self.cb_add.isChecked()

@@ -1,7 +1,8 @@
 import re
-from api.server import baidu, tencent
+from api.server import baidu, tencent, youdao, google
 import time
 from api import config, tools
+from api.locale_config import get_locale_ui_data as locale_ui
 
 last_s = None
 last_s2 = None
@@ -15,7 +16,7 @@ config_section = "setting"
 # 整合一下，方便接入其他api接口
 
 
-def text(s_from, fromLang="auto", add_old=True):
+def text(s_from, add_old=True):
     global last_s, last_s2, last_time, no_translate_this
 
     if (no_translate_this):
@@ -23,18 +24,15 @@ def text(s_from, fromLang="auto", add_old=True):
         no_translate_this = False
         return "", ""
 
-    toLangZh, changeLang = tools.get_to_lang_zh_()
+    to_lang_code, changeLang = tools.get_current_to_lang()
+    server, changeServer = tools.get_current_translate_server()
 
-    server, changeServer = tools.get_server_()
-
-    config_setting = config.get_config_section(config_section)
-
-    translate_span = config_setting["translate_span"]
+    translate_span = config.get_config_section(
+        config_section)["translate_span"]
 
     if (s_from is None):
         if (last_s is None):
-            return "复制即可翻译", "系统直接截图到剪贴板，自动识别并翻译"\
-                + "\n\n测试功能：\n勾选latex识别，可将图片公式转化为latex代码"
+            return locale_ui("notice_from"), locale_ui("notice_to")
         else:
             s_from = last_s
 
@@ -50,26 +48,30 @@ def text(s_from, fromLang="auto", add_old=True):
     s_from = s_from.replace("-\n", "").strip()
     s_from = re.sub("(?<!\.|-|。)\n", " ", s_from)
 
-    last_s2 = translate(s_from, toLangZh, server, fromLang)
+    last_s2 = translate(s_from, server, to_lang_code)
 
     last_s = s_from
     last_time = time.time()
     return last_s, last_s2
 
 
-def translate(s, toLangZh, server, fromLang="auto"):
+def translate(s, server, to_lang_code, fromLang="auto"):
 
-    if (server == tools.server_tencent):
-        s = tencent.translate_text(s, fromLang, toLangZh)
+    if (server == config.config_sections_tencent):
+        s = tencent.translate_text(s, fromLang, to_lang_code)
+    elif (server == config.config_sections_baidu):
+        s = baidu.translate_text(s, fromLang, to_lang_code)
+    elif (server == config.config_sections_youdao):
+        s = youdao.translate_text(s, fromLang, to_lang_code)
     else:
-        s = baidu.translate_text(s, fromLang, toLangZh)
+        s = google.translate_text(s, fromLang, to_lang_code)
 
     return s
 
 
 def ocr(img_path, latex=False):
 
-    if (tools.get_server() == tools.server_tencent):
+    if (tools.get_server() == config.config_sections_tencent):
         # 这个有问题，暂时用百度的
         # ok, s = tencent.ocr(img_path, latex=latex)
         ok, s = baidu.ocr(img_path, latex=latex)
@@ -84,7 +86,7 @@ def check_server_translate(server, a, b):
     a = a.strip().replace("\n", " ")
     b = b.strip().replace("\n", " ")
 
-    if (server == tools.server_tencent):
+    if (server == config.config_sections_tencent):
         ok = tencent.check(a, b)
     else:
         ok = baidu.check_translate(a, b)
@@ -97,7 +99,7 @@ def check_server_ocr(server, a, b):
     a = a.strip().replace("\n", " ")
     b = b.strip().replace("\n", " ")
 
-    if (server == tools.server_tencent):
+    if (server == config.config_sections_tencent):
         ok = tencent.check(a, b)
     else:
         ok = baidu.check_ocr(a, b)

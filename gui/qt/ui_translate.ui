@@ -25,6 +25,9 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
+       <widget class="QComboBox" name="cbb_translate_server"/>
+      </item>
+      <item>
        <widget class="QComboBox" name="cbb_to"/>
       </item>
       <item>

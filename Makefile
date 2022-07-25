@@ -28,13 +28,11 @@ build: clear
 	mkdir -p build/ldr-translate$(APP_PATH)/ldr-translate
 
 	cp data/ldr build/ldr-translate/usr/bin/
-	@echo "cd $(APP_PATH)/ldr-translate/" >> build/ldr-translate/usr/bin/ldr
-	@echo "python3 ./main.py" >> build/ldr-translate/usr/bin/ldr
 
 	cp data/icon/icon.png build/ldr-translate/usr/share/icons/ldr-translate.png
 	cp data/ldr-translate.desktop build/ldr-translate/usr/share/applications/
 
-	cp -r api data/icon data/config.json build/ldr-translate$(APP_PATH)/ldr-translate/
+	cp -r api data/icon data/config.json data/config_locale.json build/ldr-translate$(APP_PATH)/ldr-translate/
 
 
 gtk: build

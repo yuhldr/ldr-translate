@@ -9,6 +9,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from api import config, translate, tools
+from api.server import baidu
 from PyQt5.QtWidgets import QMainWindow
 
 
@@ -153,16 +154,15 @@ class Ui_MainWindow(QMainWindow):
         self.lb_how_translate.setOpenExternalLinks(True)
         self.lb_how_ocr.setOpenExternalLinks(True)
 
-        config_api = config.get_config_section(tools.server_baidu)
+        config_api = config.get_config_section(config.config_sections_baidu)
 
         self.le_ai.setText(config_api["translate_app_id"])
         self.le_sk1.setText(config_api["translate_secret_key"])
         self.le_ak.setText(config_api["ocr_api_key"])
         self.le_sk2.setText(config_api["ocr_secret_key"])
 
-        url_translate = "<a href='" + config_api[
-            "translate_url"] + "'>如何获取？</a>"
-        url_ocr = "<a href='" + config_api["ocr_url"] + "'>如何获取？</a>"
+        url_translate = "<a href='" + baidu.how_get_url_translate + "'>如何获取？</a>"
+        url_ocr = "<a href='" + baidu.how_get_url_ocr + "'>如何获取？</a>"
 
         self.lb_how_translate.setText(url_translate)
         self.lb_how_ocr.setText(url_ocr)
@@ -198,7 +198,7 @@ class Ui_MainWindow(QMainWindow):
 
     def save_baidu_ocr(self, btn=None):
         ok = True
-        server = tools.server_baidu
+        server = config.config_sections_baidu
 
         text_a = self.le_ak.text()
         text_b = self.le_sk2.text()
