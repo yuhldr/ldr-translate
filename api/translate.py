@@ -71,7 +71,8 @@ def translate(s, server, to_lang_code, fromLang="auto"):
 
 def ocr(img_path, latex=False):
 
-    if (tools.get_server() == config.config_sections_tencent):
+    server, changeServer = tools.get_current_translate_server()
+    if (server == config.config_sections_tencent):
         # 这个有问题，暂时用百度的
         # ok, s = tencent.ocr(img_path, latex=latex)
         ok, s = baidu.ocr(img_path, latex=latex)
