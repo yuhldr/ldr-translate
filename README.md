@@ -23,7 +23,7 @@
 - 可修改复制内容，重新翻译
 - 多语言互译支持，自动识别当前语言
 - 设置中自定义接口账号
-- （完善中）支持多平台api接口，目前仅支持百度、腾讯api，足够了……
+- （完善中）支持多平台api接口，目前仅支持百度、腾讯、谷歌api，足够了……
 - （测试中）截图公式，自动识别为latex代码，目前使用百度接口，效果不太好
 - 页面随着系统主题（gnome）自动变化
 - 可在菜单栏显示网络等系统信息
@@ -36,7 +36,7 @@
 
 > 此为稳定版，测试功能请手动编译，很简单
 
-在 releases下载`.deb` 的安装包，只有20+k
+在 releases下载`.deb` 的安装包，只有40+k
 
 - [gitee 国内](https://gitee.com/yuhldr/ldr-translate/releases)
 - [github 国外](https://github.com/yuhldr/ldr-translate/releases/)
@@ -167,7 +167,7 @@ yay ldr-translate
 
 - 部分系统,安装以后找不到图标
 
-    点window图标,然后在系统搜索里,输入ldr,即可看到"兰译"
+    点键盘 window图标,然后在系统搜索里,输入ldr,即可看到"兰译"
 
 ## 资料
 
