@@ -38,7 +38,11 @@ class LdrTranlate(Gtk.Application):
     def __init__(self):
         self.translate_win = None
         self._help_dialog = None
-        self.auto_translate = True
+        self.auto_translate = 0
+
+        self.clip_copy = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        self.clip_select = Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
+        self.handler_id_clip = None
 
         self.indicator = appindicator.Indicator.new(
             "ldr-tranlate", os.path.abspath('icon/tray.png'),
@@ -56,10 +60,6 @@ class LdrTranlate(Gtk.Application):
 
         self._create_menu()
 
-        self.getClipboard().connect("owner-change",
-                                    self._active_translate_windows)
-        self.menu_auto_translate.set_active(True)
-
     def _create_menu(self):
         menu = Gtk.Menu()
 
@@ -68,10 +68,18 @@ class LdrTranlate(Gtk.Application):
         menu.add(pref_menu)
         menu.add(Gtk.SeparatorMenuItem())
 
-        self.menu_auto_translate = Gtk.CheckMenuItem(label="复制即翻译")
-        self.menu_auto_translate.connect('activate',
-                                         self._active_auto_translate)
-        menu.add(self.menu_auto_translate)
+        menu_t_0 = Gtk.RadioMenuItem(label="复制即翻译")
+        menu_t_0.connect('activate', self._active_auto_translate, 0)
+        menu.append(menu_t_0)
+        menu_t_0.set_active(True)
+
+        menu_t_1 = Gtk.RadioMenuItem(label='选中即翻译', group=menu_t_0)
+        menu_t_1.connect('activate', self._active_auto_translate, 1)
+        menu.append(menu_t_1)
+
+        menu_t_2 = Gtk.RadioMenuItem(label='暂时不翻译', group=menu_t_0)
+        menu_t_2.connect('activate', self._active_auto_translate, 2)
+        menu.append(menu_t_2)
 
         menu.add(Gtk.SeparatorMenuItem())
 
@@ -133,12 +141,23 @@ class LdrTranlate(Gtk.Application):
         dialog.connect('response', lambda dialog, data: dialog.destroy())
         dialog.show_all()
 
-    def _active_auto_translate(self, view=None):
-        self.auto_translate = view.get_active()
-        self.update(None)
-        self._active_translate_windows()
+    def _active_auto_translate(self, view=None, n=0):
+        print(n)
+        if(self.handler_id_clip is not None):
+            self.getClipboard().disconnect(self.handler_id_clip)
+
+        self.auto_translate = n
+
+        if(n != 2):
+            self.handler_id_clip = self.getClipboard().connect(
+                "owner-change", self._active_translate_windows)
+            self.update(None)
+            self._active_translate_windows()
+        else:
+            self.handler_id_clip = None
 
     def _active_translate_windows(self, clipboard=None, event=None):
+        print("******")
         # 3种情况会调用这个函数
         #   复制
         is_copy = clipboard is not None and event is not None
@@ -149,21 +168,18 @@ class LdrTranlate(Gtk.Application):
 
         windows_is_closed = self.translate_win is None or self.translate_win.is_hide
 
-        print(is_active_auto, windows_is_closed,
-              self.menu_auto_translate.get_active())
+        print(is_active_auto, windows_is_closed, self.auto_translate)
 
         if (is_copy):
-            if (self.menu_auto_translate.get_active()):
-                if (windows_is_closed):
-                    self.translate_win = Translate()
-                    self.translate_win.open()
-                self.translate_win.copy_auto_translate(clipboard)
+            if (windows_is_closed):
+                self.translate_win = Translate()
+                self.translate_win.open()
+            self.translate_win.copy_auto_translate(clipboard)
         elif (is_active_auto):
-            if (self.menu_auto_translate.get_active()):
-                if (windows_is_closed):
-                    self.translate_win = Translate()
-                    self.translate_win.open()
-                    self.translate_win.copy_auto_translate()
+            if (windows_is_closed):
+                self.translate_win = Translate()
+                self.translate_win.open()
+                self.translate_win.copy_auto_translate()
             # elif (not windows_is_closed):
             #     self.translate_win.close()
         elif (is_active_windows):
@@ -175,10 +191,10 @@ class LdrTranlate(Gtk.Application):
                 self.translate_win.close()
 
     def getClipboard(self):
-        if (config.get_config_setting()["translate_way_copy"]):
-            return Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        else:
-            return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
+        if (self.auto_translate == 0):
+            return self.clip_copy
+        elif (self.auto_translate == 1):
+            return self.clip_select
 
 # ******* 监测 https://github.com/fossfreedom/indicator-sysmonitor.git  *******
 
@@ -189,9 +205,11 @@ class LdrTranlate(Gtk.Application):
 
     def update(self, data):
         print(data)
-        ind_label = "翻译中"
-        if (not self.auto_translate):
+        ind_label = "复制翻译"
+        if (self.auto_translate == 2):
             ind_label = "暂停翻译"
+        elif(self.auto_translate == 1):
+            ind_label = "划词翻译"
 
         if (config.isShowSM() and data is not None):
             label = self.sensor_mgr.get_label(data).strip()

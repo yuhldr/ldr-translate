@@ -124,7 +124,7 @@ yay ldr-translate
 
 1. 自动翻译
 
-    复制时自动翻译。如需划词翻译，[config.json](./config.json) 里修改 `"translate_way_copy": false,`，不建议划词翻译，有时候有问题
+    复制时自动翻译。gtk版本支持划词翻译（仅x11窗口，gnome如ubuntu登录输入密码时，右下角请选择xorg），不建议划词翻译，有时候有问题
 
     ![运行](images/lt_more.png)
 

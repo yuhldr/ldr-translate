@@ -9,7 +9,6 @@
         "home_url": "https://github.com/yuhldr/ldr-translate"
     },
     "setting": {
-        "translate_way_copy": true,
         "translate_server": "google",
         "translate_to_lang": "auto",
         "translate_span": 1.0,

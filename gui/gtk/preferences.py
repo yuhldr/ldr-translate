@@ -26,6 +26,10 @@ class Preference(Gtk.ApplicationWindow):
         self.init_tencent(ui)
         self.add(ui.get_object('gd_prf'))
         self.show_all()
+        show_sw = config.isShowSM()
+        print(show_sw)
+        self.cbtn_sys.set_active(show_sw)
+        self.btn_set_sm.set_visible(show_sw)
 
     def init_other(self, ui):
 
@@ -40,13 +44,11 @@ class Preference(Gtk.ApplicationWindow):
         self.btn_set_sm = ui.get_object('btn_set_sm')
         self.lb_sys_msg = ui.get_object('lb_sys_msg')
 
-        if (config.isShowSM()):
-            self.handler_id_show_sm = self.btn_set_sm.connect(
-                'clicked', self._on_indicator_sysmonitor_preferences)
+        self.handler_id_show_sm = self.btn_set_sm.connect(
+            'clicked', self._on_indicator_sysmonitor_preferences)
 
-        cbtn_sys = ui.get_object('cbtn_sys')
-        cbtn_sys.set_active(config.isShowSM())
-        cbtn_sys.connect('toggled', self.set_show_sm)
+        self.cbtn_sys = ui.get_object('cbtn_sys')
+        self.cbtn_sys.connect('toggled', self.set_show_sm)
 
         self.lb_update_msg = ui.get_object('lb_update_msg')
         self.lb_version_msg = ui.get_object('lb_version_msg')
@@ -191,14 +193,10 @@ class Preference(Gtk.ApplicationWindow):
         config.update_autostart(menu_check.get_active())
 
     def set_show_sm(self, menu_check):
+        self.btn_set_sm.set_visible(menu_check.get_active())
         self.lb_sys_msg.set_markup("重新打开软件生效")
         print(menu_check.get_active())
         config.setShowSM(menu_check.get_active())
-        if (menu_check.get_active()):
-            self.handler_id_show_sm = self.btn_set_sm.connect(
-                'clicked', self._on_indicator_sysmonitor_preferences)
-        elif (self.handler_id_show_sm is not None):
-            self.btn_set_sm.disconnect(self.handler_id_show_sm)
 
     def check_update(self, view=None):
 

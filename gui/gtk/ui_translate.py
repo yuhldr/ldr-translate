@@ -53,9 +53,6 @@ class Translate(Gtk.ApplicationWindow):
         self.add(ui.get_object('box_translate'))
         self.connect("delete-event", self.close)
 
-        # 初始化时载入上次的数据
-        self.clipboard = self.getClipboard()
-
     def copy_(self, a):
         translate.set_no_translate_this()
 
@@ -142,9 +139,3 @@ class Translate(Gtk.ApplicationWindow):
         if (len(s_from.strip()) > 0 and len(s_to.strip()) > 0):
             textbuffer_from.set_text(s_from.strip())
             textbuffer_to.set_text(s_to.strip())
-
-    def getClipboard(self):
-        if (config.get_config_setting()["translate_way_copy"]):
-            return Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        else:
-            return Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)

@@ -67,7 +67,7 @@ config_baidu_keys = [
 config_tencent_keys = ["secret_id", "secret_key"]
 
 config_setting_keys = [
-    "translate_way_copy", "translate_to_lang", "translate_server", "show_sm"
+    "translate_to_lang", "translate_server", "show_sm"
 ]
 
 config_sections_setting = "setting"
