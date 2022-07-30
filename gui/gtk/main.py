@@ -143,18 +143,18 @@ class LdrTranlate(Gtk.Application):
 
     def _active_auto_translate(self, view=None, n=0):
         print(n)
-        if(self.handler_id_clip is not None):
+        if (self.handler_id_clip is not None):
             self.getClipboard().disconnect(self.handler_id_clip)
 
         self.auto_translate = n
 
-        if(n != 2):
+        if (n != 2):
             self.handler_id_clip = self.getClipboard().connect(
                 "owner-change", self._active_translate_windows)
             self.update(None)
-            self._active_translate_windows()
         else:
             self.handler_id_clip = None
+        self._active_translate_windows()
 
     def _active_translate_windows(self, clipboard=None, event=None):
         print("******")
@@ -176,12 +176,13 @@ class LdrTranlate(Gtk.Application):
                 self.translate_win.open()
             self.translate_win.copy_auto_translate(clipboard)
         elif (is_active_auto):
-            if (windows_is_closed):
-                self.translate_win = Translate()
-                self.translate_win.open()
+            if (self.auto_translate != 2):
+                if (windows_is_closed):
+                    self.translate_win = Translate()
+                    self.translate_win.open()
                 self.translate_win.copy_auto_translate()
-            # elif (not windows_is_closed):
-            #     self.translate_win.close()
+            elif (not windows_is_closed):
+                self.translate_win.close()
         elif (is_active_windows):
             if (windows_is_closed):
                 self.translate_win = Translate()
@@ -208,7 +209,7 @@ class LdrTranlate(Gtk.Application):
         ind_label = "复制翻译"
         if (self.auto_translate == 2):
             ind_label = "暂停翻译"
-        elif(self.auto_translate == 1):
+        elif (self.auto_translate == 1):
             ind_label = "划词翻译"
 
         if (config.isShowSM() and data is not None):
