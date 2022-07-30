@@ -32,10 +32,11 @@ cpu_load = []
 
 
 def bytes_to_human(num):
-    for unit in B_UNITS:
-        if abs(num) < 1000.0:
-            return "%3.2f %s" % (num, unit)
-        num /= 1000.0
+    num /= 1024.0
+    for unit in B_UNITS[1:]:
+        if abs(num) < 99.99:
+            return "%s %s" % (("%3.2f" % (num)).zfill(5), unit)
+        num /= 1024.0
     return "%.2f %s" % (num, 'YB')
 
 
