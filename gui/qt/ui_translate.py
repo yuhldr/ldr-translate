@@ -9,8 +9,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from api import tools, config, translate, locale_config
-from api.locale_config import get_locale_ui_data as locale_ui
+from api import translate
+from utils import tools
+from utils.locale import get_locale_ui_data as locale_ui
 
 
 class Ui_MainWindow(object):

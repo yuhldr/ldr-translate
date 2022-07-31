@@ -1,8 +1,8 @@
-import gi
-from api import config, translate, tools, locale_config
+from api import translate
 from api.server import baidu, tencent
+from utils import config, locale, version
+from api import server_config
 
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from preferences_sm import Preferences as PreferenceSM
 
@@ -35,7 +35,10 @@ class Preference(Gtk.ApplicationWindow):
 
         self.handler_id_show_sm = None
 
-        config_version = config.get_config_version()
+        version_home_url = version.get_value("home_url")
+        version_name = version.get_value("name")
+        version_code = version.get_value("code")
+        print(version_name, version_code)
 
         cbtn_auto_start = ui.get_object('cbtn_auto_start')
         cbtn_auto_start.set_active(config.get_autostart())
@@ -54,11 +57,10 @@ class Preference(Gtk.ApplicationWindow):
         self.lb_version_msg = ui.get_object('lb_version_msg')
 
         self.lb_version_msg.set_markup(
-            locale_config.get_locale_data("version", "msg"))
+            locale.get_locale_data("version", "msg"))
         self.lb_update_msg.set_markup(
             "<a href='%s'>当前版本：v%s.%d</a>" %
-            (config_version["home_url"], config_version["name"],
-             config_version["code"]))
+            (version_home_url, version_name, version_code))
         ui.get_object('lb_sm_github').set_markup(
             "<a href='https://github.com/fossfreedom/indicator-sysmonitor'>开源地址</a>"
         )
@@ -66,6 +68,9 @@ class Preference(Gtk.ApplicationWindow):
         ui.get_object('btn_update').connect('clicked', self.check_update)
 
     def init_baidu_api(self, ui):
+
+        def set_value(tv, key):
+            tv.set_text(config.get_value(server_config.server_baidu, key))
 
         self.tv_baidu_translate_app_id = ui.get_object(
             'tv_baidu_translate_app_id')
@@ -81,13 +86,11 @@ class Preference(Gtk.ApplicationWindow):
             "clicked", self.save_baidu_translate)
         ui.get_object('btn_baidu_ocr_save').connect("clicked",
                                                     self.save_baidu_ocr)
-        config_api = config.get_config_section(config.config_sections_baidu)
 
-        self.tv_baidu_translate_app_id.set_text(config_api["translate_app_id"])
-        self.tv_baidu_translate_secret_key.set_text(
-            config_api["translate_secret_key"])
-        self.tv_baidu_ocr_app_key.set_text(config_api["ocr_api_key"])
-        self.tv_baidu_ocr_secret_key.set_text(config_api["ocr_secret_key"])
+        set_value(self.tv_baidu_translate_app_id, "translate_app_id")
+        set_value(self.tv_baidu_translate_secret_key, "translate_secret_key")
+        set_value(self.tv_baidu_ocr_app_key, "ocr_api_key")
+        set_value(self.tv_baidu_ocr_secret_key, "ocr_secret_key")
 
         url_translate = "<a href='" + baidu.how_get_url_translate + "'>如何获取？</a>"
         url_ocr = "<a href='" + baidu.how_get_url_ocr + "'>如何获取？</a>"
@@ -100,9 +103,15 @@ class Preference(Gtk.ApplicationWindow):
 
     def init_tencent(self, ui):
 
+        def set_value(tv, key):
+            tv.set_text(config.get_value(server_config.server_tencent, key))
+
         self.tv_tencent_secret_id = ui.get_object('tv_tencent_secret_id')
         self.tv_tencent_secret_key = ui.get_object('tv_tencent_secret_key')
         self.lb_tencnet_msg = ui.get_object('lb_tencnet_msg')
+
+        set_value(self.tv_tencent_secret_id, "translate_secret_id")
+        set_value(self.tv_tencent_secret_key, "translate_secret_key")
 
         url = "<a href='" + tencent.how_get_url_translate + "'>如何获取？</a>"
         ui.get_object('lb_tencnet_way').set_markup(url)
@@ -134,7 +143,7 @@ class Preference(Gtk.ApplicationWindow):
 
     def save_baidu_ocr(self, btn=None):
         ok = True
-        server = config.config_sections_baidu
+        server = server_config.server_baidu
 
         text_a = self.get_text(self.tv_baidu_ocr_app_key)
         text_b = self.get_text(self.tv_baidu_ocr_secret_key)
@@ -161,7 +170,7 @@ class Preference(Gtk.ApplicationWindow):
 
     def save_tencent(self, btn=None):
         ok = True
-        server = config.config_sections_tencent
+        server = server_config.server_tencent
         text_a = self.get_text(self.tv_tencent_secret_id)
         text_b = self.get_text(self.tv_tencent_secret_key)
 
@@ -200,7 +209,7 @@ class Preference(Gtk.ApplicationWindow):
 
     def check_update(self, view=None):
 
-        s, msg = config.check_update()
+        s, msg = version.check_update()
 
         self.lb_update_msg.set_markup(s)
         self.lb_version_msg.set_markup(msg)

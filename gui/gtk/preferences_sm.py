@@ -17,7 +17,7 @@ from gettext import gettext as _
 import json
 
 from gi.repository import Gtk
-from api.config import DIR_CONFIG
+from utils.config import DIR_CONFIG
 
 from sensors import SensorManager
 from sensors import ISMError

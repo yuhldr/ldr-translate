@@ -1,5 +1,9 @@
 import requests
 import json
+from api import server_config
+
+
+config_server = server_config.server_google
 
 
 def translate_text(s, fromLang="auto", to_lang_code="zh-cn"):

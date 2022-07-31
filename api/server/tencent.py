@@ -5,24 +5,19 @@ import time
 import base64
 import hmac
 
-from api import config, tools
+from utils import tools, config
+from api import server_config
 
-config_server = "tencent"
+config_server = server_config.server_tencent
 default_secret_id = "AKIDsiHacNr52j9IBpDJ8gyyh9LGuJSKvFI5"
 default_secret_key = "XnmVx82f5E6h26tQhhQs3xaz80bw0pNV"
 
 how_get_url_translate = "https://doc.tern.1c7.me/zh/folder/setting/#%E8%85%BE%E8%AE%AF%E4%BA%91"
 # how_get_url_ocr = "https://cloud.baidu.com/doc/OCR/s/dk3iqnq51"
 
-
 public_params = {}
 
-error_msg2zh = {
-    "FailedOperation.NoFreeAmount":
-    "腾讯翻译公钥使用人数过多，下个月可继续使用。但建议在设置中，更换为自己的api密钥（可免费申请，更安全）",
-    "54000": "翻译内容为空",
-    "52003": "密钥错误，请在设置中重新设置"
-}
+error_msg2zh = {"FailedOperation.NoFreeAmount": "error_translate_NoFreeAmount"}
 
 
 def translate_text(s, fromLang="auto", to_lang_code=""):
@@ -37,10 +32,8 @@ def translate_text(s, fromLang="auto", to_lang_code=""):
 
 
 def get_secret_id_key():
-    config_section = config.get_config_section(config_server)
-
-    secret_id = config_section["secret_id"]
-    secret_key = config_section["secret_key"]
+    secret_id = config.get_value(config_server, "translate_secret_id")
+    secret_key = config.get_value(config_server, "translate_secret_key")
 
     if (len(secret_id) == 0 or len(secret_key) == 0):
         secret_id = default_secret_id

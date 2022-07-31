@@ -1,12 +1,13 @@
-from api import config, locale_config
+from utils import config
+from api import server_config
+from utils.locale import get_locale_translate_data as locale_translate
 
 config_section = "setting"
 last_translate_to_lang_cache = ""
-translate_to_lang_cache = config.get_config_setting()["translate_to_lang"]
+translate_to_lang_cache = config.get_config_setting("translate_to_lang")
 
 last_translate_server_cache = ""
-translate_server_cache = config.get_config_setting()["translate_server"]
-print("**********   " + translate_server_cache)
+translate_server_cache = config.get_config_setting("translate_server")
 
 
 def get_value_by_dict(dict, key):
@@ -17,9 +18,8 @@ def get_value_by_dict(dict, key):
 
 def get_translate_server_dict_by_locale():
     translate_server_dict = {}
-    for translate_server in config.dict_to_lang.keys():
-        key_ = locale_config.get_locale_translate_data(
-            translate_server, "name")
+    for translate_server in server_config.dict_to_lang.keys():
+        key_ = locale_translate(translate_server, "name")
         translate_server_dict[key_] = translate_server
 
     return translate_server_dict
@@ -47,7 +47,7 @@ def set_translate_server(translate_server, by_code=False):
 
 def get_current_translate_server_index():
     i = 0
-    list_ = list(config.dict_to_lang.keys())
+    list_ = list(server_config.dict_to_lang.keys())
     if (translate_server_cache in list_):
         i = list_.index(translate_server_cache)
     else:
@@ -60,7 +60,6 @@ def get_current_translate_server_code():
 
 
 def get_current_translate_server_locale():
-    print("get_current_translate_server_locale     " + translate_server_cache)
     return get_value_by_dict(get_translate_server_dict_by_code(),
                              translate_server_cache)
 
@@ -72,7 +71,7 @@ def get_current_translate_server(get_code=True):
 
     last_translate_server_cache = translate_server_cache
 
-    if(get_code):
+    if (get_code):
         s = get_current_translate_server_code()
     else:
         s = get_current_translate_server_locale()
@@ -82,13 +81,12 @@ def get_current_translate_server(get_code=True):
 
 # 通过多语言文字得到tolang的code
 def get_to_lang_dict_by_locale():
-    dict_to_langs = get_value_by_dict(config.dict_to_lang,
+    dict_to_langs = get_value_by_dict(server_config.dict_to_lang,
                                       translate_server_cache)
     to_langs_locale = {}
 
     for key in dict_to_langs:
-        to_langs_locale[locale_config.get_locale_translate_data(
-            "to_lang", key)] = dict_to_langs[key]
+        to_langs_locale[locale_translate("to_lang", key)] = dict_to_langs[key]
     return to_langs_locale
 
 
@@ -100,7 +98,7 @@ def get_to_lang_dict_by_code():
 
 # 最终保存的是要翻译的语言的简写编码，不同翻译服务略有不同
 def set_to_lang(to_lang, by_code=False):
-    if(to_lang is None):
+    if (to_lang is None):
         return
     global translate_to_lang_cache
     if (not by_code):
@@ -149,12 +147,18 @@ def get_current_to_lang(get_code=True):
     return s, change_language
 
 
-def error2zh(error_code, error_msg, dict):
+def error2zh(error_code,
+             error_msg,
+             dict,
+             server=get_current_translate_server_code()):
+    print(error_code, error_msg)
     error_code = str(error_code)
     s = ""
     if (error_code in dict):
         s = dict[error_code]
 
-    s = "%s\n\n错误码：%s，%s" % (s, error_code, error_msg)
+    s = locale_translate(server, s)
+
+    s = "%s\n\n%s，%s" % (s, error_code, error_msg)
 
     return s.strip()

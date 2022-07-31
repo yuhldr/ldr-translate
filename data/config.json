@@ -1,13 +1,4 @@
 {
-    "version": {
-        "url": [
-            "https://raw.githubusercontent.com/yuhldr/ldr-translate/master/data/config.json",
-            "https://gitee.com/yuhldr/ldr-translate/raw/master/data/config.json"
-        ],
-        "code": 12,
-        "name": "1.5.1",
-        "home_url": "https://github.com/yuhldr/ldr-translate"
-    },
     "setting": {
         "translate_server": "google",
         "translate_to_lang": "auto",
@@ -24,8 +15,8 @@
         "expires_in_date": 0
     },
     "tencent": {
-        "secret_id": "",
-        "secret_key": ""
+        "translate_secret_id": "",
+        "translate_secret_key": ""
     },
     "youdao": {}
 }

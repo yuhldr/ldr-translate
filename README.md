@@ -169,6 +169,22 @@ yay ldr-translate
 
     点键盘 window图标,然后在系统搜索里,输入ldr,即可看到"兰译"
 
+- 需要使用代理
+
+    修改 /usr/bin/ldr 文件
+
+    当前为：
+
+    ```bash
+    #!/bin/bash
+    # export http_proxy="http://127.0.0.1:7890"
+    # export https_proxy="http://127.0.0.1:7890"
+    cd /opt/ldr-translate && python3 main.py
+    ```
+
+    其中 `export http_proxy="http://127.0.0.1:7890"` `export https_proxy="http://127.0.0.1:7890"` 修改为你自己的代理，注意去掉这两行前面 `#` 的注释
+
+
 ## 资料
 
 - [indicator-sysmonitor](https://github.com/fossfreedom/indicator-sysmonitor)

@@ -4,9 +4,11 @@ import base64
 import requests
 import urllib
 import time
-from api import config, tools
+from utils import tools, config
+from api import server_config
 
-config_server = "baidu"
+
+config_server = server_config.server_baidu
 
 how_get_url_translate = "https://doc.tern.1c7.me/zh/folder/setting/#%E7%99%BE%E5%BA%A6"
 how_get_url_ocr = "https://cloud.baidu.com/doc/OCR/s/dk3iqnq51"
@@ -16,24 +18,25 @@ default_translate_secret_key = "qLFDFx7fLRrioaa6CTnk"
 default_ocr_app_key = "S1NHCzzzBhL2TUMx5iGpOSUu"
 default_ocr_secret_key = "709INHX6GCLsAXXZPLhKGVMmra7bEwGl"
 
+
+# 错误代码:locale文件中对应错误说明的key
 error_msg2zh = {
-    "54003": "百度翻译公钥使用人数过多，可重试。但建议在设置中，更换为自己的api密钥（可免费申请，更安全）",
-    "54000": "翻译内容为空",
-    "52003": "密钥错误，请在设置中重新设置"
+    "54003": "error_translate_54003",
+    "54000": "error_translate_54000",
+    "52003": "error_translate_52003"
 }
 
 error_msg2zh_ocr = {
-    "17": "图片识别公钥使用人数过多，下个月才可使用。建议在设置中，更换为自己的api密钥（可免费申请，更安全，额度更多）",
-    "110": "意外错误，请重试",
+    "17": "error_ocr_17",
+    "110": "error_ocr_110",
 }
 
 
 def translate_text(s, fromLang="auto", toLang=""):
     print("百度" + toLang)
-    config_section = config.get_config_section(config_server)
 
-    appId = config_section["translate_app_id"]
-    secretKey = config_section["translate_secret_key"]
+    appId = config.get_value(config_server, "translate_app_id")
+    secretKey = config.get_value(config_server, "translate_secret_key")
 
     if (len(appId) == 0 or len(secretKey) == 0):
         appId = default_translate_app_id
@@ -93,6 +96,7 @@ def get_token_by_url(ocr_api_key, ocr_secret_key):
 
     except Exception as e:
         access_token = "请求错误：" + str(e)
+    print(ok, access_token)
 
     return ok, str(access_token), expires_in_date
 
@@ -101,16 +105,15 @@ def get_token():
     ok = False
     access_token = ""
 
-    config_baidu = config.get_config_section(config_server)
-    expires_in_date = config_baidu["expires_in_date"]
+    expires_in_date = config.get_value(config_server, "expires_in_date")
 
     if (expires_in_date - time.time() > 0):
-        access_token = config_baidu["access_token"]
+        access_token = config.get_value(config_server, "access_token")
         if (len(access_token) != 0):
             return True, access_token
 
-    ocr_api_key = config_baidu["ocr_api_key"]
-    ocr_secret_key = config_baidu["ocr_secret_key"]
+    ocr_api_key = config.get_value(config_server, "ocr_api_key")
+    ocr_secret_key = config.get_value(config_server, "ocr_secret_key")
 
     if (len(ocr_api_key) == 0 or len(ocr_secret_key) == 0):
         ocr_api_key = default_ocr_app_key
@@ -155,7 +158,8 @@ def ocr(img_path, latex=False):
             if (110 == jsons["error_code"]):
                 config.set_config(config_server, "access_token", "")
             return False, tools.error2zh(jsons["error_code"],
-                                         jsons["error_msg"], error_msg2zh_ocr)
+                                         jsons["error_msg"], error_msg2zh_ocr,
+                                         config_server)
         else:
             for word in jsons["words_result"]:
                 s += word["words"]

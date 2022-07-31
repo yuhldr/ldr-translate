@@ -23,7 +23,7 @@ from gettext import gettext as _
 from gi.repository import GLib
 
 import psutil as ps
-from api import config
+from utils import config
 
 ps_v1_api = int(ps.__version__.split('.')[0]) <= 1
 

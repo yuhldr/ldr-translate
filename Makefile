@@ -32,7 +32,7 @@ build: clear
 	cp data/icon/icon.png build/ldr-translate/usr/share/icons/ldr-translate.png
 	cp data/ldr-translate.desktop build/ldr-translate/usr/share/applications/
 
-	cp -r api data/icon data/config.json data/config_locale.json build/ldr-translate$(APP_PATH)/ldr-translate/
+	cp -r utils api data/icon data/config.json data/version.json data/locales build/ldr-translate$(APP_PATH)/ldr-translate/
 
 
 gtk: build

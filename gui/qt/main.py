@@ -2,9 +2,7 @@ import sys
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QAction, QMenu, QSystemTrayIcon, QApplication, QMessageBox
 
-from api import config
-
-config.old2new()
+from utils import config
 
 import ui_translate
 from api import translate

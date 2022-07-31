@@ -1,8 +1,9 @@
 import requests
 import urllib
-from api import config, tools
+from utils import config
+from api import server_config
 
-config_server = "youdao"
+config_server = server_config.server_youdao
 
 
 def translate_text(s, fromLang="auto", toLang=""):

@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 # coding: utf-8
-from api import translate, config, tools
+from api import translate
 from api.server import baidu
-from api.locale_config import get_locale_ui_data as locale_ui
-
-from gi.repository import Gtk, Gdk
+from utils import config, tools
+from utils.locale import get_locale_ui_data as locale_ui
+from gi.repository import Gtk
 
 
 class Translate(Gtk.ApplicationWindow):

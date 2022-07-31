@@ -18,9 +18,8 @@ from threading import Event
 # import faulthandler
 # # 在import之后直接添加以下启用代码即可 python3 -X faulthandler ldr-translate.py
 # faulthandler.enable()
-from api import config, locale_config
-
-config.old2new()
+from utils import version
+from utils import config, locale, version
 
 gi.require_version("AppIndicator3", "0.1")
 gi.require_version("Gtk", "3.0")
@@ -83,13 +82,11 @@ class LdrTranlate(Gtk.Application):
 
         menu.add(Gtk.SeparatorMenuItem())
 
-        config_version = config.get_config_version()
-
         menu_prf = Gtk.MenuItem(label="兰译设置")
         menu_prf.connect('activate', self._on_preference)
         menu.add(menu_prf)
 
-        help_menu = Gtk.MenuItem(label="关于：V" + config_version["name"])
+        help_menu = Gtk.MenuItem(label="关于：V" + version.get_value("name"))
         help_menu.connect('activate', self._on_help)
         menu.add(help_menu)
 
@@ -114,7 +111,8 @@ class LdrTranlate(Gtk.Application):
         logo = GdkPixbuf.Pixbuf.new_from_file_at_size("./icon/icon.png", 64,
                                                       64)
 
-        config_version = config.get_config_version()
+        version_home_url = version.get_value("home_url")
+        version_name = version.get_value("name")
 
         dialog = Gtk.AboutDialog()
 
@@ -124,12 +122,12 @@ class LdrTranlate(Gtk.Application):
         dialog.set_program_name("兰译")
         dialog.set_copyright("© 2021-2022 兰朵儿")
 
-        dialog.set_version("V " + config_version["name"])
-        dialog.set_website(config_version["home_url"])
+        dialog.set_version("V " + version_name)
+        dialog.set_website(version_home_url)
 
-        dialog.set_comments(locale_config.get_locale_data("version", "msg"))
+        dialog.set_comments(locale.get_locale_data("version", "msg"))
         dialog.set_website_label(
-            locale_config.get_locale_data("version", "home_name"))
+            locale.get_locale_data("version", "home_name"))
 
         dialog.set_authors(["yuh"])
         # 翻译
