@@ -130,15 +130,16 @@ class Preference(Gtk.ApplicationWindow):
         if (len(text_a) == 0 or len(text_b) == 0):
             msg = "已恢复默认（不推荐）"
         else:
-            ok, a, b = translate.check_server_translate(server, text_a, text_b)
-            self.tv_baidu_translate_app_id.set_text(a)
-            self.tv_baidu_translate_secret_key.set_text(b)
+            ok, text_a, text_b = translate.check_server_translate(
+                server, text_a, text_b)
+            self.tv_baidu_translate_app_id.set_text(text_a)
+            self.tv_baidu_translate_secret_key.set_text(text_b)
             if (ok):
                 msg = "成功，已保存"
 
         if (ok):
-            config.set_config(server, "translate_app_id", a)
-            config.set_config(server, "translate_secret_key", b)
+            config.set_config(server, "translate_app_id", text_a)
+            config.set_config(server, "translate_secret_key", text_b)
         self.lb_baidu_translate_msg.set_text(msg)
 
     def save_baidu_ocr(self, btn=None):
