@@ -14,7 +14,11 @@ def load_configs():
 def get_locale_data(section, key):
     if (locale_data is None):
         load_configs()
-    return locale_data[section][key]
+    if(section in locale_data):
+        if(key in locale_data[section]):
+            return locale_data[section][key]
+
+    return key
 
 
 def get_locale_translate_data(section, key):
