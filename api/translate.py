@@ -46,9 +46,8 @@ def text(s_from, add_old=True):
     if (add_old):
         s_from = last_s + " " + s_from
 
-    s_from = s_from.replace("-[\n|\r]", "").strip()
-
-    s_from = re.sub("(?<!\.|-|。)[\n|\r]", " ", s_from)
+    s_from = re.sub(r"-[\n|\r]+", "", s_from)
+    s_from = re.sub(r"(?<!\.|-|。)[\n|\r]+", " ", s_from)
 
     last_s2 = translate(s_from, server, to_lang_code)
 
