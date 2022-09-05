@@ -23,6 +23,7 @@ default_ocr_secret_key = "709INHX6GCLsAXXZPLhKGVMmra7bEwGl"
 error_msg2zh = {
     "54003": "error_translate_54003",
     "54000": "error_translate_54000",
+    "54004": "error_translate_54004",
     "52003": "error_translate_52003"
 }
 
@@ -70,7 +71,8 @@ def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
             s1 = "请求错误：" + request.content
 
     except Exception as e:
-        s1 = "网络错误：" + str(e)
+        print(e)
+        s1 = "未知错误：" + e
 
     return s1, ok
 

@@ -22,7 +22,11 @@ def get_locale_data(section, key):
 
 
 def get_locale_translate_data(section, key):
-    return get_locale_data("translate", section)[key]
+    dict_t = get_locale_data("translate", section)
+    if(key in dict_t):
+        return dict_t[key]
+    else:
+        return key
 
 
 def get_locale_ui_data(key):
