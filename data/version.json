@@ -3,7 +3,7 @@
         "https://raw.githubusercontent.com/yuhldr/ldr-translate/master/data/version.json",
         "https://gitee.com/yuhldr/ldr-translate/raw/master/data/version.json"
     ],
-    "code": 12,
-    "name": "1.5.1",
+    "code": 13,
+    "name": "1.5.2",
     "home_url": "https://github.com/yuhldr/ldr-translate/releases"
 }
