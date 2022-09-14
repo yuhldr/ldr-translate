@@ -1,4 +1,5 @@
 import json
+import copy
 
 locale_data = None
 
@@ -11,23 +12,22 @@ def load_configs():
         locale_data = json.load(file)
 
 
-def get_locale_data(section, key):
+def t_translate(key):
+    return t("translate.%s" % key)
+
+
+def t_ui(key):
+    return t("ui." + key)
+
+
+# t(ldr.cl.sd)
+def t(keys):
     if (locale_data is None):
         load_configs()
-    if(section in locale_data):
-        if(key in locale_data[section]):
-            return locale_data[section][key]
-
-    return key
-
-
-def get_locale_translate_data(section, key):
-    dict_t = get_locale_data("translate", section)
-    if(key in dict_t):
-        return dict_t[key]
-    else:
-        return key
-
-
-def get_locale_ui_data(key):
-    return get_locale_data("ui", key)
+    dicts = copy.deepcopy(locale_data)
+    for key in keys.split("."):
+        if(key in dicts):
+            dicts = dicts[key]
+        else:
+            return keys
+    return dicts

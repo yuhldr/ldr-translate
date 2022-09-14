@@ -3,7 +3,7 @@
 from api import translate
 from api.server import baidu
 from utils import config, tools
-from utils.locale import get_locale_ui_data as locale_ui
+from utils.locale import t_ui
 from gi.repository import Gtk
 
 
@@ -109,8 +109,8 @@ class Translate(Gtk.ApplicationWindow):
 
         if (self.cbtn_tex.get_active()):
             if (s_from is None):
-                s_from = locale_ui("notice_from")
-            self.set_text_view(s_from, locale_ui("notice_to"))
+                s_from = t_ui("notice_from")
+            self.set_text_view(s_from, t_ui("notice_to"))
         else:
             self.translate_by_s(s_from)
 

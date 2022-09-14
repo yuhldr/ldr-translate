@@ -4,32 +4,30 @@ import base64
 import requests
 import urllib
 import time
-from utils import tools, config
+from utils import tools, config, locale
 from api import server_config
-
 
 config_server = server_config.server_baidu
 
 how_get_url_translate = "https://doc.tern.1c7.me/zh/folder/setting/#%E7%99%BE%E5%BA%A6"
 how_get_url_ocr = "https://cloud.baidu.com/doc/OCR/s/dk3iqnq51"
 
-default_translate_app_id = "20211109000995303"
-default_translate_secret_key = "qLFDFx7fLRrioaa6CTnk"
-default_ocr_app_key = "S1NHCzzzBhL2TUMx5iGpOSUu"
-default_ocr_secret_key = "709INHX6GCLsAXXZPLhKGVMmra7bEwGl"
-
+default_translate_app_id = ""
+default_translate_secret_key = ""
+default_ocr_app_key = ""
+default_ocr_secret_key = ""
 
 # 错误代码:locale文件中对应错误说明的key
 error_msg2zh = {
-    "54003": "error_translate_54003",
-    "54000": "error_translate_54000",
-    "54004": "error_translate_54004",
-    "52003": "error_translate_52003"
+    "54003": "error.t54003",
+    "54000": "error.t54000",
+    "54004": "error.t54004",
+    "52003": "error.t52003"
 }
 
 error_msg2zh_ocr = {
-    "17": "error_ocr_17",
-    "110": "error_ocr_110",
+    "17": "error.o17",
+    "110": "error.o110",
 }
 
 
@@ -40,6 +38,9 @@ def translate_text(s, fromLang="auto", toLang=""):
     secretKey = config.get_value(config_server, "translate_secret_key")
 
     if (len(appId) == 0 or len(secretKey) == 0):
+        if (len(default_translate_app_id) == 0
+                or len(default_translate_secret_key) == 0):
+            return locale.t_translate("baidu.error.t")
         appId = default_translate_app_id
         secretKey = default_translate_secret_key
 
@@ -118,6 +119,8 @@ def get_token():
     ocr_secret_key = config.get_value(config_server, "ocr_secret_key")
 
     if (len(ocr_api_key) == 0 or len(ocr_secret_key) == 0):
+        if (len(default_ocr_app_key) == 0 or len(default_ocr_secret_key) == 0):
+            return False, locale.t_translate("baidu.error.o")
         ocr_api_key = default_ocr_app_key
         ocr_secret_key = default_ocr_secret_key
 
@@ -145,6 +148,8 @@ def ocr(img_path, latex=False):
 
     img = base64.b64encode(img_data)
     ok, token = get_token()
+    if(not ok):
+        return False, token
     params = {"image": img}
     request_url = request_url + "?access_token=" + token
     headers = {'content-type': 'application/x-www-form-urlencoded'}

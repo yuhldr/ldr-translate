@@ -57,7 +57,7 @@ class Preference(Gtk.ApplicationWindow):
         self.lb_version_msg = ui.get_object('lb_version_msg')
 
         self.lb_version_msg.set_markup(
-            locale.get_locale_data("version", "msg"))
+            locale.t("version.msg"))
         self.lb_update_msg.set_markup(
             "<a href='%s'>当前版本：v%s.%d</a>" %
             (version_home_url, version_name, version_code))

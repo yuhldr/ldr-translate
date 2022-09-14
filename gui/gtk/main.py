@@ -125,9 +125,9 @@ class LdrTranlate(Gtk.Application):
         dialog.set_version("V " + version_name)
         dialog.set_website(version_home_url)
 
-        dialog.set_comments(locale.get_locale_data("version", "msg"))
+        dialog.set_comments(locale.t("version.msg"))
         dialog.set_website_label(
-            locale.get_locale_data("version", "home_name"))
+            locale.t("version.home_name"))
 
         dialog.set_authors(["yuh"])
         # 翻译

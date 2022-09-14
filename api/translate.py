@@ -3,7 +3,7 @@ from api.server import baidu, tencent, youdao, google
 import time
 from utils import tools, config
 from api import server_config
-from utils.locale import get_locale_ui_data as locale_ui
+from utils.locale import t_ui
 
 last_s = None
 last_s2 = None
@@ -32,7 +32,7 @@ def text(s_from, add_old=True):
 
     if (s_from is None):
         if (last_s is None):
-            return locale_ui("notice_from"), locale_ui("notice_to")
+            return t_ui("notice_from"), t_ui("notice_to")
         else:
             s_from = last_s
 

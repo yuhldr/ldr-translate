@@ -1,6 +1,6 @@
 from utils import config
 from api import server_config
-from utils.locale import get_locale_translate_data as locale_translate
+from utils.locale import t_translate
 
 config_section = "setting"
 last_translate_to_lang_cache = ""
@@ -19,7 +19,7 @@ def get_value_by_dict(dict, key):
 def get_translate_server_dict_by_locale():
     translate_server_dict = {}
     for translate_server in server_config.dict_to_lang.keys():
-        key_ = locale_translate(translate_server, "name")
+        key_ = t_translate("%s.name" % translate_server)
         translate_server_dict[key_] = translate_server
 
     return translate_server_dict
@@ -86,7 +86,7 @@ def get_to_lang_dict_by_locale():
     to_langs_locale = {}
 
     for key in dict_to_langs:
-        to_langs_locale[locale_translate("to_lang", key)] = dict_to_langs[key]
+        to_langs_locale[t_translate("to_lang.%s" % key)] = dict_to_langs[key]
     return to_langs_locale
 
 
@@ -157,7 +157,7 @@ def error2zh(error_code,
     if (error_code in dict):
         s = dict[error_code]
 
-    s = locale_translate(server, s)
+    s = t_translate("%s.%s" % (server, s))
 
     s = "%s\n\n%s，%s" % (s, error_code, error_msg)
 

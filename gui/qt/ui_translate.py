@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from api import translate
 from utils import tools
-from utils.locale import get_locale_ui_data as locale_ui
+from utils.locale import t_ui
 
 
 class Ui_MainWindow(object):
@@ -73,9 +73,8 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "兰译"))
 
         self.pushButton.setText(
-            _translate("MainWindow", locale_ui("btn_translate_label")))
-        self.cb_add.setText(_translate("MainWindow",
-                                       locale_ui("cb_add_label")))
+            _translate("MainWindow", t_ui("btn_translate_label")))
+        self.cb_add.setText(_translate("MainWindow", t_ui("cb_add_label")))
 
         self.cbb_translate_to_lang.currentIndexChanged.connect(
             self.on_cbb_tanslate_lang_changed)
@@ -88,10 +87,9 @@ class Ui_MainWindow(object):
             self.on_cbb_tanslate_server_changed)
         self.set_cbb_tanslate_to_lang_data()
 
-        self.te_to.setPlainText(
-            _translate("MainWindow", locale_ui("notice_to")))
-        self.te_from.setPlainText(
-            _translate("MainWindow", locale_ui("notice_from")))
+        self.te_to.setPlainText(_translate("MainWindow", t_ui("notice_to")))
+        self.te_from.setPlainText(_translate("MainWindow",
+                                             t_ui("notice_from")))
         self.pushButton.clicked.connect(self.btnTranslate)
 
     def on_cbb_tanslate_lang_changed(self):
