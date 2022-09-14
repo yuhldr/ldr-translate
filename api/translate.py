@@ -5,8 +5,9 @@ from utils import tools, config
 from api import server_config
 from utils.locale import t_ui
 
-last_s = None
-last_s2 = None
+last_s_from = None
+last_s_from_all = None
+last_s_to_all = None
 last_time = 0
 
 no_translate_this = False
@@ -18,7 +19,7 @@ config_section = "setting"
 
 
 def text(s_from, add_old=True):
-    global last_s, last_s2, last_time, no_translate_this
+    global last_s_from_all, last_s_from, last_s_to_all, last_time, no_translate_this
 
     if (no_translate_this):
         print("不翻译")
@@ -31,29 +32,33 @@ def text(s_from, add_old=True):
     translate_span = config.get_config_setting("translate_span")
 
     if (s_from is None):
-        if (last_s is None):
+        if (last_s_from_all is None):
             return t_ui("notice_from"), t_ui("notice_to")
-        else:
-            s_from = last_s
+        elif (not add_old):
+            s_from = last_s_from_all
+
+    s_from = re.sub(r"-[\n|\r]+", "", s_from)
+    s_from = re.sub(r"(?<!\.|-|。)[\n|\r]+", " ", s_from)
 
     # 文字和上次一样，并且被翻译的语言没有修改，就不翻译了
-    if (last_s == s_from and not changeLang and not changeServer):
-        return last_s, last_s2
+    if (last_s_from == s_from and not changeLang and not changeServer):
+        return last_s_from_all, last_s_to_all
+
     span = translate_span * 1.2 - (time.time() - last_time)
     if (span > 0):
         time.sleep(span)
 
     if (add_old):
-        s_from = last_s + " " + s_from
+        s_from_all = "%s %s" % (last_s_from_all, s_from)
+    else:
+        s_from_all = s_from
+    last_s_to_all = translate(s_from_all, server, to_lang_code)
 
-    s_from = re.sub(r"-[\n|\r]+", "", s_from)
-    s_from = re.sub(r"(?<!\.|-|。)[\n|\r]+", " ", s_from)
-
-    last_s2 = translate(s_from, server, to_lang_code)
-
-    last_s = s_from
+    last_s_from = s_from
+    last_s_from_all = s_from_all
     last_time = time.time()
-    return last_s, last_s2
+
+    return last_s_from_all, last_s_to_all
 
 
 def translate(s, server, to_lang_code, fromLang="auto"):
