@@ -3,7 +3,7 @@
 from api import translate
 from api.server import baidu
 from utils import config, tools
-from utils.locale import t_ui
+from utils.locales import t_ui
 from gi.repository import Gtk
 
 
@@ -47,11 +47,15 @@ class Translate(Gtk.ApplicationWindow):
         self.set_to_lang_data()
         self.cbt_lang.connect("changed", self.on_cbt_lang_changed)
 
-        ui.get_object('btn_translate').connect("clicked",
-                                               self.update_translate_view)
+        self.btn_translate = ui.get_object('btn_translate')
+        self.btn_translate.connect("clicked", self.update_translate_view)
 
         self.add(ui.get_object('box_translate'))
         self.connect("delete-event", self.close)
+
+        self.cbtn_add_old.set_label(t_ui("cb_add_label"))
+        self.cbtn_tex.set_label(t_ui("cbtn_tex"))
+        self.btn_translate.set_label(t_ui("btn_translate_label"))
 
     def copy_(self, a):
         translate.set_no_translate_this()

@@ -4,7 +4,7 @@ import base64
 import requests
 import urllib
 import time
-from utils import tools, config, locale
+from utils import locales, tools, config
 from api import server_config
 
 config_server = server_config.server_baidu
@@ -40,7 +40,7 @@ def translate_text(s, fromLang="auto", toLang=""):
     if (len(appId) == 0 or len(secretKey) == 0):
         if (len(default_translate_app_id) == 0
                 or len(default_translate_secret_key) == 0):
-            return locale.t_translate("baidu.error.t")
+            return locales.t_translate("baidu.error.t")
         appId = default_translate_app_id
         secretKey = default_translate_secret_key
 
@@ -64,7 +64,7 @@ def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
             if ("error_code" in result):
                 ok = False
                 s1 = tools.error2zh(result["error_code"], result["error_msg"],
-                                    error_msg2zh)
+                                    error_msg2zh, config_server)
             else:
                 for trans_result in result["trans_result"]:
                     s1 += trans_result["dst"] + "\n"
@@ -120,7 +120,7 @@ def get_token():
 
     if (len(ocr_api_key) == 0 or len(ocr_secret_key) == 0):
         if (len(default_ocr_app_key) == 0 or len(default_ocr_secret_key) == 0):
-            return False, locale.t_translate("baidu.error.o")
+            return False, locales.t_translate("baidu.error.o")
         ocr_api_key = default_ocr_app_key
         ocr_secret_key = default_ocr_secret_key
 

@@ -3,7 +3,7 @@ from api.server import baidu, tencent, youdao, google
 import time
 from utils import tools, config
 from api import server_config
-from utils.locale import t_ui
+from utils.locales import t_ui
 
 last_s_from = None
 last_s_from_all = None

@@ -79,7 +79,8 @@ def translate(query_text,
                 print(result)
 
                 s1 = tools.error2zh(result["Error"]["Code"],
-                                    result["Error"]["Message"], error_msg2zh)
+                                    result["Error"]["Message"], error_msg2zh,
+                                    config_server)
             else:
                 ok = True
                 s1 = result["TargetText"]

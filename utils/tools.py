@@ -1,6 +1,6 @@
 from utils import config
 from api import server_config
-from utils.locale import t_translate
+from utils.locales import t_translate
 
 config_section = "setting"
 last_translate_to_lang_cache = ""

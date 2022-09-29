@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from api import translate
 from utils import tools
-from utils.locale import t_ui
+from utils.locales import t_ui
 
 
 class Ui_MainWindow(object):

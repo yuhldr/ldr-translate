@@ -1,0 +1,54 @@
+{
+    "key": "en_US",
+    "version": {
+        "msg": "1. Copy to automatically translate, and the status bar can pause copying and translation\n2. Take screenshots to the system clipboard, and OCR will recognize and translate them automatically\n3. Automatically remove meaningless newlines in documents, and support incremental copying\n4. Test the screenshot formula , automatically recognized as latex code",
+        "home_name": "Open source, update address"
+    },
+    "ui": {
+        "btn_translate_label": "translate",
+        "cb_add_label": "Append",
+        "cbtn_tex": "Tex",
+        "setting_label": "setting",
+        "notice_from": "Copy automatic translation\n\nYou can set your own api and use the developer api. When there are too many people, problems such as translation failure may occur",
+        "notice_to": "The system directly takes screenshots to the clipboard, and automatically recognizes and translates\n\nAfter selecting 'Append', the translation will be accumulated"
+    },
+    "translate": {
+        "to_lang": {
+            "auto": "Auto",
+            "zh": "Chinese",
+            "wyw": "Classical Chinese",
+            "en": "English",
+            "jp": "Japanese",
+            "kor": "Korean",
+            "de": "German",
+            "fra": "French"
+        },
+        "baidu": {
+            "name": "Baidu",
+            "error": {
+                "t": "Please fill in the Baidu translation api key and id in the settings",
+                "t54003": "There are too many users of Baidu Translator's public key, please try again. But it is recommended to replace it with your own api key in the settings (you can apply for free, more secure)",
+                "t54000": "The translation content is empty",
+                "t54004": "Baidu's free quota for this month has been used up\n\nThe number of users of Baidu Translator's public key is too large, you can try again. But it is recommended to replace it with your own api key in the settings (you can apply for free, more secure)",
+                "t52003": "Incorrect key, please reset in settings",
+                "o": "Please fill in the Baidu text recognition api key and id in the settings",
+                "o17": "There are too many users of the image recognition public key, and it will not be used until next month. It is recommended to replace it with your own api key in the settings (you can apply for free, more secure, and more quota)",
+                "o110": "Unexpected error, please try again"
+            }
+        },
+        "tencent": {
+            "name": "Tencent",
+            "error_translate_NoFreeAmount": "There are too many users of Tencent Translator's public key, and it can continue to be used next month. But it is recommended to replace it with your own api key in the settings (you can apply for free, more secure)"
+        },
+        "youdao": {
+            "name": "有道"
+        },
+        "google": {
+            "name": "Google"
+        }
+    },
+    "error": {
+        "api_translate_notice": "Please change your own key in settings",
+        "ocr_translate_notice": "Please replace it with your own identification in the settings"
+    }
+}
