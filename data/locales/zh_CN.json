@@ -6,7 +6,7 @@
     },
     "ui": {
         "btn_translate_label": "翻译",
-        "cb_add_label": "追加模式",
+        "cb_add_label": "追加",
         "cbtn_tex": "Tex",
         "setting_label": "设置",
         "notice_from": "复制自动翻译\n\n可以设置自己的api，使用开发者api,人数过多时，可能出现翻译失败等问题",
@@ -49,6 +49,7 @@
     },
     "error": {
         "api_translate_notice": "请在设置中更换自己的密钥",
-        "ocr_translate_notice": "请在设置中更换为自己的识别"
+        "ocr_translate_notice": "请在设置中更换为自己的识别",
+        "request": "请求错误"
     }
 }

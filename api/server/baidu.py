@@ -57,23 +57,15 @@ def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
     url = "https://api.fanyi.baidu.com/api/trans/vip/translate?appid=%s&q=%s&from=%s&to=%s&salt=%s&sign=%s"
     url = url % (appId, urllib.parse.quote(s), fromLang, toLang, salt, sign)
     s1 = ""
-    try:
-        request = requests.get(url, timeout=config.time_out)
-        if (request.status_code == 200):
-            result = request.json()
-            if ("error_code" in result):
-                ok = False
-                s1 = tools.error2zh(result["error_code"], result["error_msg"],
-                                    error_msg2zh, config_server)
-            else:
-                for trans_result in result["trans_result"]:
-                    s1 += trans_result["dst"] + "\n"
-        else:
-            s1 = "请求错误：" + request.content
-
-    except Exception as e:
-        print(e)
-        s1 = "未知错误：" + e
+    request = requests.get(url, timeout=config.time_out)
+    result = request.json()
+    if ("error_code" in result):
+        ok = False
+        s1 = tools.error2zh(result["error_code"], result["error_msg"],
+                            error_msg2zh, config_server)
+    else:
+        for trans_result in result["trans_result"]:
+            s1 += trans_result["dst"] + "\n"
 
     return s1, ok
 
@@ -86,20 +78,16 @@ def get_token_by_url(ocr_api_key, ocr_secret_key):
     # client_id 为官网获取的AK， client_secret 为官网获取的SK
     host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s' % (
         ocr_api_key, ocr_secret_key)
-    try:
-        request = requests.get(host, timeout=config.time_out)
 
-        jsons = request.json()
-        if ("access_token" not in jsons):
-            access_token = "错误：" + jsons["error_description"]
-        else:
-            access_token = jsons["access_token"]
-            expires_in_date = time.time() + jsons["expires_in"]
-            ok = True
+    request = requests.get(host, timeout=config.time_out)
 
-    except Exception as e:
-        access_token = "请求错误：" + str(e)
-    print(ok, access_token)
+    jsons = request.json()
+    if ("access_token" not in jsons):
+        access_token = "错误：" + jsons["error_description"]
+    else:
+        access_token = jsons["access_token"]
+        expires_in_date = time.time() + jsons["expires_in"]
+        ok = True
 
     return ok, str(access_token), expires_in_date
 
@@ -148,7 +136,7 @@ def ocr(img_path, latex=False):
 
     img = base64.b64encode(img_data)
     ok, token = get_token()
-    if(not ok):
+    if (not ok):
         return False, token
     params = {"image": img}
     request_url = request_url + "?access_token=" + token
@@ -158,27 +146,22 @@ def ocr(img_path, latex=False):
                              headers=headers,
                              timeout=config.time_out)
 
-    if response:
-        jsons = (response.json())
+    jsons = (response.json())
 
-        if ("error_code" in jsons):
-            if (110 == jsons["error_code"]):
-                config.set_config(config_server, "access_token", "")
-            return False, tools.error2zh(jsons["error_code"],
-                                         jsons["error_msg"], error_msg2zh_ocr,
-                                         config_server)
-        else:
-            for word in jsons["words_result"]:
-                s += word["words"]
-                if (latex):
-                    s += "\n"
-                else:
-                    s_ = word["words"]
-                    if (s_[len(s_) - 1:len(s_)] != "-"):
-                        s += " "
-
+    if ("error_code" in jsons):
+        if (110 == jsons["error_code"]):
+            config.set_config(config_server, "access_token", "")
+        return False, tools.error2zh(jsons["error_code"], jsons["error_msg"],
+                                     error_msg2zh_ocr, config_server)
     else:
-        print(response.text)
+        for word in jsons["words_result"]:
+            s += word["words"]
+            if (latex):
+                s += "\n"
+            else:
+                s_ = word["words"]
+                if (s_[len(s_) - 1:len(s_)] != "-"):
+                    s += " "
 
     if (latex):
         s = s.replace(" _ ", "_")

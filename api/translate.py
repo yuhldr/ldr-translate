@@ -3,7 +3,7 @@ from api.server import baidu, tencent, youdao, google
 import time
 from utils import tools, config
 from api import server_config
-from utils.locales import t_ui
+from utils.locales import t_ui, t
 
 last_s_from = None
 last_s_from_all = None
@@ -52,7 +52,11 @@ def text(s_from, add_old=True):
         s_from_all = "%s %s" % (last_s_from_all, s_from)
     else:
         s_from_all = s_from
-    last_s_to_all = translate(s_from_all, server, to_lang_code)
+
+    try:
+        last_s_to_all = translate(s_from_all, server, to_lang_code)
+    except Exception as e:
+        return s_from_all, "%s\n\n%s" % (t("error.request"), str(e))
 
     last_s_from = s_from
     last_s_from_all = s_from_all
@@ -76,15 +80,18 @@ def translate(s, server, to_lang_code, fromLang="auto"):
 
 
 def ocr(img_path, latex=False):
-
-    server, changeServer = tools.get_current_translate_server()
-    if (server == server_config.server_tencent):
-        # 这个有问题，暂时用百度的
-        # ok, s = tencent.ocr(img_path, latex=latex)
-        ok, s = baidu.ocr(img_path, latex=latex)
-    else:
-        ok, s = baidu.ocr(img_path, latex=latex)
-
+    ok = False
+    s = ""
+    try:
+        server, changeServer = tools.get_current_translate_server()
+        if (server == server_config.server_tencent):
+            # 这个有问题，暂时用百度的
+            # ok, s = tencent.ocr(img_path, latex=latex)
+            ok, s = baidu.ocr(img_path, latex=latex)
+        else:
+            ok, s = baidu.ocr(img_path, latex=latex)
+    except Exception as e:
+        print(e)
     return ok, s
 
 
@@ -92,11 +99,13 @@ def check_server_translate(server, a, b):
     ok = False
     a = a.strip().replace("\n", " ")
     b = b.strip().replace("\n", " ")
-
-    if (server == server_config.server_tencent):
-        ok = tencent.check(a, b)
-    else:
-        ok = baidu.check_translate(a, b)
+    try:
+        if (server == server_config.server_tencent):
+            ok = tencent.check(a, b)
+        else:
+            ok = baidu.check_translate(a, b)
+    except Exception as e:
+        print(e)
 
     return ok, a, b
 
@@ -106,11 +115,14 @@ def check_server_ocr(server, a, b):
     a = a.strip().replace("\n", " ")
     b = b.strip().replace("\n", " ")
 
-    if (server == server_config.server_tencent):
-        ok = tencent.check(a, b)
-    else:
-        ok = baidu.check_ocr(a, b)
-    print(ok, a, b)
+    try:
+        if (server == server_config.server_tencent):
+            ok = tencent.check(a, b)
+        else:
+            ok = baidu.check_ocr(a, b)
+    except Exception as e:
+        print(e)
+
     return ok, a, b
 
 

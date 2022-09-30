@@ -67,28 +67,20 @@ def translate(query_text,
     s = get_string_to_sign(query_method, endpoint, data)
 
     data["Signature"] = sign_str(secret_key, s, hashlib.sha1)
+    request = requests.get("https://" + endpoint,
+                           params=data,
+                           timeout=config.time_out)
 
-    try:
-        request = requests.get("https://" + endpoint,
-                               params=data,
-                               timeout=config.time_out)
+    result = request.json()["Response"]
+    if ("Error" in result):
+        print(result)
 
-        if (request.status_code == 200):
-            result = request.json()["Response"]
-            if ("Error" in result):
-                print(result)
-
-                s1 = tools.error2zh(result["Error"]["Code"],
-                                    result["Error"]["Message"], error_msg2zh,
-                                    config_server)
-            else:
-                ok = True
-                s1 = result["TargetText"]
-        else:
-            s1 = "请求错误：" + request.content
-
-    except Exception as e:
-        s1 = "网络错误：" + str(e)
+        s1 = tools.error2zh(result["Error"]["Code"],
+                            result["Error"]["Message"], error_msg2zh,
+                            config_server)
+    else:
+        ok = True
+        s1 = result["TargetText"]
 
     return s1, ok
 

@@ -2,6 +2,7 @@ from api import translate
 from api.server import baidu, tencent
 from utils import config, locales, version
 from api import server_config
+import threading
 
 from gi.repository import Gtk
 from preferences_sm import Preferences as PreferenceSM
@@ -56,8 +57,7 @@ class Preference(Gtk.ApplicationWindow):
         self.lb_update_msg = ui.get_object('lb_update_msg')
         self.lb_version_msg = ui.get_object('lb_version_msg')
 
-        self.lb_version_msg.set_markup(
-            locales.t("version.msg"))
+        self.lb_version_msg.set_markup(locales.t("version.msg"))
         self.lb_update_msg.set_markup(
             "<a href='%s'>当前版本：v%s.%d</a>" %
             (version_home_url, version_name, version_code))
@@ -120,77 +120,43 @@ class Preference(Gtk.ApplicationWindow):
 
     def save_baidu_translate(self, btn=None):
 
-        ok = True
-        server = "baidu"
-        text_a = self.get_text(self.tv_baidu_translate_app_id)
-        text_b = self.get_text(self.tv_baidu_translate_secret_key)
-
-        msg = "超时或账号密码错误"
-
-        if (len(text_a) == 0 or len(text_b) == 0):
-            msg = "已恢复默认（不推荐）"
-        else:
-            ok, text_a, text_b = translate.check_server_translate(
-                server, text_a, text_b)
-            self.tv_baidu_translate_app_id.set_text(text_a)
-            self.tv_baidu_translate_secret_key.set_text(text_b)
-            if (ok):
-                msg = "成功，已保存"
-
-        if (ok):
-            config.set_config(server, "translate_app_id", text_a)
-            config.set_config(server, "translate_secret_key", text_b)
-        self.lb_baidu_translate_msg.set_text(msg)
+        self.save_server(
+            self.tv_baidu_translate_app_id,
+            self.tv_baidu_translate_secret_key,
+            self.lb_baidu_translate_msg,
+            translate.check_server_translate,
+            server_config.server_baidu,
+            "translate_app_id",
+            "translate_secret_key",
+        )
 
     def save_baidu_ocr(self, btn=None):
-        ok = True
         server = server_config.server_baidu
 
-        text_a = self.get_text(self.tv_baidu_ocr_app_key)
-        text_b = self.get_text(self.tv_baidu_ocr_secret_key)
+        config.set_config(server, "access_token", "")
+        config.set_config(server, "expires_in_date", 0)
 
-        msg = "超时或账号密码错误"
-
-        if (len(text_a) == 0 or len(text_b) == 0):
-            msg = "已恢复默认（不推荐）"
-        else:
-            ok, text_a, text_b = translate.check_server_ocr(
-                server, text_a, text_b)
-            self.tv_baidu_ocr_app_key.set_text(text_a)
-            self.tv_baidu_ocr_secret_key.set_text(text_b)
-            if (ok):
-                msg = "成功，已保存"
-
-        if (ok):
-            config.set_config(server, "ocr_api_key", text_a)
-            config.set_config(server, "ocr_secret_key", text_b)
-            config.set_config(server, "access_token", "")
-            config.set_config(server, "expires_in_date", 0)
-
-        self.lb_baidu_ocr_msg.set_text(msg)
+        self.save_server(
+            self.tv_baidu_ocr_app_key,
+            self.tv_baidu_ocr_secret_key,
+            self.lb_baidu_ocr_msg,
+            translate.check_server_ocr,
+            server,
+            "ocr_api_key",
+            "ocr_secret_key",
+        )
 
     def save_tencent(self, btn=None):
-        ok = True
-        server = server_config.server_tencent
-        text_a = self.get_text(self.tv_tencent_secret_id)
-        text_b = self.get_text(self.tv_tencent_secret_key)
 
-        msg = "超时或账号密码错误"
-
-        if (len(text_a) == 0 or len(text_b) == 0):
-            msg = "已恢复默认（不推荐）"
-        else:
-            ok, text_a, text_b = translate.check_server_translate(
-                server, text_a, text_b)
-            self.tv_tencent_secret_id.set_text(text_a)
-            self.tv_tencent_secret_key.set_text(text_b)
-            if (ok):
-                msg = "成功，已保存"
-
-        if (ok):
-            config.set_config(server, "translate_app_id", text_a)
-            config.set_config(server, "translate_secret_key", text_b)
-        self.lb_tencnet_msg.set_text(msg)
+        self.save_server(
+            self.tv_tencent_secret_id,
+            self.tv_tencent_secret_key,
+            self.lb_tencnet_msg,
+            translate.check_server_translate,
+            server_config.server_tencent,
+            "translate_app_id",
+            "translate_secret_key",
+        )
 
     def get_text(self, text_view):
         tb = text_view.get_buffer()
@@ -210,10 +176,13 @@ class Preference(Gtk.ApplicationWindow):
 
     def check_update(self, view=None):
 
-        s, msg = version.check_update()
+        def _check():
+            s, msg = version.check_update()
+            self.lb_update_msg.set_markup(s)
+            self.lb_version_msg.set_markup(msg)
 
-        self.lb_update_msg.set_markup(s)
-        self.lb_version_msg.set_markup(msg)
+        tt = threading.Thread(target=_check)
+        tt.start()
 
     def _on_indicator_sysmonitor_preferences(self, event=None):
         if self.indicator_sysmonitor_preferences is not None:
@@ -223,3 +192,31 @@ class Preference(Gtk.ApplicationWindow):
         self.indicator_sysmonitor_preferences = PreferenceSM(
             self, self.ind_parent)
         self.indicator_sysmonitor_preferences = None
+
+    def save_server(self, tv_a, tv_b, label_msg, fun_check, server, key_a,
+                    key_b):
+
+        def _save():
+
+            ok = True
+            text_a = self.get_text(tv_a)
+            text_b = self.get_text(tv_b)
+
+            msg = "超时或账号密码错误"
+
+            if (len(text_a) == 0 or len(text_b) == 0):
+                msg = "已恢复默认（不推荐）"
+            else:
+                ok, text_a, text_b = fun_check(server, text_a, text_b)
+                tv_a.set_text(text_a)
+                tv_b.set_text(text_b)
+                if (ok):
+                    msg = "成功，已保存"
+
+            if (ok):
+                config.set_config(server, key_a, text_a)
+                config.set_config(server, key_b, text_b)
+            label_msg.set_text(msg)
+
+        tt = threading.Thread(target=_save)
+        tt.start()

@@ -100,6 +100,17 @@
             <property name="position">4</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkSpinner" id="sp_translate">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>

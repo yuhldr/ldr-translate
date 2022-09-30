@@ -5,6 +5,8 @@ from api.server import baidu
 from utils import config, tools
 from utils.locales import t_ui
 from gi.repository import Gtk
+import time
+import threading
 
 
 class Translate(Gtk.ApplicationWindow):
@@ -47,6 +49,7 @@ class Translate(Gtk.ApplicationWindow):
         self.set_to_lang_data()
         self.cbt_lang.connect("changed", self.on_cbt_lang_changed)
 
+        self.sp_translate = ui.get_object('sp_translate')
         self.btn_translate = ui.get_object('btn_translate')
         self.btn_translate.connect("clicked", self.update_translate_view)
 
@@ -73,7 +76,7 @@ class Translate(Gtk.ApplicationWindow):
         for currency in tools.get_to_lang_dict_by_locale().keys():
             self.cbt_lang.append_text(currency)
 
-        if(i < 0):
+        if (i < 0):
             i = tools.get_current_to_lang_index()
         self.cbt_lang.set_active(i)
 
@@ -131,9 +134,21 @@ class Translate(Gtk.ApplicationWindow):
 
     def translate_by_s(self, s_from=None):
 
-        s_from, s_to = translate.text(s_from,
-                                      add_old=self.cbtn_add_old.get_active())
-        self.set_text_view(s_from, s_to)
+        def request_text(s_from=None):
+            start_ = time.time()
+            s_from, s_to = translate.text(
+                s_from, add_old=self.cbtn_add_old.get_active())
+            span = 0.5 - (time.time() - start_)
+            if span > 0:
+                time.sleep(span)
+            self.set_text_view(s_from, s_to)
+            self.sp_translate.stop()
+
+        if (s_from is not None):
+            self.set_text_view(s_from, "翻译中……")
+            self.sp_translate.start()
+        tt = threading.Thread(target=request_text, args=(s_from, ))
+        tt.start()
 
     def set_text_view(self, s_from, s_to):
 

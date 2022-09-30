@@ -123,8 +123,7 @@ def change_deal():
             if (MainWindow.isHidden()):
                 MainWindow.show()
 
-            text_from, text_to = translate.text(text_from, add_old=ui.isAdd())
-            ui.translate_text(text_from, text_to)
+            ui.translate_text(text_from)
 
 
 if __name__ == "__main__":
