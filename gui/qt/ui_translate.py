@@ -9,12 +9,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from PyQt5.QtCore import Qt, QThread, pyqtSignal, QDateTime
 from api import translate
-from utils import tools
 from utils.locales import t_ui
-import threading
-import time
+from qt_utils import MyThread
+from utils import tools, config
 
 
 class Ui_MainWindow(object):
@@ -121,45 +119,34 @@ class Ui_MainWindow(object):
         print(add)
         return add
 
-    def set_ui(self, text_from=None, text_to=None):
+    def ocr_image(self, img_path):
+        def next(param):
+            ok, s = param
+            self.set_ui((s, "文本识别成功！"))
+            self.translate_text(s)
+
+        s = "文本识别中...\n设置中可修改识别方式"
+        if config.is_ocr_local():
+            s = "离线（精确度低）：" + s
+        else:
+            s = "在线" + s
+
+        self.set_ui((s, s))
+        self.thread = MyThread(translate.ocr2, (img_path, self.isAdd()))
+        self.thread.signal.connect(next)
+        self.thread.start()
+
+    def set_ui(self, param):
+        text_from, text_to = param
         self.te_from.setPlainText(text_from)
         self.te_to.setPlainText(text_to)
 
     def translate_text(self, text_from=None):
-
-        self.set_ui(text_from, "翻译中")
-
-        self.thread = UpdateThread(text_from, self.isAdd())
+        self.set_ui((text_from, "翻译中"))
+        self.thread = MyThread(translate.text2, (text_from, self.isAdd()))
         self.thread.signal.connect(self.set_ui)
-        # 启动线程
         self.thread.start()
 
     def btnTranslate(self):
         text_from = self.te_from.toPlainText()
         self.translate_text(text_from)
-
-
-class UpdateThread(QThread):
-    signal = pyqtSignal(str, str)
-
-    # 括号里填写信号传递的参数
-
-    def __init__(self, text_from, add):
-        self.text_from = text_from
-        self.add = add
-        super().__init__()
-
-    def __del__(self):
-        self.wait()
-
-    def run(self):
-
-        start_ = time.time()
-        text_from, text_to = translate.text(self.text_from, self.add)
-        span = 0.5 - (time.time() - start_)
-        if span > 0:
-            time.sleep(span)
-
-        # 进行任务操作
-        self.signal.emit(text_from, text_to)
-        # 发射信号

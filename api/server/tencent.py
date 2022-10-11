@@ -13,7 +13,7 @@ default_secret_id = "AKIDsiHacNr52j9IBpDJ8gyyh9LGuJSKvFI5"
 default_secret_key = "XnmVx82f5E6h26tQhhQs3xaz80bw0pNV"
 
 how_get_url_translate = "https://doc.tern.1c7.me/zh/folder/setting/#%E8%85%BE%E8%AE%AF%E4%BA%91"
-# how_get_url_ocr = "https://cloud.baidu.com/doc/OCR/s/dk3iqnq51"
+how_get_url_ocr = "https://doc.tern.1c7.me/zh/folder/setting/#%E8%85%BE%E8%AE%AF%E4%BA%91"
 
 public_params = {}
 

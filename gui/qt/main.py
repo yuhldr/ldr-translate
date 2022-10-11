@@ -49,9 +49,6 @@ class SystemTray(object):
         global isAuto
         isAuto = self.auto.isChecked()
 
-    def update_autostart(self):
-        config.update_autostart(self.autostart.isChecked())
-
     def _on_prefrrence(self):
         self.preferences = ui_preferences.Ui_MainWindow()
 
@@ -65,11 +62,6 @@ class SystemTray(object):
         self.auto.setCheckable(True)
         self.auto.setChecked(True)
 
-        self.autostart = QAction('开机自启', triggered=self.update_autostart)
-        self.autostart.setEnabled(True)
-        self.autostart.setCheckable(True)
-        self.autostart.setChecked(config.get_autostart())
-
         a0 = QAction('翻译设置', triggered=self._on_prefrrence)
 
         a1 = QAction('显示兰译', triggered=self.w.show)
@@ -77,7 +69,6 @@ class SystemTray(object):
 
         tpMenu = QMenu()
         tpMenu.addAction(self.auto)
-        tpMenu.addAction(self.autostart)
         tpMenu.addAction(a0)
         tpMenu.addAction(a1)
         tpMenu.addAction(a2)
@@ -106,23 +97,18 @@ def change_deal():
 
         formats = data.formats()
 
-        isTranslate = True
-
         # 如果是文本格式，把内容打印出来
-        if ('text/uri-list' in formats):
-            isTranslate = False
-        elif ('application/x-qt-image' in formats):
-            # 必须有.png
-            img_path = config.app_home_dir + "/copy_img.png"
-            clipboard.image().save(img_path)
-            ok, text_from = translate.ocr(img_path)
-        else:
-            text_from = data.text()
-
-        if (isTranslate):
+        if ('text/uri-list' not in formats):
             if (MainWindow.isHidden()):
                 MainWindow.show()
 
+        if ('application/x-qt-image' in formats):
+            # 必须有.png
+            img_path = config.app_home_dir + "/copy_img.png"
+            clipboard.image().save(img_path)
+            ui.ocr_image(img_path)
+        else:
+            text_from = data.text()
             ui.translate_text(text_from)
 
 

@@ -76,6 +76,14 @@ def setShowSM(b):
     return set_config(config_sections_setting, "show_sm", b)
 
 
+def is_ocr_local():
+    return get_config_setting("ocr_local")
+
+
+def set_ocr_local(b):
+    return set_config(config_sections_setting, "ocr_local", b)
+
+
 # 开机自启
 def update_autostart(autostart):
     if not autostart:

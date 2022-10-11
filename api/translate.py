@@ -18,6 +18,11 @@ config_section = "setting"
 # 整合一下，方便接入其他api接口
 
 
+def text2(param):
+    s_from, add_old = param
+    return text(s_from, add_old)
+
+
 def text(s_from, add_old=True):
     global last_s_from_all, last_s_from, last_s_to_all, last_time, no_translate_this
 
@@ -79,10 +84,23 @@ def translate(s, server, to_lang_code, fromLang="auto"):
     return s
 
 
+def ocr2(param):
+    img_path, latex = param
+    return ocr(img_path, latex)
+
+
 def ocr(img_path, latex=False):
     ok = False
     s = ""
     try:
+        if config.is_ocr_local():
+            import easyocr
+            reader = easyocr.Reader(['ch_sim', 'en'])
+            list = reader.readtext(img_path, detail=0)
+            s = ""
+            for s_ in list:
+                s += s_ + " "
+            return True, s.strip()
         server, changeServer = tools.get_current_translate_server()
         if (server == server_config.server_tencent):
             # 这个有问题，暂时用百度的
@@ -92,7 +110,16 @@ def ocr(img_path, latex=False):
             ok, s = baidu.ocr(img_path, latex=latex)
     except Exception as e:
         print(e)
+    if(not ok):
+        return False, "也可以使用离线文本识别，请在设置中启用。\n\n离线识别精度 低于 在线api"
     return ok, s
+
+
+def check_server_api(param):
+    is_ocr, server, a, b = param
+    if is_ocr:
+        return check_server_ocr(server, a, b)
+    return check_server_translate(server, a, b)
 
 
 def check_server_translate(server, a, b):

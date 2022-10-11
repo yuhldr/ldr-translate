@@ -3,6 +3,30 @@ server_tencent = "tencent"
 server_youdao = "youdao"
 server_google = "google"
 
+
+def get_api_key(server, is_ocr=False):
+    api_keys = dict_api_save[server]
+    s = "t"
+    if (is_ocr):
+        s = "o"
+    return api_keys[s + "a"], api_keys[s + "b"]
+
+
+dict_api_save = {
+    server_baidu: {
+        "ta": "translate_app_id",
+        "tb": "translate_secret_key",
+        "oa": "ocr_api_key",
+        "ob": "ocr_secret_key",
+    },
+    server_tencent: {
+        "ta": "translate_secret_id",
+        "tb": "translate_secret_key",
+        "oa": "translate_secret_id",
+        "ob": "translate_secret_key",
+    },
+}
+
 dict_to_lang = {
     # 在locale/zh.json中对应的["translate"]["to_lang"]key：在此翻译服务中实际对应的toLang参数code
     server_baidu: {
