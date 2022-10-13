@@ -380,7 +380,7 @@ class Ui_MainWindow(QMainWindow):
 
         self.retranslateUi(MainWindow)
 
-        self.tw.setCurrentIndex(1)
+        self.tw.setCurrentIndex(0)
 
     # setupUi
 

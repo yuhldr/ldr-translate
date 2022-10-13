@@ -1,6 +1,7 @@
 import requests
 import json
 from api import server_config
+from utils import config
 
 
 config_server = server_config.server_google
@@ -11,7 +12,7 @@ def translate_text(s, fromLang="auto", to_lang_code="zh-cn"):
     print("谷歌" + to_lang_code)
     url = 'https://translate.googleapis.com/translate_a/single?'
     param = 'client=gtx&dt=t&sl=%s&tl=%s&q=%s' % (fromLang, to_lang_code, s)
-    response = requests.get(url + param)
+    response = requests.get(url + param, timeout=config.time_out)
     result = json.loads(response.text)
 
     s = ""

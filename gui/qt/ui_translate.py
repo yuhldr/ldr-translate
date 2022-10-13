@@ -138,11 +138,18 @@ class Ui_MainWindow(object):
 
     def set_ui(self, param):
         text_from, text_to = param
-        self.te_from.setPlainText(text_from)
-        self.te_to.setPlainText(text_to)
+        print(text_from, text_to)
+        if text_from is not None and len(text_from) > 0:
+            self.te_from.setPlainText(text_from)
+            if text_to is not None and len(text_to) > 0:
+                self.te_to.setPlainText(text_to)
 
     def translate_text(self, text_from=None):
-        self.set_ui((text_from, "翻译中"))
+        if translate.no_translate_this:
+            translate.set_no_translate_this(False)
+            return
+
+        self.set_ui((text_from, "翻译中..."))
         self.thread = MyThread(translate.text2, (text_from, self.isAdd()))
         self.thread.signal.connect(self.set_ui)
         self.thread.start()

@@ -26,11 +26,6 @@ def text2(param):
 def text(s_from, add_old=True):
     global last_s_from_all, last_s_from, last_s_to_all, last_time, no_translate_this
 
-    if (no_translate_this):
-        print("不翻译")
-        no_translate_this = False
-        return "", ""
-
     to_lang_code, changeLang = tools.get_current_to_lang()
     server, changeServer = tools.get_current_translate_server()
 
@@ -154,5 +149,6 @@ def check_server_ocr(server, a, b):
 
 
 def set_no_translate_this(ntt=True):
+    print("------", ntt)
     global no_translate_this
     no_translate_this = ntt
