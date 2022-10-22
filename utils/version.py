@@ -1,5 +1,6 @@
 import requests
 import json
+from utils import config
 
 version_data = None
 
@@ -32,18 +33,18 @@ def get_default():
 
 def check_update_version(url):
 
-    update = True
+    update = False
 
     version_version = get_value("name")
     version_code = get_value("code")
     version_home_url = get_value("home_url")
 
     old_version_name = "v%s.%d" % (version_version, version_code)
-    s = "<a href='%s'>软件有更新，点我</a>" % (version_home_url)
+    s = "<a href='%s'>请求错误，可以去看看，点我</a>" % (version_home_url)
     msg = ""
-    print(url)
+
     try:
-        request = requests.get(url, timeout=2)
+        request = requests.get(url, timeout=config.time_out)
         if (request.status_code == 200):
             json_config = request.json()
             print(json_config)
@@ -59,5 +60,5 @@ def check_update_version(url):
                                                   old_version_name)
     except Exception as e:
         print(e)
-
+    print(s)
     return update, s, msg

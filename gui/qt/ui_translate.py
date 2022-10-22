@@ -115,9 +115,7 @@ class Ui_MainWindow(object):
         self.set_cbb_tanslate_to_lang_data(i)
 
     def isAdd(self):
-        add = self.cb_add.isChecked()
-        print(add)
-        return add
+        return self.cb_add.isChecked()
 
     def ocr_image(self, img_path):
         def next(param):
@@ -125,12 +123,7 @@ class Ui_MainWindow(object):
             self.set_ui((s, "文本识别成功！"))
             self.translate_text(s)
 
-        s = "文本识别中...\n设置中可修改识别方式"
-        if config.is_ocr_local():
-            s = "离线（精确度低）：" + s
-        else:
-            s = "在线" + s
-
+        s = config.get_ocr_notice()
         self.set_ui((s, s))
         self.thread = MyThread(translate.ocr2, (img_path, self.isAdd()))
         self.thread.signal.connect(next)
@@ -138,7 +131,7 @@ class Ui_MainWindow(object):
 
     def set_ui(self, param):
         text_from, text_to = param
-        print(text_from, text_to)
+
         if text_from is not None and len(text_from) > 0:
             self.te_from.setPlainText(text_from)
             if text_to is not None and len(text_to) > 0:

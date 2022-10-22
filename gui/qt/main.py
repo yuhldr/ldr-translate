@@ -18,12 +18,14 @@ class SystemTray(object):
         QApplication.setQuitOnLastWindowClosed(False)
         self.w.show()  # 不设置显示则为启动最小化到托盘
         self.tp = QSystemTrayIcon(self.w)
+        self.tp.setToolTip("ldr-tranlate")
+
         self.initUI()
         self.run()
 
     def initUI(self):
         # 设置托盘图标
-        self.tp.setIcon(QIcon('./icon/tray.png'))
+        self.tp.setIcon(QIcon('./icon/tray-%s.png' % config.get_tray_icon()))
 
     def quitApp(self):
         # 退出程序

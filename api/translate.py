@@ -104,9 +104,12 @@ def ocr(img_path, latex=False):
         else:
             ok, s = baidu.ocr(img_path, latex=latex)
     except Exception as e:
+        s = "识别错误：" + str(e)
+        if (config.is_ocr_local()):
+            s += "。离线识别请安装依赖，终端输入： pip3 install easyocr"
+        else:
+            s += "。也可以使用离线文本识别，请在设置中启用。离线识别精度 < 在线api，但无次数限制"
         print(e)
-    if(not ok):
-        return False, "也可以使用离线文本识别，请在设置中启用。\n\n离线识别精度 低于 在线api"
     return ok, s
 
 
@@ -149,6 +152,5 @@ def check_server_ocr(server, a, b):
 
 
 def set_no_translate_this(ntt=True):
-    print("------", ntt)
     global no_translate_this
     no_translate_this = ntt

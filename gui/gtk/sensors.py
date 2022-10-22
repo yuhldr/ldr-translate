@@ -279,7 +279,6 @@ class SensorManager(object):
             global cpu_load
             cpu_load = ps.cpu_percent(interval=0, percpu=True)
 
-            # print (self.settings["custom_text"]) custom_text is the full visible string seen in Preferences edit field
             for sensor in Preferences.sensors_regex.findall(
                     self.settings["custom_text"]):
 
@@ -398,9 +397,6 @@ class CPUSensor(BaseSensor):
                 nber = int(sensor[3:]) if len(sensor) > 3 else 999
 
             if nber >= self.cpu_count:
-                # print(sensor)
-                # print(self.cpu_count)
-                # print(len(sensor))
                 raise ISMError(_("Invalid number of CPUs."))
 
             return True

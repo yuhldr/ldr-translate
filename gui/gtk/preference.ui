@@ -28,11 +28,10 @@
         <property name="margin-bottom">16</property>
         <property name="interpolate-size">True</property>
         <child>
-          <!-- n-columns=3 n-rows=6 -->
+          <!-- n-columns=2 n-rows=8 -->
           <object class="GtkGrid" id="prf">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="row-spacing">8</property>
             <property name="column-spacing">8</property>
             <child>
               <object class="GtkCheckButton" id="cbtn_auto_start">
@@ -40,13 +39,15 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="margin-left">8</property>
                 <property name="margin-start">8</property>
+                <property name="margin-top">8</property>
+                <property name="margin-bottom">8</property>
                 <property name="draw-indicator">True</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
-                <property name="width">2</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
@@ -55,35 +56,63 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="margin-left">8</property>
                 <property name="margin-start">8</property>
                 <property name="margin-top">8</property>
+                <property name="margin-bottom">8</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="cb_ocr_local">
+                <property name="label" translatable="yes">离线识别</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="margin-left">8</property>
+                <property name="margin-start">8</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="lb_version_msg">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-start">8</property>
-                <property name="margin-top">8</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">5</property>
-                <property name="width">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="lb_update_msg">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">8</property>
+                <property name="margin-bottom">8</property>
+                <property name="label" translatable="yes">离线ocr，需自己安装依赖，终端输入：
+pip install easyocr</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
                 <property name="width">2</property>
               </packing>
             </child>
@@ -93,14 +122,15 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="margin-left">8</property>
                 <property name="margin-start">8</property>
                 <property name="margin-top">8</property>
+                <property name="margin-bottom">8</property>
                 <property name="draw-indicator">True</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-                <property name="width">2</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
@@ -108,21 +138,12 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-top">8</property>
+                <property name="margin-bottom">8</property>
                 <property name="label" translatable="yes">显示网速、CPU等信息</property>
               </object>
               <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
@@ -131,12 +152,13 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="margin-left">8</property>
                 <property name="margin-start">8</property>
                 <property name="margin-top">8</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
@@ -147,8 +169,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-                <property name="width">2</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
@@ -159,12 +180,41 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-                <property name="width">3</property>
+                <property name="top-attach">5</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">文本识别（ocr）</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">通知栏图标</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="cbb_tray_icon">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
+              </packing>
             </child>
           </object>
           <packing>

@@ -217,8 +217,6 @@ class Preferences(Gtk.ApplicationWindow):
     SETTINGS_FILE = DIR_CONFIG + '/preferences_sm.json'
     settings = {}
 
-    # print(SETTINGS_FILE)
-
     def __init__(self, parent, ind_parent):
         """It creates the widget of the dialogs"""
         Gtk.Window.__init__(self)
@@ -285,7 +283,6 @@ class Preferences(Gtk.ApplicationWindow):
         try:
             self.update_parent()
         except Exception as ex:
-            # print(ex)
             error_dialog = Gtk.MessageDialog(
                 None, Gtk.DialogFlags.DESTROY_WITH_PARENT,
                 Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, ex)

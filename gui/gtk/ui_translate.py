@@ -13,7 +13,7 @@ class Translate(Gtk.ApplicationWindow):
 
     setting_titles = ["百度API", "其他待补充"]
     setting_title_types = [baidu.config_server, ""]
-    is_hide = False
+    is_hide = True
     clipboard = None
 
     def __init__(self):
@@ -94,32 +94,15 @@ class Translate(Gtk.ApplicationWindow):
 
         return text
 
-    def get_text_by_clipboard(self, clipboard_):
-        text = ""
-        ok = False
-        image_pixbuf = clipboard_.wait_for_image()
-        if image_pixbuf is not None:
-            img_path = config.app_home_dir + "/copy_img"
-            image_pixbuf.savev(img_path, "png", "", "")
-
-            ok, text = translate.ocr(img_path,
-                                     latex=self.cbtn_tex.get_active())
+    def copy_auto_translate(self, clipboard=None):
+        if (clipboard is not None):
+            image_pixbuf = clipboard.wait_for_image()
+            if image_pixbuf is not None:
+                self.ocr_image(image_pixbuf)
+            else:
+                self.translate_by_s(clipboard.wait_for_text())
         else:
-            text = clipboard_.wait_for_text()
-
-        return ok, text
-
-    def copy_auto_translate(self, clipboard_=None):
-        s_from = None
-        if (clipboard_ is not None):
-            ok, s_from = self.get_text_by_clipboard(clipboard_)
-
-        if (self.cbtn_tex.get_active()):
-            if (s_from is None):
-                s_from = t_ui("notice_from")
-            self.set_text_view(s_from, t_ui("notice_to"))
-        else:
-            self.translate_by_s(s_from)
+            self.set_text_view(t_ui("notice_from"), t_ui("notice_to"))
 
     # 按钮再次翻译（可能修改了文本）
     def update_translate_view(self, view=None):
@@ -132,7 +115,27 @@ class Translate(Gtk.ApplicationWindow):
 
         self.translate_by_s(s_from=s)
 
+    def ocr_image(self, image_pixbuf):
+
+        def next(img_path, tex):
+            ok, text = translate.ocr(img_path, latex=tex)
+            self.sp_translate.stop()
+            self.translate_by_s(text)
+
+        self.set_text_view(config.get_ocr_notice(), "识别中……")
+        self.sp_translate.start()
+
+        img_path = config.app_home_dir + "/copy_img"
+        image_pixbuf.savev(img_path, "png", "", "")
+
+        tt = threading.Thread(target=next,
+                              args=(img_path, self.cbtn_tex.get_active(),))
+        tt.start()
+
     def translate_by_s(self, s_from=None):
+        if translate.no_translate_this:
+            translate.set_no_translate_this(False)
+            return
 
         def request_text(s_from=None):
             start_ = time.time()

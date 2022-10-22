@@ -48,7 +48,6 @@ dict_to_lang = {
         "fra": "fr",
     },
     server_tencent: {
-        "auto": "auto",
         "zh": "zh",
         "en": "en",
         "jp": "jp",

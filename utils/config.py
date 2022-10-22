@@ -67,6 +67,18 @@ def check_dir(dir):
         os.makedirs(dir)
 
 
+def get_tray_types():
+    return ["color", "light", "dark"]
+
+
+def get_tray_icon():
+    return get_config_setting("tray_icon")
+
+
+def set_tray_icon(tray_icon):
+    return set_config(config_sections_setting, "tray_icon", tray_icon)
+
+
 # 显示网速等信息
 def isShowSM():
     return get_config_setting("show_sm")
@@ -78,6 +90,15 @@ def setShowSM(b):
 
 def is_ocr_local():
     return get_config_setting("ocr_local")
+
+
+def get_ocr_notice():
+    s = "文本识别中...\n设置中可修改识别方式"
+    if is_ocr_local():
+        s = "离线（精确度低，首次极慢）：" + s
+    else:
+        s = "在线" + s
+    return s
 
 
 def set_ocr_local(b):
@@ -105,4 +126,4 @@ def get_autostart():
 
 
 # 超时时间不然会很卡
-time_out = 2
+time_out = 3

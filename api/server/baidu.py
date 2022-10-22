@@ -12,16 +12,13 @@ config_server = server_config.server_baidu
 how_get_url_translate = "https://doc.tern.1c7.me/zh/folder/setting/#%E7%99%BE%E5%BA%A6"
 how_get_url_ocr = "https://cloud.baidu.com/doc/OCR/s/dk3iqnq51"
 
-default_translate_app_id = ""
-default_translate_secret_key = ""
-default_ocr_app_key = ""
-default_ocr_secret_key = ""
 
 # 错误代码:locale文件中对应错误说明的key
 error_msg2zh = {
     "54003": "error.t54003",
     "54000": "error.t54000",
     "54004": "error.t54004",
+    "52001": "error.t52001",
     "52003": "error.t52003"
 }
 
@@ -32,17 +29,12 @@ error_msg2zh_ocr = {
 
 
 def translate_text(s, fromLang="auto", toLang=""):
-    print("百度" + toLang)
 
     appId = config.get_value(config_server, "translate_app_id")
     secretKey = config.get_value(config_server, "translate_secret_key")
 
     if (len(appId) == 0 or len(secretKey) == 0):
-        if (len(default_translate_app_id) == 0
-                or len(default_translate_secret_key) == 0):
-            return locales.t_translate("baidu.error.t")
-        appId = default_translate_app_id
-        secretKey = default_translate_secret_key
+        return locales.t_translate("baidu.error.t")
 
     text, ok = translate(s, appId, secretKey, fromLang, toLang)
     return text
@@ -57,8 +49,10 @@ def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
     url = "https://api.fanyi.baidu.com/api/trans/vip/translate?appid=%s&q=%s&from=%s&to=%s&salt=%s&sign=%s"
     url = url % (appId, urllib.parse.quote(s), fromLang, toLang, salt, sign)
     s1 = ""
+
     request = requests.get(url, timeout=config.time_out)
     result = request.json()
+
     if ("error_code" in result):
         ok = False
         s1 = tools.error2zh(result["error_code"], result["error_msg"],
@@ -107,10 +101,7 @@ def get_token():
     ocr_secret_key = config.get_value(config_server, "ocr_secret_key")
 
     if (len(ocr_api_key) == 0 or len(ocr_secret_key) == 0):
-        if (len(default_ocr_app_key) == 0 or len(default_ocr_secret_key) == 0):
-            return False, locales.t_translate("baidu.error.o")
-        ocr_api_key = default_ocr_app_key
-        ocr_secret_key = default_ocr_secret_key
+        return False, locales.t_translate("baidu.error.o")
 
     ok, access_token, expires_in_date = get_token_by_url(
         ocr_api_key, ocr_secret_key)

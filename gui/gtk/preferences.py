@@ -1,7 +1,7 @@
 from api import translate
 from api.server import baidu, tencent
 from utils import config, locales, version
-from api import server_config
+from api.server_config import server_baidu, server_tencent, dict_api_save, get_api_key
 import threading
 
 from gi.repository import Gtk
@@ -28,7 +28,7 @@ class Preference(Gtk.ApplicationWindow):
         self.add(ui.get_object('gd_prf'))
         self.show_all()
         show_sw = config.isShowSM()
-        print(show_sw)
+
         self.cbtn_sys.set_active(show_sw)
         self.btn_set_sm.set_visible(show_sw)
 
@@ -36,14 +36,13 @@ class Preference(Gtk.ApplicationWindow):
 
         self.handler_id_show_sm = None
 
-        version_home_url = version.get_value("home_url")
-        version_name = version.get_value("name")
-        version_code = version.get_value("code")
-        print(version_name, version_code)
-
         cbtn_auto_start = ui.get_object('cbtn_auto_start')
         cbtn_auto_start.set_active(config.get_autostart())
         cbtn_auto_start.connect('toggled', self.update_autostart)
+
+        cb_ocr_local = ui.get_object('cb_ocr_local')
+        cb_ocr_local.set_active(config.is_ocr_local())
+        cb_ocr_local.connect('toggled', self.update_ocr_local)
 
         self.btn_set_sm = ui.get_object('btn_set_sm')
         self.lb_sys_msg = ui.get_object('lb_sys_msg')
@@ -54,23 +53,30 @@ class Preference(Gtk.ApplicationWindow):
         self.cbtn_sys = ui.get_object('cbtn_sys')
         self.cbtn_sys.connect('toggled', self.set_show_sm)
 
-        self.lb_update_msg = ui.get_object('lb_update_msg')
         self.lb_version_msg = ui.get_object('lb_version_msg')
 
-        self.lb_version_msg.set_markup(locales.t("version.msg"))
-        self.lb_update_msg.set_markup(
-            "<a href='%s'>当前版本：v%s.%d</a>" %
-            (version_home_url, version_name, version_code))
+        self.lb_version_msg.set_markup(version.get_default())
         ui.get_object('lb_sm_github').set_markup(
             "<a href='https://github.com/fossfreedom/indicator-sysmonitor'>开源地址</a>"
         )
 
         ui.get_object('btn_update').connect('clicked', self.check_update)
 
+        self.cbb_tray_icon = ui.get_object('cbb_tray_icon')
+        for tray_type in config.get_tray_types():
+            self.cbb_tray_icon.append_text(tray_type)
+
+        i = config.get_tray_types().index(config.get_tray_icon())
+        self.cbb_tray_icon.set_active(i)
+        self.cbb_tray_icon.connect("changed", self.on_cbb_tray_icon)
+
+    def on_cbb_tray_icon(self, combo):
+        config.set_tray_icon(combo.get_active_text())
+
     def init_baidu_api(self, ui):
 
         def set_value(tv, key):
-            tv.set_text(config.get_value(server_config.server_baidu, key))
+            tv.set_text(config.get_value(server_baidu, key))
 
         self.tv_baidu_translate_app_id = ui.get_object(
             'tv_baidu_translate_app_id')
@@ -95,16 +101,13 @@ class Preference(Gtk.ApplicationWindow):
         url_translate = "<a href='" + baidu.how_get_url_translate + "'>如何获取？</a>"
         url_ocr = "<a href='" + baidu.how_get_url_ocr + "'>如何获取？</a>"
 
-        print(url_translate)
-        print(url_ocr)
-
         ui.get_object('lb_baidu_tanslate_way').set_markup(url_translate)
         ui.get_object('lb_baidu_ocr_way').set_markup(url_ocr)
 
     def init_tencent(self, ui):
 
         def set_value(tv, key):
-            tv.set_text(config.get_value(server_config.server_tencent, key))
+            tv.set_text(config.get_value(server_tencent, key))
 
         self.tv_tencent_secret_id = ui.get_object('tv_tencent_secret_id')
         self.tv_tencent_secret_key = ui.get_object('tv_tencent_secret_key')
@@ -124,39 +127,23 @@ class Preference(Gtk.ApplicationWindow):
             self.tv_baidu_translate_app_id,
             self.tv_baidu_translate_secret_key,
             self.lb_baidu_translate_msg,
-            translate.check_server_translate,
-            server_config.server_baidu,
-            "translate_app_id",
-            "translate_secret_key",
+            server_baidu,
         )
 
     def save_baidu_ocr(self, btn=None):
-        server = server_config.server_baidu
+        server = server_baidu
 
         config.set_config(server, "access_token", "")
         config.set_config(server, "expires_in_date", 0)
 
-        self.save_server(
-            self.tv_baidu_ocr_app_key,
-            self.tv_baidu_ocr_secret_key,
-            self.lb_baidu_ocr_msg,
-            translate.check_server_ocr,
-            server,
-            "ocr_api_key",
-            "ocr_secret_key",
-        )
+        self.save_server(self.tv_baidu_ocr_app_key,
+                         self.tv_baidu_ocr_secret_key, self.lb_baidu_ocr_msg,
+                         server, True)
 
     def save_tencent(self, btn=None):
 
-        self.save_server(
-            self.tv_tencent_secret_id,
-            self.tv_tencent_secret_key,
-            self.lb_tencnet_msg,
-            translate.check_server_translate,
-            server_config.server_tencent,
-            "translate_app_id",
-            "translate_secret_key",
-        )
+        self.save_server(self.tv_tencent_secret_id, self.tv_tencent_secret_key,
+                         self.lb_tencnet_msg, server_tencent)
 
     def get_text(self, text_view):
         tb = text_view.get_buffer()
@@ -165,21 +152,25 @@ class Preference(Gtk.ApplicationWindow):
         return text
 
     def update_autostart(self, menu_check):
-        print(menu_check.get_active())
+
         config.update_autostart(menu_check.get_active())
+
+    def update_ocr_local(self, menu_check):
+        config.set_ocr_local(menu_check.get_active())
 
     def set_show_sm(self, menu_check):
         self.btn_set_sm.set_visible(menu_check.get_active())
         self.lb_sys_msg.set_markup("重新打开软件生效")
-        print(menu_check.get_active())
+
         config.setShowSM(menu_check.get_active())
 
     def check_update(self, view=None):
 
         def _check():
             s, msg = version.check_update()
-            self.lb_update_msg.set_markup(s)
-            self.lb_version_msg.set_markup(msg)
+            self.lb_version_msg.set_markup(s)
+
+        self.lb_version_msg.set_markup("更新检查中……")
 
         tt = threading.Thread(target=_check)
         tt.start()
@@ -193,30 +184,30 @@ class Preference(Gtk.ApplicationWindow):
             self, self.ind_parent)
         self.indicator_sysmonitor_preferences = None
 
-    def save_server(self, tv_a, tv_b, label_msg, fun_check, server, key_a,
-                    key_b):
+    def save_server(self, tv_a, tv_b, lb_msg, server, is_ocr=False):
 
-        def _save():
+        text_a = self.get_text(tv_a)
+        text_b = self.get_text(tv_b)
 
-            ok = True
-            text_a = self.get_text(tv_a)
-            text_b = self.get_text(tv_b)
+        def _save(text_a, text_b):
+            ok, text_a, text_b = translate.check_server_api(
+                (is_ocr, server, text_a, text_b))
 
             msg = "超时或账号密码错误"
 
-            if (len(text_a) == 0 or len(text_b) == 0):
-                msg = "已恢复默认（不推荐）"
-            else:
-                ok, text_a, text_b = fun_check(server, text_a, text_b)
-                tv_a.set_text(text_a)
-                tv_b.set_text(text_b)
-                if (ok):
-                    msg = "成功，已保存"
+            tv_a.set_text(text_a)
+            tv_b.set_text(text_b)
 
             if (ok):
+                msg = "成功，已保存"
+                key_a, key_b = get_api_key(server, is_ocr)
                 config.set_config(server, key_a, text_a)
                 config.set_config(server, key_b, text_b)
-            label_msg.set_text(msg)
+            lb_msg.set_text(msg)
 
-        tt = threading.Thread(target=_save)
-        tt.start()
+        if (len(text_a) == 0 or len(text_b) == 0):
+            lb_msg.set_text("已恢复默认（不推荐）")
+        else:
+            lb_msg.set_text("加载中...")
+            tt = threading.Thread(target=_save, args=(text_a, text_b, ))
+            tt.start()

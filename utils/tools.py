@@ -38,9 +38,7 @@ def set_translate_server(translate_server, by_code=False):
     else:
         translate_server_cache = get_value_by_dict(
             get_translate_server_dict_by_locale(), translate_server)
-    print("翻译服务设置", translate_server, translate_server_cache,
-          last_translate_server_cache)
-    print("保存翻译服务", translate_server_cache, translate_to_lang_cache)
+
     config.set_config(config_section, "translate_server",
                       translate_server_cache)
 
@@ -106,7 +104,7 @@ def set_to_lang(to_lang, by_code=False):
             get_to_lang_dict_by_locale(), to_lang)
     else:
         translate_to_lang_cache = to_lang
-    print("保存", translate_to_lang_cache)
+
     config.set_config(config_section, "translate_to_lang",
                       translate_to_lang_cache)
 

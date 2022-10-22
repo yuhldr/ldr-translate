@@ -9,7 +9,7 @@
 
 from PyQt5 import QtGui
 from PyQt5.QtCore import QSize, QCoreApplication, QRect, Qt
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QCheckBox, QLabel, QLayout, QPushButton, QLineEdit, QSpacerItem, QSizePolicy, QMainWindow
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QCheckBox, QLabel, QComboBox, QPushButton, QLineEdit, QSpacerItem, QSizePolicy, QMainWindow
 from qt_utils import MyThread
 
 from api import translate
@@ -35,6 +35,7 @@ class Ui_MainWindow(QMainWindow):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icon/icon.svg"))
         MainWindow.setWindowIcon(icon)
+
         self.tw = QTabWidget(MainWindow)
         self.tw.setObjectName(u"tw")
         self.tab_normal = QWidget()
@@ -59,30 +60,57 @@ class Ui_MainWindow(QMainWindow):
 
         self.vl_normal.addWidget(self.lb_ocr_local_msg)
 
-        self.hl_normal = QHBoxLayout()
-        self.hl_normal.setSpacing(6)
-        self.hl_normal.setObjectName(u"hl_normal")
-        self.hl_normal.setSizeConstraint(QLayout.SetDefaultConstraint)
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.label_2 = QLabel(self.tab_normal)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setMaximumSize(QSize(16777215, 16777215))
+
+        self.horizontalLayout_2.addWidget(self.label_2)
+
+        self.cbb_tray_icon = QComboBox(self.tab_normal)
+        self.cbb_tray_icon.setObjectName(u"cbb_tray_icon")
+        self.cbb_tray_icon.setMaximumSize(QSize(16777215, 16777215))
+
+        self.horizontalLayout_2.addWidget(self.cbb_tray_icon)
+
+        self.label_3 = QLabel(self.tab_normal)
+        self.label_3.setObjectName(u"label_3")
+
+        self.horizontalLayout_2.addWidget(self.label_3)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding,
+                                            QSizePolicy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer)
+
+        self.vl_normal.addLayout(self.horizontalLayout_2)
+
+        self.label = QLabel(self.tab_normal)
+        self.label.setObjectName(u"label")
+
+        self.vl_normal.addWidget(self.label)
+
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.btn_update = QPushButton(self.tab_normal)
         self.btn_update.setObjectName(u"btn_update")
         self.btn_update.setMaximumSize(QSize(72, 16777215))
 
-        self.hl_normal.addWidget(self.btn_update)
+        self.horizontalLayout.addWidget(self.btn_update)
 
         self.lb_version_code = QLabel(self.tab_normal)
         self.lb_version_code.setObjectName(u"lb_version_code")
         self.lb_version_code.setMaximumSize(QSize(16777215, 32))
 
-        self.hl_normal.addWidget(self.lb_version_code)
+        self.horizontalLayout.addWidget(self.lb_version_code)
 
-        self.vl_normal.addLayout(self.hl_normal)
+        self.vl_normal.addLayout(self.horizontalLayout)
 
-        self.lb_version_msg = QLabel(self.tab_normal)
-        self.lb_version_msg.setObjectName(u"lb_version_msg")
-        self.lb_version_msg.setMinimumSize(QSize(0, 18))
-        self.lb_version_msg.setMaximumSize(QSize(16777215, 16777215))
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum,
+                                          QSizePolicy.Expanding)
 
-        self.vl_normal.addWidget(self.lb_version_msg)
+        self.vl_normal.addItem(self.verticalSpacer)
 
         self.tw.addTab(self.tab_normal, "")
         self.tab_baidu = QWidget()
@@ -302,78 +330,10 @@ class Ui_MainWindow(QMainWindow):
 
         self.vl_tencent.addLayout(self.hl_tct_save)
 
-        self.lb_tco = QLabel(self.tab_tencent)
-        self.lb_tco.setObjectName(u"lb_tco")
-        self.lb_tco.setMinimumSize(QSize(0, 18))
-        self.lb_tco.setMaximumSize(QSize(16777215, 18))
-        self.lb_tco.setMargin(0)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum,
+                                            QSizePolicy.Expanding)
 
-        self.vl_tencent.addWidget(self.lb_tco)
-
-        self.hl_tco_api_key = QHBoxLayout()
-        self.hl_tco_api_key.setObjectName(u"hl_tco_api_key")
-        self.lb_tco_api_key = QLabel(self.tab_tencent)
-        self.lb_tco_api_key.setObjectName(u"lb_tco_api_key")
-        self.lb_tco_api_key.setMinimumSize(QSize(60, 18))
-        self.lb_tco_api_key.setMaximumSize(QSize(60, 18))
-
-        self.hl_tco_api_key.addWidget(self.lb_tco_api_key)
-
-        self.le_tco_api_key = QLineEdit(self.tab_tencent)
-        self.le_tco_api_key.setObjectName(u"le_tco_api_key")
-        self.le_tco_api_key.setEnabled(False)
-        self.le_tco_api_key.setMinimumSize(QSize(200, 30))
-        self.le_tco_api_key.setMaximumSize(QSize(16777215, 30))
-
-        self.hl_tco_api_key.addWidget(self.le_tco_api_key)
-
-        self.vl_tencent.addLayout(self.hl_tco_api_key)
-
-        self.hl_tco_secret_key = QHBoxLayout()
-        self.hl_tco_secret_key.setObjectName(u"hl_tco_secret_key")
-        self.lb_tco_secret_key = QLabel(self.tab_tencent)
-        self.lb_tco_secret_key.setObjectName(u"lb_tco_secret_key")
-        self.lb_tco_secret_key.setMinimumSize(QSize(60, 18))
-        self.lb_tco_secret_key.setMaximumSize(QSize(60, 18))
-
-        self.hl_tco_secret_key.addWidget(self.lb_tco_secret_key)
-
-        self.le_tco_secret_key = QLineEdit(self.tab_tencent)
-        self.le_tco_secret_key.setObjectName(u"le_tco_secret_key")
-        self.le_tco_secret_key.setEnabled(False)
-        self.le_tco_secret_key.setMinimumSize(QSize(200, 30))
-        self.le_tco_secret_key.setMaximumSize(QSize(16777215, 30))
-
-        self.hl_tco_secret_key.addWidget(self.le_tco_secret_key)
-
-        self.vl_tencent.addLayout(self.hl_tco_secret_key)
-
-        self.hl_tco_save = QHBoxLayout()
-        self.hl_tco_save.setObjectName(u"hl_tco_save")
-        self.btn_tco_save = QPushButton(self.tab_tencent)
-        self.btn_tco_save.setObjectName(u"btn_tco_save")
-        self.btn_tco_save.setEnabled(False)
-        self.btn_tco_save.setMaximumSize(QSize(66, 16777215))
-
-        self.hl_tco_save.addWidget(self.btn_tco_save)
-
-        self.lb_tco_msg = QLabel(self.tab_tencent)
-        self.lb_tco_msg.setObjectName(u"lb_tco_msg")
-
-        self.hl_tco_save.addWidget(self.lb_tco_msg)
-
-        self.hp_tco_save = QSpacerItem(40, 18, QSizePolicy.Expanding,
-                                       QSizePolicy.Minimum)
-
-        self.hl_tco_save.addItem(self.hp_tco_save)
-
-        self.lb_tco_how = QLabel(self.tab_tencent)
-        self.lb_tco_how.setObjectName(u"lb_tco_how")
-        self.lb_tco_how.setEnabled(False)
-
-        self.hl_tco_save.addWidget(self.lb_tco_how)
-
-        self.vl_tencent.addLayout(self.hl_tco_save)
+        self.vl_tencent.addItem(self.verticalSpacer_2)
 
         self.tw.addTab(self.tab_tencent, "")
         MainWindow.setCentralWidget(self.tw)
@@ -399,6 +359,14 @@ class Ui_MainWindow(QMainWindow):
                 "MainWindow",
                 u"\u79bb\u7ebfocr\uff0c\u9700\u624b\u52a8\u5b89\u88c5\u4f9d\u8d56\uff1apip install easyocr",
                 None))
+        self.label_2.setText(
+            QCoreApplication.translate(
+                "MainWindow", u"\u901a\u77e5\u680f\u56fe\u6807\uff1a", None))
+        self.label_3.setText(
+            QCoreApplication.translate(
+                "MainWindow", u"\u91cd\u65b0\u6253\u5f00\u540e\u751f\u6548",
+                None))
+        self.label.setText("")
         self.btn_update.setText(
             QCoreApplication.translate("MainWindow",
                                        u"\u68c0\u67e5\u66f4\u65b0", None))
@@ -406,8 +374,6 @@ class Ui_MainWindow(QMainWindow):
             QCoreApplication.translate("MainWindow",
                                        u"\u5f53\u524d\u7248\u672c\uff1a",
                                        None))
-        self.lb_version_msg.setText(
-            QCoreApplication.translate("MainWindow", u"\u7b80\u4ecb", None))
         self.tw.setTabText(
             self.tw.indexOf(self.tab_normal),
             QCoreApplication.translate("MainWindow", u"\u8bbe\u7f6e", None))
@@ -454,32 +420,13 @@ class Ui_MainWindow(QMainWindow):
         self.lb_tct_how.setText(
             QCoreApplication.translate("MainWindow",
                                        u"\u5982\u4f55\u83b7\u53d6", None))
-        self.lb_tco.setText(
-            QCoreApplication.translate(
-                "MainWindow", u"\u817e\u8baf\u56fe\u7247\u8bc6\u522bapi",
-                None))
-        self.lb_tco_api_key.setText(
-            QCoreApplication.translate("MainWindow", u"ApiKey", None))
-        self.lb_tco_secret_key.setText(
-            QCoreApplication.translate("MainWindow", u"SecretKey", None))
-        self.btn_tco_save.setText(
-            QCoreApplication.translate("MainWindow", u"\u4fdd\u5b58", None))
-        self.lb_tco_msg.setText(
-            QCoreApplication.translate("MainWindow",
-                                       u"\u6682\u4e0d\u652f\u6301", None))
-        self.lb_tco_how.setText(
-            QCoreApplication.translate("MainWindow",
-                                       u"\u5982\u4f55\u83b7\u53d6", None))
         self.tw.setTabText(
             self.tw.indexOf(self.tab_tencent),
             QCoreApplication.translate("MainWindow", u"\u817e\u8bafApi", None))
+        # retranslateUi
 
         self.load_data()
         self._listen()
-
-    # retranslateUi
-
-
 
 # self.load_data()
 # self._listen()
@@ -495,7 +442,6 @@ class Ui_MainWindow(QMainWindow):
             self.lb_bdt_how: baidu.how_get_url_translate,
             self.lb_bdo_how: baidu.how_get_url_ocr,
             self.lb_tct_how: tencent.how_get_url_translate,
-            self.lb_tco_how: tencent.how_get_url_ocr,
         }
 
         for key in dict_how:
@@ -522,6 +468,10 @@ class Ui_MainWindow(QMainWindow):
         self.cb_ocr_local.setChecked(config.is_ocr_local())
         self.lb_version_code.setOpenExternalLinks(True)
 
+        self.cbb_tray_icon.addItems(config.get_tray_types())
+        self.cbb_tray_icon.setCurrentText(config.get_tray_icon())
+        self.cbb_tray_icon.currentIndexChanged.connect(self.on_cbb_tray_icon)
+
     def _listen(self):
         self.btn_bdt_save.clicked.connect(self.save_bdt)
         self.btn_bdo_save.clicked.connect(self.save_bdo)
@@ -529,6 +479,9 @@ class Ui_MainWindow(QMainWindow):
         self.btn_update.clicked.connect(self.check_update)
         self.cb_start_up.clicked.connect(self.update_autostart)
         self.cb_ocr_local.clicked.connect(self.update_ocr_local)
+
+    def on_cbb_tray_icon(self):
+        config.set_tray_icon(self.cbb_tray_icon.currentText())
 
     def update_autostart(self, a):
         config.update_autostart(a)
@@ -562,6 +515,9 @@ class Ui_MainWindow(QMainWindow):
 
     def save_server(self, tv_a, tv_b, lb_msg, server, is_ocr=False):
 
+        text_a = tv_a.text()
+        text_b = tv_b.text()
+
         def set_ui(result):
             ok, text_a, text_b = result
             print(ok, text_a, text_b)
@@ -574,9 +530,6 @@ class Ui_MainWindow(QMainWindow):
                 config.set_config(server, key_a, text_a)
                 config.set_config(server, key_b, text_b)
             lb_msg.setText(msg)
-
-        text_a = tv_a.text()
-        text_b = tv_b.text()
 
         if (len(text_a) == 0 or len(text_b) == 0):
             lb_msg.setText("已恢复默认（不推荐）")

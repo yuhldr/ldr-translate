@@ -5,27 +5,26 @@ import time
 import base64
 import hmac
 
-from utils import tools, config
+from utils import locales, tools, config
 from api import server_config
 
 config_server = server_config.server_tencent
-default_secret_id = "AKIDsiHacNr52j9IBpDJ8gyyh9LGuJSKvFI5"
-default_secret_key = "XnmVx82f5E6h26tQhhQs3xaz80bw0pNV"
 
 how_get_url_translate = "https://doc.tern.1c7.me/zh/folder/setting/#%E8%85%BE%E8%AE%AF%E4%BA%91"
 how_get_url_ocr = "https://doc.tern.1c7.me/zh/folder/setting/#%E8%85%BE%E8%AE%AF%E4%BA%91"
 
 public_params = {}
 
-error_msg2zh = {"FailedOperation.NoFreeAmount": "error_translate_NoFreeAmount"}
+error_msg2zh = {"FailedOperation.NoFreeAmount": "t_NoFreeAmount"}
 
 
 def translate_text(s, fromLang="auto", to_lang_code=""):
     # fromLang = "auto"   # 原文语种
     # toLang = "zh"   # 译文语种
-    print("腾讯" + to_lang_code)
 
     secret_id, secret_key = get_secret_id_key()
+    if (len(secret_id) == 0 or len(secret_key) == 0):
+        return locales.t_translate("tencent.error.t")
 
     text, ok = translate(s, secret_id, secret_key, fromLang, to_lang_code)
     return text
@@ -35,9 +34,6 @@ def get_secret_id_key():
     secret_id = config.get_value(config_server, "translate_secret_id")
     secret_key = config.get_value(config_server, "translate_secret_key")
 
-    if (len(secret_id) == 0 or len(secret_key) == 0):
-        secret_id = default_secret_id
-        secret_key = default_secret_key
     return secret_id, secret_key
 
 
@@ -105,6 +101,8 @@ def ocr(img_path,
         region="ap-beijing",
         version="2018-11-19"):
     secret_id, secret_key = get_secret_id_key()
+    if (len(secret_id) == 0 or len(secret_key) == 0):
+        return locales.t_translate("tencent.error.o")
 
     img_data = open(img_path, 'rb').read()
 

@@ -1,751 +1,650 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>MainWindow</class>
-    <widget class="QMainWindow" name="MainWindow">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>380</width>
-                <height>336</height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string>MainWindow</string>
-        </property>
-        <widget class="QTabWidget" name="tw">
-            <property name="currentIndex">
-                <number>0</number>
-            </property>
-            <widget class="QWidget" name="tab_normal">
-                <attribute name="title">
-                    <string>设置</string>
-                </attribute>
-                <layout class="QVBoxLayout" name="vl_normal">
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
-                    <property name="leftMargin">
-                        <number>8</number>
-                    </property>
-                    <property name="topMargin">
-                        <number>8</number>
-                    </property>
-                    <property name="rightMargin">
-                        <number>8</number>
-                    </property>
-                    <property name="bottomMargin">
-                        <number>8</number>
-                    </property>
-                    <item>
-                        <widget class="QCheckBox" name="cb_start_up">
-                            <property name="text">
-                                <string>开机自启</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QCheckBox" name="cb_ocr_local">
-                            <property name="text">
-                                <string>离线文本识别(ocr)</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QLabel" name="lb_ocr_local_msg">
-                            <property name="maximumSize">
-                                <size>
-                                    <width>16777215</width>
-                                    <height>36</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>离线ocr，需手动安装依赖：pip install easyocr</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_normal">
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <property name="sizeConstraint">
-                                <enum>QLayout::SetDefaultConstraint</enum>
-                            </property>
-                            <item>
-                                <widget class="QPushButton" name="btn_update">
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>72</width>
-                                            <height>16777215</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>检查更新</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLabel" name="lb_version_code">
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>16777215</width>
-                                            <height>32</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>当前版本：</string>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <widget class="QLabel" name="lb_version_msg">
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>18</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>16777215</width>
-                                    <height>16777215</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>简介</string>
-                            </property>
-                        </widget>
-                    </item>
-                </layout>
-            </widget>
-            <widget class="QWidget" name="tab_baidu">
-                <attribute name="title">
-                    <string>百度Api</string>
-                </attribute>
-                <layout class="QVBoxLayout" name="vl_baidu">
-                    <property name="leftMargin">
-                        <number>8</number>
-                    </property>
-                    <property name="topMargin">
-                        <number>8</number>
-                    </property>
-                    <property name="rightMargin">
-                        <number>8</number>
-                    </property>
-                    <property name="bottomMargin">
-                        <number>8</number>
-                    </property>
-                    <item>
-                        <widget class="QLabel" name="lb_bdt">
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>18</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>16777215</width>
-                                    <height>18</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>百度翻译api</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_bdt_app_id">
-                            <item>
-                                <widget class="QLabel" name="lb_bdt_app_id">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>AppId</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLineEdit" name="le_bdt_app_id">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>200</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>16777215</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_bdt_secret_key">
-                            <property name="rightMargin">
-                                <number>0</number>
-                            </property>
-                            <item>
-                                <widget class="QLabel" name="lb_bdt_secret_key">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>SecretKey</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLineEdit" name="le_bdt_secret_key">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>200</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>16777215</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_bdt_save">
-                            <item>
-                                <widget class="QPushButton" name="btn_bdt_save">
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>66</width>
-                                            <height>16777215</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>保存</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLabel" name="lb_bdt_msg">
-                                    <property name="text">
-                                        <string />
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <spacer name="hp_bdt_save">
-                                    <property name="orientation">
-                                        <enum>Qt::Horizontal</enum>
-                                    </property>
-                                    <property name="sizeHint" stdset="0">
-                                        <size>
-                                            <width>40</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                            </item>
-                            <item>
-                                <widget class="QLabel" name="lb_bdt_how">
-                                    <property name="text">
-                                        <string>如何获取</string>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <widget class="QLabel" name="lb_bdo">
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>18</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>16777215</width>
-                                    <height>18</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>百度图片识别api</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_bdo_api_key">
-                            <item>
-                                <widget class="QLabel" name="lb_bdo_api_key">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>ApiKey</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLineEdit" name="le_bdo_api_key">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>200</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>16777215</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_bdo_secret_key">
-                            <item>
-                                <widget class="QLabel" name="lb_bdo_secret_key">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>SecretKey</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLineEdit" name="le_bdo_secret_key">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>200</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>16777215</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_bdo_save">
-                            <item>
-                                <widget class="QPushButton" name="btn_bdo_save">
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>66</width>
-                                            <height>16777215</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>保存</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLabel" name="lb_bdo_msg">
-                                    <property name="text">
-                                        <string />
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <spacer name="hp_bdo_save">
-                                    <property name="orientation">
-                                        <enum>Qt::Horizontal</enum>
-                                    </property>
-                                    <property name="sizeHint" stdset="0">
-                                        <size>
-                                            <width>40</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                            </item>
-                            <item>
-                                <widget class="QLabel" name="lb_bdo_how">
-                                    <property name="text">
-                                        <string>如何获取</string>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                </layout>
-            </widget>
-            <widget class="QWidget" name="tab_tencent">
-                <attribute name="title">
-                    <string>腾讯Api</string>
-                </attribute>
-                <layout class="QVBoxLayout" name="vl_tencent">
-                    <property name="leftMargin">
-                        <number>8</number>
-                    </property>
-                    <property name="topMargin">
-                        <number>8</number>
-                    </property>
-                    <property name="rightMargin">
-                        <number>8</number>
-                    </property>
-                    <property name="bottomMargin">
-                        <number>8</number>
-                    </property>
-                    <item>
-                        <widget class="QLabel" name="lb_tct">
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>18</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>16777215</width>
-                                    <height>18</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>腾讯翻译api</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_tct_secret_id">
-                            <item>
-                                <widget class="QLabel" name="lb_tct_secret_id">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>SecretId</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLineEdit" name="le_tct_secret_id">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>200</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>16777215</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_tct_secret_key">
-                            <property name="rightMargin">
-                                <number>0</number>
-                            </property>
-                            <item>
-                                <widget class="QLabel" name="lb_tct_secret_key">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>SecretKey</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLineEdit" name="le_tct_secret_key">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>200</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>16777215</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_tct_save">
-                            <item>
-                                <widget class="QPushButton" name="btn_tct_save">
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>66</width>
-                                            <height>16777215</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>保存</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLabel" name="lb_tct_msg">
-                                    <property name="text">
-                                        <string />
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <spacer name="hp_tct_save">
-                                    <property name="orientation">
-                                        <enum>Qt::Horizontal</enum>
-                                    </property>
-                                    <property name="sizeHint" stdset="0">
-                                        <size>
-                                            <width>40</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                            </item>
-                            <item>
-                                <widget class="QLabel" name="lb_tct_how">
-                                    <property name="text">
-                                        <string>如何获取</string>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <widget class="QLabel" name="lb_tco">
-                            <property name="minimumSize">
-                                <size>
-                                    <width>0</width>
-                                    <height>18</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>16777215</width>
-                                    <height>18</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string>腾讯图片识别api</string>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_tco_api_key">
-                            <item>
-                                <widget class="QLabel" name="lb_tco_api_key">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>ApiKey</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLineEdit" name="le_tco_api_key">
-                                    <property name="enabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>200</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>16777215</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_tco_secret_key">
-                            <item>
-                                <widget class="QLabel" name="lb_tco_secret_key">
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>60</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>SecretKey</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLineEdit" name="le_tco_secret_key">
-                                    <property name="enabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>200</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>16777215</width>
-                                            <height>30</height>
-                                        </size>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hl_tco_save">
-                            <item>
-                                <widget class="QPushButton" name="btn_tco_save">
-                                    <property name="enabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>66</width>
-                                            <height>16777215</height>
-                                        </size>
-                                    </property>
-                                    <property name="text">
-                                        <string>保存</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLabel" name="lb_tco_msg">
-                                    <property name="text">
-                                        <string>暂不支持</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <spacer name="hp_tco_save">
-                                    <property name="orientation">
-                                        <enum>Qt::Horizontal</enum>
-                                    </property>
-                                    <property name="sizeHint" stdset="0">
-                                        <size>
-                                            <width>40</width>
-                                            <height>18</height>
-                                        </size>
-                                    </property>
-                                </spacer>
-                            </item>
-                            <item>
-                                <widget class="QLabel" name="lb_tco_how">
-                                    <property name="enabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="text">
-                                        <string>如何获取</string>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                </layout>
-            </widget>
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>380</width>
+    <height>336</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QTabWidget" name="tw">
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tab_normal">
+    <attribute name="title">
+     <string>设置</string>
+    </attribute>
+    <layout class="QVBoxLayout" name="vl_normal">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <property name="leftMargin">
+      <number>8</number>
+     </property>
+     <property name="topMargin">
+      <number>8</number>
+     </property>
+     <property name="rightMargin">
+      <number>8</number>
+     </property>
+     <property name="bottomMargin">
+      <number>8</number>
+     </property>
+     <item>
+      <widget class="QCheckBox" name="cb_start_up">
+       <property name="text">
+        <string>开机自启</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="cb_ocr_local">
+       <property name="text">
+        <string>离线文本识别(ocr)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lb_ocr_local_msg">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>36</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>离线ocr，需手动安装依赖：pip install easyocr</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>通知栏图标：</string>
+         </property>
         </widget>
-    </widget>
-    <resources />
-    <connections />
+       </item>
+       <item>
+        <widget class="QComboBox" name="cbb_tray_icon">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>重新打开后生效</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="btn_update">
+         <property name="maximumSize">
+          <size>
+           <width>72</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>检查更新</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lb_version_code">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>当前版本：</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="tab_baidu">
+    <attribute name="title">
+     <string>百度Api</string>
+    </attribute>
+    <layout class="QVBoxLayout" name="vl_baidu">
+     <property name="leftMargin">
+      <number>8</number>
+     </property>
+     <property name="topMargin">
+      <number>8</number>
+     </property>
+     <property name="rightMargin">
+      <number>8</number>
+     </property>
+     <property name="bottomMargin">
+      <number>8</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="lb_bdt">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>18</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>18</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>百度翻译api</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hl_bdt_app_id">
+       <item>
+        <widget class="QLabel" name="lb_bdt_app_id">
+         <property name="minimumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>AppId</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="le_bdt_app_id">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hl_bdt_secret_key">
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="lb_bdt_secret_key">
+         <property name="minimumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>SecretKey</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="le_bdt_secret_key">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hl_bdt_save">
+       <item>
+        <widget class="QPushButton" name="btn_bdt_save">
+         <property name="maximumSize">
+          <size>
+           <width>66</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>保存</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lb_bdt_msg">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="hp_bdt_save">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lb_bdt_how">
+         <property name="text">
+          <string>如何获取</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="lb_bdo">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>18</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>18</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>百度图片识别api</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hl_bdo_api_key">
+       <item>
+        <widget class="QLabel" name="lb_bdo_api_key">
+         <property name="minimumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>ApiKey</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="le_bdo_api_key">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hl_bdo_secret_key">
+       <item>
+        <widget class="QLabel" name="lb_bdo_secret_key">
+         <property name="minimumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>SecretKey</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="le_bdo_secret_key">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hl_bdo_save">
+       <item>
+        <widget class="QPushButton" name="btn_bdo_save">
+         <property name="maximumSize">
+          <size>
+           <width>66</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>保存</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lb_bdo_msg">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="hp_bdo_save">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lb_bdo_how">
+         <property name="text">
+          <string>如何获取</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="tab_tencent">
+    <attribute name="title">
+     <string>腾讯Api</string>
+    </attribute>
+    <layout class="QVBoxLayout" name="vl_tencent">
+     <property name="leftMargin">
+      <number>8</number>
+     </property>
+     <property name="topMargin">
+      <number>8</number>
+     </property>
+     <property name="rightMargin">
+      <number>8</number>
+     </property>
+     <property name="bottomMargin">
+      <number>8</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="lb_tct">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>18</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>18</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>腾讯翻译api</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hl_tct_secret_id">
+       <item>
+        <widget class="QLabel" name="lb_tct_secret_id">
+         <property name="minimumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>SecretId</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="le_tct_secret_id">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hl_tct_secret_key">
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="lb_tct_secret_key">
+         <property name="minimumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>SecretKey</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="le_tct_secret_key">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hl_tct_save">
+       <item>
+        <widget class="QPushButton" name="btn_tct_save">
+         <property name="maximumSize">
+          <size>
+           <width>66</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>保存</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lb_tct_msg">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="hp_tct_save">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lb_tct_how">
+         <property name="text">
+          <string>如何获取</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>

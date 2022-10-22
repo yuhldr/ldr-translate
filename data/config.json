@@ -1,11 +1,12 @@
 {
     "setting": {
-        "translate_server": "google",
+        "translate_server": "baidu",
         "translate_to_lang": "auto",
         "translate_span": 1.0,
         "ocr_span": 1.0,
         "ocr_local": true,
-        "show_sm": true
+        "show_sm": true,
+        "tray_icon":"color"
     },
     "baidu": {
         "translate_app_id": "",

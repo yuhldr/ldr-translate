@@ -38,7 +38,10 @@
         },
         "tencent": {
             "name": "Tencent",
-            "error_translate_NoFreeAmount": "There are too many users of Tencent Translator's public key, and it can continue to be used next month. But it is recommended to replace it with your own api key in the settings (you can apply for free, more secure)"
+            "error": {
+                "t": "Please fill in the Tencent translation api key and id in the settings",
+                "t_NoFreeAmount": "There are too many users of Tencent Translator's public key, and it can continue to be used next month. But it is recommended to replace it with your own api key in the settings (you can apply for free, more secure)"
+            }
         },
         "youdao": {
             "name": "有道"

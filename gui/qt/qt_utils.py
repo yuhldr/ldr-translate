@@ -16,7 +16,7 @@ class MyThread(QThread):
     def run(self):
         start_ = time.time()
         result = self.fun(self.param)
-        print(result)
+
         span = 0.5 - (time.time() - start_)
         if span > 0:
             time.sleep(span)
