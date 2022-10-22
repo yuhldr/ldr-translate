@@ -37,10 +37,6 @@ class SystemTray(object):
             self.tp.setVisible(False)  # 隐藏托盘控件，托盘图标刷新不及时，提前隐藏
             self.app.quit()  # 退出程序
 
-    def message(self):
-        # 提示信息被点击方法
-        print("弹出的信息被点击了")
-
     def act(self, reason):
         # 主界面显示方法
         # 鼠标点击icon传递的信号会带有一个整形的值，1是表示单击右键，2是双击，3是单击左键，4是用鼠标中键点击
@@ -77,13 +73,6 @@ class SystemTray(object):
         self.tp.setContextMenu(tpMenu)
         self.tp.show()  # 不调用show不会显示系统托盘消息，图标隐藏无法调用
 
-        # 信息提示
-        # 参数1：标题
-        # 参数2：内容
-        # 参数3：图标（0没有图标 1信息图标 2警告图标 3错误图标），0还是有一个小图标
-        self.tp.showMessage('兰译', '复制自动翻译', icon=0)
-        # 绑定提醒信息点击事件
-        self.tp.messageClicked.connect(self.message)
         # 绑定托盘菜单点击事件
         self.tp.activated.connect(self.act)
         sys.exit(self.app.exec_())  # 持续对app的连接

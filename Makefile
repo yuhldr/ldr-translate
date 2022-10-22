@@ -41,13 +41,20 @@ gtk: build
 qt: build
 	cp gui/qt/* build/ldr-translate$(APP_PATH)/ldr-translate/
 
-deb:gtk
-	rm -rf build/deb
-	mkdir -p build/deb
+deb-gtk:gtk
+	make deb-data
+	@echo "Depends: gir1.2-appindicator3-0.1,python3-psutil,python3-requests" >> build/deb/ldr-translate/DEBIAN/control
+	cd build/deb && dpkg -b ldr-translate ldr-translate-gtk.deb && ls -l --block-size=k *.deb && rm -r ldr-translate
+
+deb-qt:qt
+	make deb-data
+	@echo "Depends: python3-pyqt5,python3-requests" >> build/deb/ldr-translate/DEBIAN/control
+	cd build/deb && dpkg -b ldr-translate ldr-translate-qt.deb && ls -l --block-size=k *.deb && rm -r ldr-translate
+
+deb-data:
 	mkdir -p build/deb/ldr-translate/DEBIAN
 	cp -r build/ldr-translate/* build/deb/ldr-translate/
 	cp data/pkg/debian/control/* build/deb/ldr-translate/DEBIAN/
-	cd build/deb && dpkg -b ldr-translate ldr-translate.deb && ls -l --block-size=k *.deb && rm -r ldr-translate
 
 rpm:
 	@echo 暂不支持，请输入以下命令，即可安装
