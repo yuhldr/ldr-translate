@@ -6,14 +6,14 @@
 ## 安装
 
 - [点我安装deb版本](#安装deb版本): ubuntu等使用gnome桌面的，建议[gtk版本](#gtk版本)，功能较为完善，包括GPU、CPU、内存等信息使用情况，已经打包deb安装包:
-- [点我安装QT版本](#安装QT版本): opensuse等kde桌面的，建议[qt版本](#qt版本)，测试中，功能暂时不完善，基本上只能翻译(含截图翻译、追加模式、自定义百度api)，KDE自带系统信息小部件，暂时不会开发 `GPU、CPU、内存等信息使用情况` 的功能:
+- [点我安装QT版本](#安装QT版本): opensuse等kde桌面的，建议[qt版本](#qt版本)，基本完善，但KDE自带系统信息小部件，暂时不会开发 `GPU、CPU、内存等信息使用情况` 的功能:
 - archlinux系统：已经发布在aur，可以使用 `yay ldr-translate` 根据自己的桌面选择合适的即可，`kde` 桌面选择`ldr-translate-qt`，`gnome` 桌面选择`ldr-translate-gtk`
 
 ### GTk版本
 
 建议gnome等桌面使用这个
 
-> 已打包deb，真实环境安装（非最小安装）ubuntu20.04桌面版，虚拟机测试ubuntu22.04、ubuntu18.04、16.04, popOs,mint-linux，都可以正常使用该软件
+> 已打包deb，真实环境安装（非最小安装）ubuntu20.04桌面版，虚拟机测试ubuntu22.04、ubuntu18.04、16.04(无法使用qt版本), popOs,mint-linux，都可以正常使用该软件
 
 #### GTk功能
 
@@ -36,7 +36,7 @@
 
 > 此为稳定版，测试功能请手动编译，很简单
 
-在 releases下载`.deb` 的安装包，只有40+k
+在 releases下载`.deb` 的安装包，只有50+k
 
 - [gitee 国内](https://gitee.com/yuhldr/ldr-translate/releases)
 - [github 国外](https://github.com/yuhldr/ldr-translate/releases/)
@@ -74,14 +74,16 @@ sudo apt remove ldr-translate -y
 ```bash
 sudo apt install cmake
 
-make deb
+make deb-qt
+# 或
+make deb-gtk
 ```
 
 安装包在 `build/deb` 这里
 
 ### 安装QT版本
 
-KDE等桌面建议使用这个，还没打包，但是也容易用
+KDE等桌面建议使用这个，只打包了deb，其他系统也容易用
 
 以opensuse为例，下载源码，解压，打开终端，进入解压以后的文件夹
 
@@ -163,11 +165,20 @@ yay ldr-translate
 
 - ubuntu22.04复制以后，鼠标移动到兰译，才能翻译
 
-    请不要使用wayland方式登录，登录输入密码前，右下角，选择 `xorg`
+    - 方法一： 请不要使用wayland方式登录，登录输入密码前，右下角，选择 `xorg`
+    - 方法二：使用 `qt` 版本
 
 - 部分系统,安装以后找不到图标
 
     点键盘 window图标,然后在系统搜索里,输入ldr,即可看到"兰译"
+
+- 部分系统打不开
+
+  - [点我，看这里](https://gitee.com/yuhldr/ldr-translate/issues/I5KSRE)
+
+- 谷歌没法用
+
+    最近需要代理，百度解决，有代理的，看下面的
 
 - 需要使用代理
 
