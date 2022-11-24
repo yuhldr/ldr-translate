@@ -38,7 +38,7 @@ def text(s_from, add_old=True):
             s_from = last_s_from_all
 
     s_from = re.sub(r"-[\n|\r]+", "", s_from)
-    s_from = re.sub(r"(?<!\.|-|。)[\n|\r]+", " ", s_from)
+    #s_from = re.sub(r"(?<!\.|-|。)[\n|\r]+", " ", s_from)
 
     # 文字和上次一样，并且被翻译的语言没有修改，就不翻译了
     if (last_s_from == s_from and not changeLang and not changeServer):

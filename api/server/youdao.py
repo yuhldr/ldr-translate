@@ -22,9 +22,9 @@ def translate_text(s, fromLang="auto", toLang=""):
                 ok = False
                 s1 = "翻译错误,试试其他引擎?"
             else:
-                print(result["translateResult"][0])
-                for trans_result in result["translateResult"][0]:
-                    s1 += trans_result["tgt"] + "\n"
+                print(result["translateResult"])
+                for trans_result in result["translateResult"]:
+                    s1 += trans_result[0]["tgt"] + "\n"
         else:
             s1 = "请求错误：" + request.content
 
