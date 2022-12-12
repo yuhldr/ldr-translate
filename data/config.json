@@ -5,8 +5,7 @@
         "translate_span": 1.0,
         "ocr_span": 1.0,
         "ocr_local": true,
-        "show_sm": true,
-        "tray_icon":"color"
+        "tray_icon_n":0
     },
     "baidu": {
         "translate_app_id": "",

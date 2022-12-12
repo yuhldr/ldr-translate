@@ -25,7 +25,7 @@ class SystemTray(object):
 
     def initUI(self):
         # 设置托盘图标
-        self.tp.setIcon(QIcon('./icon/tray-%s.png' % config.get_tray_icon()))
+        self.tp.setIcon(QIcon(config.get_tray_icon_file()))
 
     def quitApp(self):
         # 退出程序

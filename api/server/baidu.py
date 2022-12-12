@@ -112,7 +112,7 @@ def get_token():
     return ok, access_token
 
 
-def ocr(img_path, latex=False):
+def ocr(img_path):
     img_data = open(img_path, 'rb').read()
     # open('./images/lt.png', 'rb').read()
     '''
@@ -120,10 +120,8 @@ def ocr(img_path, latex=False):
     '''
     s = ""
     request_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/"
-    if (latex):
-        request_url += "formula"
-    else:
-        request_url += "general_basic"
+
+    request_url += "general_basic"
 
     img = base64.b64encode(img_data)
     ok, token = get_token()
@@ -147,15 +145,11 @@ def ocr(img_path, latex=False):
     else:
         for word in jsons["words_result"]:
             s += word["words"]
-            if (latex):
-                s += "\n"
-            else:
-                s_ = word["words"]
-                if (s_[len(s_) - 1:len(s_)] != "-"):
-                    s += " "
 
-    if (latex):
-        s = s.replace(" _ ", "_")
+            s_ = word["words"]
+            if s_[len(s_) - 1:len(s_)] != "-":
+                s += " "
+
     return ok, s
 
 

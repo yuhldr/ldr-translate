@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <!-- n-columns=2 n-rows=1 -->
@@ -28,7 +28,7 @@
         <property name="margin-bottom">16</property>
         <property name="interpolate-size">True</property>
         <child>
-          <!-- n-columns=2 n-rows=8 -->
+          <!-- n-columns=2 n-rows=5 -->
           <object class="GtkGrid" id="prf">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -113,74 +113,6 @@ pip install easyocr</property>
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">2</property>
-                <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="cbtn_sys">
-                <property name="label" translatable="yes">系统信息</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="margin-left">8</property>
-                <property name="margin-start">8</property>
-                <property name="margin-top">8</property>
-                <property name="margin-bottom">8</property>
-                <property name="draw-indicator">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">6</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="lb_sys_msg">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-top">8</property>
-                <property name="margin-bottom">8</property>
-                <property name="label" translatable="yes">显示网速、CPU等信息</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">6</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btn_set_sm">
-                <property name="label" translatable="yes">显示设置</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="margin-left">8</property>
-                <property name="margin-start">8</property>
-                <property name="margin-top">8</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">7</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="lb_sm_github">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-top">8</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">7</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSeparator">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-top">8</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">5</property>
                 <property name="width">2</property>
               </packing>
             </child>

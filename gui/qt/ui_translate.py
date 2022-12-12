@@ -125,7 +125,7 @@ class Ui_MainWindow(object):
 
         s = config.get_ocr_notice()
         self.set_ui((s, s))
-        self.thread = MyThread(translate.ocr2, (img_path, self.isAdd()))
+        self.thread = MyThread(translate.ocr2, (img_path))
         self.thread.signal.connect(next)
         self.thread.start()
 

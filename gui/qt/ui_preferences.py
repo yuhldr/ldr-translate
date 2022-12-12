@@ -11,6 +11,7 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import QSize, QCoreApplication, QRect, Qt
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QCheckBox, QLabel, QComboBox, QPushButton, QLineEdit, QSpacerItem, QSizePolicy, QMainWindow
 from qt_utils import MyThread
+from utils.locales import t
 
 from api import translate
 from api.server import baidu, tencent
@@ -468,8 +469,9 @@ class Ui_MainWindow(QMainWindow):
         self.cb_ocr_local.setChecked(config.is_ocr_local())
         self.lb_version_code.setOpenExternalLinks(True)
 
-        self.cbb_tray_icon.addItems(config.get_tray_types())
-        self.cbb_tray_icon.setCurrentText(config.get_tray_icon())
+        tray_types = config.get_tray_types()
+        self.cbb_tray_icon.addItems(tray_types)
+        self.cbb_tray_icon.setCurrentText(tray_types[config.get_tray_icon_n()])
         self.cbb_tray_icon.currentIndexChanged.connect(self.on_cbb_tray_icon)
 
     def _listen(self):

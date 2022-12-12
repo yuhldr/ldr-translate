@@ -1,11 +1,12 @@
 from api import translate
 from api.server import baidu, tencent
-from utils import config, locales, version
+from utils import config, version
+from utils.locales import t
 from api.server_config import server_baidu, server_tencent, dict_api_save, get_api_key
 import threading
 
+
 from gi.repository import Gtk
-from preferences_sm import Preferences as PreferenceSM
 
 
 class Preference(Gtk.ApplicationWindow):
@@ -21,20 +22,13 @@ class Preference(Gtk.ApplicationWindow):
 
         ui = Gtk.Builder()
         ui.add_from_file('./preference.ui')
-        self.indicator_sysmonitor_preferences = None
         self.init_other(ui)
         self.init_baidu_api(ui)
         self.init_tencent(ui)
         self.add(ui.get_object('gd_prf'))
         self.show_all()
-        show_sw = config.isShowSM()
-
-        self.cbtn_sys.set_active(show_sw)
-        self.btn_set_sm.set_visible(show_sw)
 
     def init_other(self, ui):
-
-        self.handler_id_show_sm = None
 
         cbtn_auto_start = ui.get_object('cbtn_auto_start')
         cbtn_auto_start.set_active(config.get_autostart())
@@ -44,21 +38,11 @@ class Preference(Gtk.ApplicationWindow):
         cb_ocr_local.set_active(config.is_ocr_local())
         cb_ocr_local.connect('toggled', self.update_ocr_local)
 
-        self.btn_set_sm = ui.get_object('btn_set_sm')
         self.lb_sys_msg = ui.get_object('lb_sys_msg')
-
-        self.handler_id_show_sm = self.btn_set_sm.connect(
-            'clicked', self._on_indicator_sysmonitor_preferences)
-
-        self.cbtn_sys = ui.get_object('cbtn_sys')
-        self.cbtn_sys.connect('toggled', self.set_show_sm)
 
         self.lb_version_msg = ui.get_object('lb_version_msg')
 
         self.lb_version_msg.set_markup(version.get_default())
-        ui.get_object('lb_sm_github').set_markup(
-            "<a href='https://github.com/fossfreedom/indicator-sysmonitor'>开源地址</a>"
-        )
 
         ui.get_object('btn_update').connect('clicked', self.check_update)
 
@@ -66,8 +50,7 @@ class Preference(Gtk.ApplicationWindow):
         for tray_type in config.get_tray_types():
             self.cbb_tray_icon.append_text(tray_type)
 
-        i = config.get_tray_types().index(config.get_tray_icon())
-        self.cbb_tray_icon.set_active(i)
+        self.cbb_tray_icon.set_active(config.get_tray_icon_n())
         self.cbb_tray_icon.connect("changed", self.on_cbb_tray_icon)
 
     def on_cbb_tray_icon(self, combo):
@@ -158,12 +141,6 @@ class Preference(Gtk.ApplicationWindow):
     def update_ocr_local(self, menu_check):
         config.set_ocr_local(menu_check.get_active())
 
-    def set_show_sm(self, menu_check):
-        self.btn_set_sm.set_visible(menu_check.get_active())
-        self.lb_sys_msg.set_markup("重新打开软件生效")
-
-        config.setShowSM(menu_check.get_active())
-
     def check_update(self, view=None):
 
         def _check():
@@ -174,15 +151,6 @@ class Preference(Gtk.ApplicationWindow):
 
         tt = threading.Thread(target=_check)
         tt.start()
-
-    def _on_indicator_sysmonitor_preferences(self, event=None):
-        if self.indicator_sysmonitor_preferences is not None:
-            self._preferences_dialog.present()
-            return
-
-        self.indicator_sysmonitor_preferences = PreferenceSM(
-            self, self.ind_parent)
-        self.indicator_sysmonitor_preferences = None
 
     def save_server(self, tv_a, tv_b, lb_msg, server, is_ocr=False):
 

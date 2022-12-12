@@ -94,7 +94,6 @@ def sign_str(key, s, method):
 
 # TODO 有问题，以后再说
 def ocr(img_path,
-        latex=False,
         action="GeneralBasicOCR",
         endpoint="ocr.tencentcloudapi.com",
         query_method="GET",

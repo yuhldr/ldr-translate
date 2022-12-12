@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 from pathlib import Path
+from utils.locales import t
 
 config_data = None
 config_file_name = "config.json"
@@ -19,7 +20,6 @@ AUTOSTART_PATH = AUTOSTART_DIR + "/" + DESKTOP_NAME
 
 app_home_dir = DIR_CONFIG + "/ldr-translate"
 config_home_path = app_home_dir + "/" + config_file_name
-SETTINGS_FILE = app_home_dir + '/indicator-sysmonitor.json'
 
 DESKTOP_PATH = "/usr/share/applications/" + DESKTOP_NAME
 
@@ -68,24 +68,20 @@ def check_dir(dir):
 
 
 def get_tray_types():
-    return ["color", "light", "dark"]
+    return t("ui.setting.tray_icon_select")
 
 
-def get_tray_icon():
-    return get_config_setting("tray_icon")
+def get_tray_icon_n():
+    return get_config_setting("tray_icon_n")
 
 
-def set_tray_icon(tray_icon):
-    return set_config(config_sections_setting, "tray_icon", tray_icon)
+def get_tray_icon_file():
+    return "./icon/tray-%s.png" % ["color", "white", "gray"][get_tray_icon_n()]
 
 
-# 显示网速等信息
-def isShowSM():
-    return get_config_setting("show_sm")
-
-
-def setShowSM(b):
-    return set_config(config_sections_setting, "show_sm", b)
+def set_tray_icon(tray_text):
+    n = get_tray_types().index(tray_text)
+    return set_config(config_sections_setting, "tray_icon_n", n)
 
 
 def is_ocr_local():

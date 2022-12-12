@@ -1,16 +1,18 @@
 {
     "key": "en_US",
     "version": {
-        "msg": "1. Copy to automatically translate, and the status bar can pause copying and translation\n2. Take screenshots to the system clipboard, and OCR will recognize and translate them automatically\n3. Automatically remove meaningless newlines in documents, and support incremental copying\n4. Test the screenshot formula , automatically recognized as latex code",
+        "msg": "1. Copy to automatically translate, and the status bar can pause copying and translation\n2. Take screenshots to the system clipboard, and OCR will recognize and translate them automatically\n3. Automatically remove meaningless newlines in documents, and support incremental copying",
         "home_name": "Open source, update address"
     },
     "ui": {
         "btn_translate_label": "translate",
         "cb_add_label": "Append",
-        "cbtn_tex": "Tex",
         "setting_label": "setting",
         "notice_from": "Copy automatic translation\n\nYou can set your own api and use the developer api. When there are too many people, problems such as translation failure may occur",
-        "notice_to": "The system directly takes screenshots to the clipboard, and automatically recognizes and translates\n\nAfter selecting 'Append', the translation will be accumulated"
+        "notice_to": "The system directly takes screenshots to the clipboard, and automatically recognizes and translates\n\nAfter selecting 'Append', the translation will be accumulated",
+        "setting":{
+            "tray_icon_select":["color", "white", "gray"]
+        }
     },
     "translate": {
         "to_lang": {

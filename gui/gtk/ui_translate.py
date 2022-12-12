@@ -42,8 +42,7 @@ class Translate(Gtk.ApplicationWindow):
         self.cbt_server.connect("changed", self.on_cbt_server_changed)
 
         self.cbtn_add_old = ui.get_object('cbtn_add_old')
-        # 公式识别
-        self.cbtn_tex = ui.get_object('cbtn_tex')
+
 
         self.cbt_lang = ui.get_object('cbt_lang')
         self.set_to_lang_data()
@@ -57,7 +56,7 @@ class Translate(Gtk.ApplicationWindow):
         self.connect("delete-event", self.close)
 
         self.cbtn_add_old.set_label(t_ui("cb_add_label"))
-        self.cbtn_tex.set_label(t_ui("cbtn_tex"))
+
         self.btn_translate.set_label(t_ui("btn_translate_label"))
 
     def copy_(self, a):
@@ -117,8 +116,8 @@ class Translate(Gtk.ApplicationWindow):
 
     def ocr_image(self, image_pixbuf):
 
-        def next(img_path, tex):
-            ok, text = translate.ocr(img_path, latex=tex)
+        def next(img_path):
+            ok, text = translate.ocr(img_path)
             self.sp_translate.stop()
             self.translate_by_s(text)
 
@@ -129,7 +128,7 @@ class Translate(Gtk.ApplicationWindow):
         image_pixbuf.savev(img_path, "png", "", "")
 
         tt = threading.Thread(target=next,
-                              args=(img_path, self.cbtn_tex.get_active(),))
+                              args=(img_path,))
         tt.start()
 
     def translate_by_s(self, s_from=None):

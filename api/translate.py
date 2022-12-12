@@ -38,7 +38,7 @@ def text(s_from, add_old=True):
             s_from = last_s_from_all
 
     s_from = re.sub(r"-[\n|\r]+", "", s_from)
-    #s_from = re.sub(r"(?<!\.|-|。)[\n|\r]+", " ", s_from)
+    s_from = re.sub(r"(?<!\.|-|。)[\n|\r]+", " ", s_from)
 
     # 文字和上次一样，并且被翻译的语言没有修改，就不翻译了
     if (last_s_from == s_from and not changeLang and not changeServer):
@@ -80,11 +80,11 @@ def translate(s, server, to_lang_code, fromLang="auto"):
 
 
 def ocr2(param):
-    img_path, latex = param
-    return ocr(img_path, latex)
+    img_path = param
+    return ocr(img_path)
 
 
-def ocr(img_path, latex=False):
+def ocr(img_path):
     ok = False
     s = ""
     try:
@@ -99,10 +99,9 @@ def ocr(img_path, latex=False):
         server, changeServer = tools.get_current_translate_server()
         if (server == server_config.server_tencent):
             # 这个有问题，暂时用百度的
-            # ok, s = tencent.ocr(img_path, latex=latex)
-            ok, s = baidu.ocr(img_path, latex=latex)
+            ok, s = baidu.ocr(img_path)
         else:
-            ok, s = baidu.ocr(img_path, latex=latex)
+            ok, s = baidu.ocr(img_path)
     except Exception as e:
         s = "识别错误：" + str(e)
         if (config.is_ocr_local()):
