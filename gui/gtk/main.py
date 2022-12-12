@@ -37,7 +37,7 @@ class LdrTranlate(Gtk.Application):
     def __init__(self):
         self.translate_win = None
         self._help_dialog = None
-        self.auto_translate = 0
+        self.auto_translate = 2
 
         self.clip_copy = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         self.clip_select = Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
@@ -71,7 +71,6 @@ class LdrTranlate(Gtk.Application):
         menu_t_0 = Gtk.RadioMenuItem(label="复制即翻译")
         menu_t_0.connect('activate', self._set_auto_translate, 0)
         menu.append(menu_t_0)
-        menu_t_0.set_active(True)
 
         menu_t_1 = Gtk.RadioMenuItem(label='划词翻译', group=menu_t_0)
         menu_t_1.connect('activate', self._set_auto_translate, 1)
@@ -80,6 +79,7 @@ class LdrTranlate(Gtk.Application):
         menu_t_2 = Gtk.RadioMenuItem(label='暂不翻译', group=menu_t_0)
         menu_t_2.connect('activate', self._set_auto_translate, 2)
         menu.append(menu_t_2)
+        menu_t_2.set_active(True)
 
         menu.add(Gtk.SeparatorMenuItem())
 
