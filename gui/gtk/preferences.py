@@ -1,8 +1,7 @@
 from api import translate
 from api.server import baidu, tencent
 from utils import config, version
-from utils.locales import t
-from api.server_config import server_baidu, server_tencent, dict_api_save, get_api_key
+from api.server_config import server_baidu, server_tencent, get_api_key
 import threading
 
 

@@ -4,7 +4,7 @@ from api import translate
 from api.server import baidu
 from utils import config, tools
 from utils.locales import t_ui
-from gi.repository import Gtk
+from gi.repository import Gtk, GLib
 import time
 import threading
 
@@ -154,9 +154,10 @@ class Translate(Gtk.ApplicationWindow):
 
     def set_text_view(self, s_from, s_to):
 
-        textbuffer_from = self.tv_from.get_buffer()
-        textbuffer_to = self.tv_to.get_buffer()
+        def set_text(s_from, s_to):
 
-        if (len(s_from.strip()) > 0 and len(s_to.strip()) > 0):
-            textbuffer_from.set_text(s_from.strip())
-            textbuffer_to.set_text(s_to.strip())
+            if (len(s_from.strip()) > 0 and len(s_to.strip()) > 0):
+                self.tv_from.get_buffer().set_text(s_from.strip())
+                self.tv_to.get_buffer().set_text(s_to.strip())
+
+        GLib.idle_add(set_text, s_from, s_to)

@@ -224,3 +224,10 @@ yay ldr-translate
   - rules文件: 这实际上是另外一个Makefile脚本，用来给dpkg-buildpackage用的.
   - compat文件: 这个文件留着是有用的
   - dirs文件：这个文件指出我们需要的但是在缺省情况下不会自动创建的目录
+
+
+
+## Sponsor
+The project is develop by [JetBrains Ide](https://www.jetbrains.com/?from=puck)
+
+[![](https://www.jetbrains.com/company/brand/img/logo1.svg)](https://www.jetbrains.com/?from=puck)

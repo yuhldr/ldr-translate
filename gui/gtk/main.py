@@ -10,11 +10,6 @@
 
 import gi
 import os
-import logging
-import sys
-from argparse import ArgumentParser
-from gettext import gettext as _
-from threading import Event
 # import faulthandler
 # # 在import之后直接添加以下启用代码即可 python3 -X faulthandler ldr-translate.py
 # faulthandler.enable()
