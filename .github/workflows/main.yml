@@ -20,13 +20,18 @@ jobs:
     - name: pring version
       run: echo $VERSION
 
-    - name: build
+    - name: build-gtk
       run: make deb-gtk
+
+    - name: build-qt
+      run: make deb-qt
 
     - name: Create Release and Upload Release Asset
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ env.TAG_NAME }}
         prerelease: true
+        draft: false
         files: |
           build/deb/ldr-translate-gtk.deb
+          build/deb/ldr-translate-qt.deb
