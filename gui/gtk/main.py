@@ -16,13 +16,18 @@ import os
 from utils import locales, version, config
 from utils.locales import t_ui
 
-gi.require_version("AppIndicator3", "0.1")
+try:
+    gi.require_version('AyatanaAppIndicator3', '0.1')
+    from gi.repository import AyatanaAppIndicator3 as appindicator
+except ValueError:
+    gi.require_version('AppIndicator3', '0.1')
+    from gi.repository import AppIndicator3 as appindicator
+
 gi.require_version("Gtk", "3.0")
 
 from ui_translate import Translate
 from preferences import Preference
 
-from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gtk, Gdk, GdkPixbuf
 
 

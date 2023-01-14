@@ -5,7 +5,7 @@ from api.server_config import server_baidu, server_tencent, get_api_key
 import threading
 
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GLib
 
 
 class Preference(Gtk.ApplicationWindow):
@@ -172,9 +172,15 @@ class Preference(Gtk.ApplicationWindow):
                 config.set_config(server, key_b, text_b)
             lb_msg.set_text(msg)
 
+        def _save_c(text_a, text_b):
+            GLib.idle_add(_save, text_a, text_b)
+
         if (len(text_a) == 0 or len(text_b) == 0):
             lb_msg.set_text("已恢复默认（不推荐）")
         else:
             lb_msg.set_text("加载中...")
-            tt = threading.Thread(target=_save, args=(text_a, text_b, ))
+            tt = threading.Thread(target=_save_c, args=(
+                text_a,
+                text_b,
+            ))
             tt.start()

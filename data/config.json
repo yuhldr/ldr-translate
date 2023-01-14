@@ -4,7 +4,7 @@
         "translate_to_lang": "auto",
         "translate_span": 1.0,
         "ocr_span": 1.0,
-        "ocr_local": true,
+        "ocr_local": false,
         "tray_icon_n":0
     },
     "baidu": {

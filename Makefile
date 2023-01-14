@@ -15,10 +15,10 @@ snap:
 
 
 check-gtk:
-	pip3 install requests psutil
+	pip3 install requests PyGObject
 
 check-qt:
-	pip3 install requests pyQt5
+	pip3 install requests PyQt5
 
 
 build: clear
@@ -43,7 +43,7 @@ qt: build
 
 deb-gtk:gtk
 	make deb-data
-	@echo "Depends: gir1.2-appindicator3-0.1,python3-psutil,python3-requests" >> build/deb/ldr-translate/DEBIAN/control
+	@echo "Depends: gir1.2-appindicator3-0.1,python3,python3-gi,python3-requests" >> build/deb/ldr-translate/DEBIAN/control
 	cd build/deb && \
 	dpkg -b ldr-translate ldr-translate-gtk.deb && \
 	ls -l --block-size=k *.deb && \
@@ -51,7 +51,7 @@ deb-gtk:gtk
 
 deb-qt:qt
 	make deb-data
-	@echo "Depends: python3-pyqt5,python3-requests" >> build/deb/ldr-translate/DEBIAN/control
+	@echo "Depends: python3,python3-pyqt5,python3-requests" >> build/deb/ldr-translate/DEBIAN/control
 	cd build/deb && \
 	dpkg -b ldr-translate ldr-translate-qt.deb \
 	&& ls -l --block-size=k *.deb \

@@ -143,6 +143,7 @@ class Ui_MainWindow(object):
             return
 
         self.set_ui((text_from, "翻译中..."))
+        print("翻译中...", text_from)
         self.thread = MyThread(translate.text2, (text_from, self.isAdd()))
         self.thread.signal.connect(self.set_ui)
         self.thread.start()

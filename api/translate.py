@@ -105,7 +105,7 @@ def ocr(img_path):
     except Exception as e:
         s = "识别错误：" + str(e)
         if (config.is_ocr_local()):
-            s += "。离线识别请安装依赖，终端输入： pip3 install easyocr"
+            s += "。也可以使用在线文本识别（百度OCR），设置中可切换识别方式。离线识别请安装依赖，终端输入： pip3 install easyocr"
         else:
             s += "。也可以使用离线文本识别，请在设置中启用。离线识别精度 < 在线api，但无次数限制"
         print(e)
