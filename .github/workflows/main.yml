@@ -29,4 +29,4 @@ jobs:
         tag_name: ${{ env.TAG_NAME }}
         prerelease: true
         files: |
-          ldr-translate-gtk.deb
+          build/deb/ldr-translate-gtk.deb
