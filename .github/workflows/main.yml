@@ -31,7 +31,7 @@ jobs:
     - name: build-qt
       run: |
         make deb-qt
-        cp build/deb/${SOFTWARE_NAME}-gtk.deb disk/${SOFTWARE_NAME}-${VERSION}-qt.deb
+        cp build/deb/${SOFTWARE_NAME}-qt.deb disk/${SOFTWARE_NAME}-${VERSION}-qt.deb
 
     - name: Create Release and Upload Release Asset
       uses: softprops/action-gh-release@v1
