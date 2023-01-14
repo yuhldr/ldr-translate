@@ -22,3 +22,11 @@ jobs:
 
     - name: build
       run: make deb-gtk
+
+    - name: Create Release and Upload Release Asset
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ env.TAG_NAME }}
+        prerelease: true
+        files: |
+          ldr-translate-gtk.deb
