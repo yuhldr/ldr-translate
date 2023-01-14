@@ -1,4 +1,4 @@
-name: Test
+name: AutoPkg
 
 on:
   push:
@@ -26,19 +26,19 @@ jobs:
     - name: build-gtk
       run: |
         make deb-gtk
-        cp build/deb/${SOFTWARE_NAME}-gtk.deb disk/${SOFTWARE_NAME}-${VERSION}-gtk.deb
+        cp build/deb/$SOFTWARE_NAME-gtk.deb disk/$SOFTWARE_NAME-$VERSION-gtk.deb
 
     - name: build-qt
       run: |
         make deb-qt
-        cp build/deb/${SOFTWARE_NAME}-qt.deb disk/${SOFTWARE_NAME}-${VERSION}-qt.deb
+        cp build/deb/$SOFTWARE_NAME-qt.deb disk/$SOFTWARE_NAME-$VERSION-qt.deb
 
     - name: Create Release and Upload Release Asset
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${TAG_NAME}
+        tag_name: $TAG_NAME
         prerelease: true
         draft: false
         files: |
-          disk/${SOFTWARE_NAME}-${VERSION}-gtk.deb
-          disk/${SOFTWARE_NAME}-${VERSION}-qt.deb
+          disk/$SOFTWARE_NAME-$VERSION-gtk.deb
+          disk/$SOFTWARE_NAME-$VERSION-qt.deb
