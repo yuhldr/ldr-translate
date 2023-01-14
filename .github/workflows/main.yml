@@ -1,0 +1,24 @@
+name: Test
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+
+env:
+  TAG_NAME: "nightly"
+  VERSION: "1.6.0"
+
+jobs:
+  build-ldr-linux:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: pring version
+      run: echo $VERSION
+
+    - name: build
+      run: make deb-gtk
