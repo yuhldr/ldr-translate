@@ -8,7 +8,8 @@ on:
 
 
 env:
-  TAG_NAME: "nightly"
+  TAG_NAME: "自动打包"
+  SOFTWARE_NAME: "ldr-translate"
   VERSION: "1.6.0"
 
 jobs:
@@ -17,21 +18,27 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: pring version
-      run: echo $VERSION
+    - name: prepare
+      run: |
+      echo $VERSION
+      mkdir -p cache
 
     - name: build-gtk
-      run: make deb-gtk
+      run: |
+      make deb-gtk
+      cp build/deb/${SOFTWARE_NAME}-gtk.deb cache/${SOFTWARE_NAME}-${VERSION}-gtk.deb
 
     - name: build-qt
-      run: make deb-qt
+      run: |
+      make deb-qt
+      cp build/deb/${SOFTWARE_NAME}-gtk.deb cache/${SOFTWARE_NAME}-${VERSION}-qt.deb
 
     - name: Create Release and Upload Release Asset
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ env.TAG_NAME }}
+        tag_name: ${TAG_NAME}
         prerelease: true
         draft: false
         files: |
-          build/deb/ldr-translate-gtk.deb
-          build/deb/ldr-translate-qt.deb
+          cache/${SOFTWARE_NAME}-${VERSION}-gtk.deb
+          cache/${SOFTWARE_NAME}-${VERSION}-qt.deb
