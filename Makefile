@@ -44,12 +44,18 @@ qt: build
 deb-gtk:gtk
 	make deb-data
 	@echo "Depends: gir1.2-appindicator3-0.1,python3-psutil,python3-requests" >> build/deb/ldr-translate/DEBIAN/control
-	cd build/deb && dpkg -b ldr-translate ldr-translate-gtk.deb && ls -l --block-size=k *.deb && rm -r ldr-translate
+	cd build/deb && \
+	dpkg -b ldr-translate ldr-translate-gtk.deb && \
+	ls -l --block-size=k *.deb && \
+	rm -r ldr-translate
 
 deb-qt:qt
 	make deb-data
 	@echo "Depends: python3-pyqt5,python3-requests" >> build/deb/ldr-translate/DEBIAN/control
-	cd build/deb && dpkg -b ldr-translate ldr-translate-qt.deb && ls -l --block-size=k *.deb && rm -r ldr-translate
+	cd build/deb && \
+	dpkg -b ldr-translate ldr-translate-qt.deb \
+	&& ls -l --block-size=k *.deb \
+	&& rm -r ldr-translate
 
 deb-data:
 	mkdir -p build/deb/ldr-translate/DEBIAN
@@ -85,10 +91,6 @@ uninstall:
 
 clear:
 	rm -rf ./build
-	rm -rf ./disk
 	rm -rf ./test*
 	rm -rf ./tempCodeRunnerFile*
-	rm -rf ./cache
-	rm -rf *.spec
-	rm -rf ./build
 

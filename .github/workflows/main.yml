@@ -21,17 +21,17 @@ jobs:
     - name: prepare
       run: |
         echo $VERSION
-        mkdir -p cache
+        mkdir -p disk
 
     - name: build-gtk
       run: |
         make deb-gtk
-        cp build/deb/${SOFTWARE_NAME}-gtk.deb cache/${SOFTWARE_NAME}-${VERSION}-gtk.deb
+        cp build/deb/${SOFTWARE_NAME}-gtk.deb disk/${SOFTWARE_NAME}-${VERSION}-gtk.deb
 
     - name: build-qt
       run: |
         make deb-qt
-        cp build/deb/${SOFTWARE_NAME}-gtk.deb cache/${SOFTWARE_NAME}-${VERSION}-qt.deb
+        cp build/deb/${SOFTWARE_NAME}-gtk.deb disk/${SOFTWARE_NAME}-${VERSION}-qt.deb
 
     - name: Create Release and Upload Release Asset
       uses: softprops/action-gh-release@v1
@@ -40,5 +40,5 @@ jobs:
         prerelease: true
         draft: false
         files: |
-          cache/${SOFTWARE_NAME}-${VERSION}-gtk.deb
-          cache/${SOFTWARE_NAME}-${VERSION}-qt.deb
+          disk/${SOFTWARE_NAME}-${VERSION}-gtk.deb
+          disk/${SOFTWARE_NAME}-${VERSION}-qt.deb
