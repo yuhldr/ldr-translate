@@ -18,35 +18,45 @@ qt版本|![qt1](md/images/qt1.png)|![qt2](md/images/qt2.png)|![qt3](md/images/qt
 
 ## 安装
 
-
-- archlinux
+- archlinux 或 manjaro 系统
   
-  > 已经发布在 `aur`
-  
-  - qt版本：推荐 `kde` 桌面使用
+  > 已经发布在 `aur`，但是只包含 `稳定版`，而且 `aur` 在国内可能无法使用
 
-    ```bash
-    yay -S ldr-translate-qt
-    ```
+     1. 离线安装
 
-  - gtk版本，推荐 `gnome` 桌面使用
-    
-    ```bash
-    yay -S ldr-translate-gtk
-    ```
+          可以使用预览版，及时修复bugs
 
-    `gnome` 桌面注意安装依赖 `gnome-shell-extension-appindicator`
+        - 在 [github-release](https://github.com/yuhldr/ldr-translate/releases/) 下载 `.zst` 的安装包（包含 `gtk` 和 `qt` 两种）
+        - 然后在下载目录，右键，终端打开，终端输入：
+
+          ```bash
+          sudo pacman -U ./下载的 zst 文件名
+          ```
+
+     2. 在线安装
+
+          使用 `yay` 通过 `aur`，自动更新，但是只能使用稳定版
+
+          - qt版本：推荐 `kde` 桌面使用
+
+          ```bash
+          yay -S ldr-translate-qt
+          ```
+
+          - gtk版本，推荐 `gnome` 桌面使用
+
+          ```bash
+          yay -S ldr-translate-gtk
+          ```
+
+          `gnome` 桌面注意安装依赖 `gnome-shell-extension-appindicator`
 
 
-- ubuntu22.04
+- ubuntu22.04 或其他支持 deb 的系统
 
     > 注意，没有刻意适配 `wayland`，对于 `ubuntu22.04` 建议注销重新登录，输入密码前，右下角，选择 `xorg`
 
-   1. 下载 `.deb` 的安装包（包含 `gtk` 和 `qt` 两种）
-
-
-      - [gitee 国内](https://gitee.com/yuhldr/ldr-translate/releases)
-      - [github 国外](https://github.com/yuhldr/ldr-translate/releases/)
+   1. 在 [github-release](https://github.com/yuhldr/ldr-translate/releases/) 下载 `.deb` 的安装包（包含 `gtk` 和 `qt` 两种）
 
    2. 然后在下载目录，右键，终端打开，终端输入：
 
@@ -60,7 +70,7 @@ qt版本|![qt1](md/images/qt1.png)|![qt2](md/images/qt2.png)|![qt3](md/images/qt
         sudo apt install -f
         ```
 
-   4. 再安装
+   4. 再安装（这一步或许可以省略）
 
         ```bash
         sudo dpkg -i ./下载的deb文件名
