@@ -35,6 +35,11 @@ jobs:
       with:
         packages: >
           make
+          python
+          python-requests
+          libappindicator-gtk3
+          python-gobject
+          python-pyqt5
         scripts: make aur-gtk && make aur-qt
 
     - name: Create Release and Upload Release Asset
