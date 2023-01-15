@@ -106,7 +106,7 @@ aur-gtk:
 	sed -i "s/^conflicts=()/conflicts=($(NAME)-qt)/g" PKGBUILD  && \
 	sed -i "s#PKG_PATH#\$(shell pwd)/build/gtk#g" PKGBUILD  && \
 	sed -i "s/PKG_TYPE/gtk/g" PKGBUILD  && \
-	makepkg -sf
+	makepkg -f
 	cp build/aur/gtk/*.zst disk/
 
 aur-qt:
@@ -120,7 +120,7 @@ aur-qt:
 	sed -i "s/^conflicts=()/conflicts=($(NAME)-gtk)/g" PKGBUILD && \
 	sed -i "s#PKG_PATH#\$(shell pwd)/build/qt#g" PKGBUILD  && \
 	sed -i "s/PKG_TYPE/qt/g" PKGBUILD  && \
-	makepkg -sf
+	makepkg -f
 	cp build/aur/qt/*.zst disk/
 
 

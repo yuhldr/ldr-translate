@@ -21,6 +21,7 @@ jobs:
     - name: Prepare
       run: |
         rm -rf disk
+        make clear
         mkdir disk
         make build
         make gtk
@@ -32,6 +33,8 @@ jobs:
     - name: Build archlinux package
       uses: vufa/arch-makepkg-action@master
       with:
+        packages: >
+          make
         scripts: make aur-gtk && make aur-qt
 
     - name: Create Release and Upload Release Asset
