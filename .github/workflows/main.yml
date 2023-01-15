@@ -10,7 +10,7 @@ on:
 env:
   TAG_NAME: "自动打包"
   SOFTWARE_NAME: "ldr-translate"
-  VERSION: "1.6.0"
+
 
 jobs:
   build-ldr-linux:
@@ -18,20 +18,21 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: prepare
+    - name: Prepare
       run: |
-        echo ${{ env.VERSION }}
-        mkdir -p disk
+        rm -rf disk
+        mkdir disk
+        make build
+        make gtk
+        make qt
 
-    - name: build-gtk
-      run: |
-        make deb-gtk
-        cp build/deb/${{ env.SOFTWARE_NAME }}-gtk.deb disk/${{ env.SOFTWARE_NAME }}-${{ env.VERSION }}-gtk.deb
+    - name: Build deb
+      run: make deb-gtk && make deb-qt
 
-    - name: build-qt
-      run: |
-        make deb-qt
-        cp build/deb/${{ env.SOFTWARE_NAME }}-qt.deb disk/${{ env.SOFTWARE_NAME }}-${{ env.VERSION }}-qt.deb
+    - name: Build archlinux package
+      uses: vufa/arch-makepkg-action@master
+      with:
+        scripts: make aur-gtk && make aur-qt
 
     - name: Create Release and Upload Release Asset
       uses: softprops/action-gh-release@v1
@@ -40,5 +41,5 @@ jobs:
         prerelease: true
         draft: false
         files: |
-          disk/${{ env.SOFTWARE_NAME }}-${{ env.VERSION }}-gtk.deb
-          disk/${{ env.SOFTWARE_NAME }}-${{ env.VERSION }}-qt.deb
+          disk/*.deb
+          disk/*.zst

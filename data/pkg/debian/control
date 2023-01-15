@@ -1,6 +1,7 @@
 package: ldr-translate
 Section: net
-version: 1.6.0
+version:
+Depends:
 architecture: amd64
 Maintainer: yuhldr <yuhldr@qq.com>
 Homepage: https://github.com/yuhldr/ldr-translate

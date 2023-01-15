@@ -1,0 +1,19 @@
+# Maintainer=yuh <yuhldr@qq.com>
+
+pkgdata=ldr-translate
+pkgname=
+pkgver=
+pkgrel=1
+pkgdesc="一个翻译软件，专注文献翻译，可以截图翻译、复制翻译"
+arch=('x86_64')
+url="https://github.com/yuhldr/$pkgdata"
+license=('GPL')
+groups=(ldr)
+depends=()
+optdepends=()
+conflicts=()
+
+
+package() {
+cp -r PKG_PATH/$pkgdata/* "$pkgdir"/
+}
