@@ -29,7 +29,7 @@ qt版本|![qt1](md/images/qt1.png)|![qt2](md/images/qt2.png)|![qt3](md/images/qt
         - 然后在下载目录，右键，终端打开，终端输入：
 
           ```bash
-          sudo pacman -U ./下载的 zst 文件名
+          sudo pacman -U ./下载的zst文件名
           ```
 
      2. 在线安装
