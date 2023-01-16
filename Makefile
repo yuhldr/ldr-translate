@@ -126,10 +126,6 @@ rpm-gtk:
 	cp -r build/gtk/$(NAME) build/rpm/gtk/BUILD/
 
 	cd build/rpm/gtk && \
-	pwd && \
-	ls -l ../../../ && \
-	ls -l ../../../data/pkg && \
-	ls -l ../../../data/pkg/rpm && \
 	cp -r ../../../data/pkg/rpm/SPECS ./ && \
 	cd SPECS && \
 	sed -i "s/PKG_TYPE/gtk/g" ldr.spec && \
