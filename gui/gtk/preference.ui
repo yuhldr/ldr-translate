@@ -244,7 +244,7 @@ pip install easyocr</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="lb_baidu_tanslate_way">
+              <object class="GtkLabel" id="lb_baidu_translate_way">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="use-markup">True</property>
@@ -373,7 +373,7 @@ pip install easyocr</property>
             <property name="column-spacing">18</property>
             <property name="column-homogeneous">True</property>
             <child>
-              <object class="GtkButton" id="btn_tencnet_save">
+              <object class="GtkButton" id="btn_tencent_save">
                 <property name="label" translatable="yes">保存</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -407,7 +407,7 @@ pip install easyocr</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="lb_tencnet_way">
+              <object class="GtkLabel" id="lb_tencent_way">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="use-markup">True</property>
@@ -440,7 +440,7 @@ pip install easyocr</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="lb_tencnet_msg">
+              <object class="GtkLabel" id="lb_tencent_msg">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">暂不支持图片识别</property>

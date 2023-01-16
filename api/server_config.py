@@ -7,7 +7,7 @@ server_google = "google"
 def get_api_key(server, is_ocr=False):
     api_keys = dict_api_save[server]
     s = "t"
-    if (is_ocr):
+    if is_ocr:
         s = "o"
     return api_keys[s + "a"], api_keys[s + "b"]
 
@@ -54,10 +54,8 @@ dict_to_lang = {
         "kor": "kr",
         "de": "de",
         "fra": "fr",
+    },
+    server_youdao: {
+        "auto": ""
     }
-    # ,
-    # server_youdao: {
-    #     "zh": "zh",
-    #     "en": "en"
-    # }
 }

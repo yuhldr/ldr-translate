@@ -26,29 +26,29 @@ def text2(param):
 def text(s_from, add_old=True):
     global last_s_from_all, last_s_from, last_s_to_all, last_time, no_translate_this
 
-    to_lang_code, changeLang = tools.get_current_to_lang()
-    server, changeServer = tools.get_current_translate_server()
+    to_lang_code, change_lang = tools.get_current_to_lang()
+    server, change_server = tools.get_current_translate_server()
 
     translate_span = config.get_config_setting("translate_span")
 
-    if (s_from is None):
-        if (last_s_from_all is None):
+    if s_from is None:
+        if last_s_from_all is None:
             return t_ui("notice_from"), t_ui("notice_to")
-        elif (not add_old):
+        elif not add_old:
             s_from = last_s_from_all
 
     s_from = re.sub(r"-[\n|\r]+", "", s_from)
     s_from = re.sub(r"(?<!\.|-|。)[\n|\r]+", " ", s_from)
 
     # 文字和上次一样，并且被翻译的语言没有修改，就不翻译了
-    if (last_s_from == s_from and not changeLang and not changeServer):
+    if last_s_from == s_from and not change_lang and not change_server:
         return last_s_from_all, last_s_to_all
 
     span = translate_span * 1.2 - (time.time() - last_time)
-    if (span > 0):
+    if span > 0:
         time.sleep(span)
 
-    if (add_old):
+    if add_old:
         s_from_all = "%s %s" % (last_s_from_all, s_from)
     else:
         s_from_all = s_from
@@ -67,11 +67,11 @@ def text(s_from, add_old=True):
 
 def translate(s, server, to_lang_code, fromLang="auto"):
 
-    if (server == server_config.server_tencent):
+    if server == server_config.server_tencent:
         s = tencent.translate_text(s, fromLang, to_lang_code)
-    elif (server == server_config.server_baidu):
+    elif server == server_config.server_baidu:
         s = baidu.translate_text(s, fromLang, to_lang_code)
-    elif (server == server_config.server_youdao):
+    elif server == server_config.server_youdao:
         s = youdao.translate_text(s, fromLang, to_lang_code)
     else:
         s = google.translate_text(s, fromLang, to_lang_code)
@@ -91,20 +91,20 @@ def ocr(img_path):
         if config.is_ocr_local():
             import easyocr
             reader = easyocr.Reader(['ch_sim', 'en'])
-            list = reader.readtext(img_path, detail=0)
+            list_ = reader.readtext(img_path, detail=0)
             s = ""
-            for s_ in list:
+            for s_ in list_:
                 s += s_ + " "
             return True, s.strip()
-        server, changeServer = tools.get_current_translate_server()
-        if (server == server_config.server_tencent):
+        server, change_server = tools.get_current_translate_server()
+        if server == server_config.server_tencent:
             # 这个有问题，暂时用百度的
             ok, s = baidu.ocr(img_path)
         else:
             ok, s = baidu.ocr(img_path)
     except Exception as e:
         s = "识别错误：" + str(e)
-        if (config.is_ocr_local()):
+        if config.is_ocr_local():
             s += "。也可以使用在线文本识别（百度OCR），设置中可切换识别方式。离线识别请安装依赖，终端输入： pip3 install easyocr"
         else:
             s += "。也可以使用离线文本识别，请在设置中启用。离线识别精度 < 在线api，但无次数限制"
@@ -124,7 +124,7 @@ def check_server_translate(server, a, b):
     a = a.strip().replace("\n", " ")
     b = b.strip().replace("\n", " ")
     try:
-        if (server == server_config.server_tencent):
+        if server == server_config.server_tencent:
             ok = tencent.check(a, b)
         else:
             ok = baidu.check_translate(a, b)
@@ -140,7 +140,7 @@ def check_server_ocr(server, a, b):
     b = b.strip().replace("\n", " ")
 
     try:
-        if (server == server_config.server_tencent):
+        if server == server_config.server_tencent:
             ok = tencent.check(a, b)
         else:
             ok = baidu.check_ocr(a, b)

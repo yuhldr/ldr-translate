@@ -25,9 +25,17 @@ from api.server_config import server_baidu, server_tencent, dict_api_save, get_a
 # MainWindow.setWindowIcon(icon)
 
 
-class Ui_MainWindow(QMainWindow):
+def update_autostart(a):
+    config.update_autostart(a)
 
-    def setupUi(self, MainWindow):
+
+def update_ocr_local(a):
+    config.set_ocr_local(a)
+
+
+class UiMainWindow(QMainWindow):
+
+    def setup_ui(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(380, 336)
@@ -435,8 +443,8 @@ class Ui_MainWindow(QMainWindow):
 
     def load_data(self):
 
-        def get_value(tv, key, server=server_config.server_baidu):
-            tv.setText(config.get_value(server, key))
+        def get_value(tv, key_0, server_=server_config.server_baidu):
+            tv.setText(config.get_value(server_, key_0))
 
         dict_how = {
             self.lb_bdt_how: baidu.how_get_url_translate,
@@ -478,17 +486,11 @@ class Ui_MainWindow(QMainWindow):
         self.btn_bdo_save.clicked.connect(self.save_bdo)
         self.btn_tct_save.clicked.connect(self.save_tct)
         self.btn_update.clicked.connect(self.check_update)
-        self.cb_start_up.clicked.connect(self.update_autostart)
-        self.cb_ocr_local.clicked.connect(self.update_ocr_local)
+        self.cb_start_up.clicked.connect(update_autostart)
+        self.cb_ocr_local.clicked.connect(update_ocr_local)
 
     def on_cbb_tray_icon(self):
         config.set_tray_icon(self.cbb_tray_icon.currentText())
-
-    def update_autostart(self, a):
-        config.update_autostart(a)
-
-    def update_ocr_local(self, a):
-        config.set_ocr_local(a)
 
     def check_update(self, view=None):
 
@@ -520,19 +522,19 @@ class Ui_MainWindow(QMainWindow):
         text_b = tv_b.text()
 
         def set_ui(result):
-            ok, text_a, text_b = result
-            print(ok, text_a, text_b)
+            ok, text_a_, text_b_ = result
+            print(ok, text_a_, text_b_)
             msg = "超时或账号密码错误"
-            tv_a.setText(text_a)
-            tv_b.setText(text_b)
-            if (ok):
+            tv_a.setText(text_a_)
+            tv_b.setText(text_b_)
+            if ok:
                 msg = "成功，已保存"
                 key_a, key_b = get_api_key(server, is_ocr)
-                config.set_config(server, key_a, text_a)
-                config.set_config(server, key_b, text_b)
+                config.set_config(server, key_a, text_a_)
+                config.set_config(server, key_b, text_b_)
             lb_msg.setText(msg)
 
-        if (len(text_a) == 0 or len(text_b) == 0):
+        if len(text_a) == 0 or len(text_b) == 0:
             lb_msg.setText("已恢复默认（不推荐）")
         else:
             lb_msg.setText("加载中...")

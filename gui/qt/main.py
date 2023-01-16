@@ -18,16 +18,16 @@ class SystemTray(object):
         QApplication.setQuitOnLastWindowClosed(False)
         self.w.show()  # 不设置显示则为启动最小化到托盘
         self.tp = QSystemTrayIcon(self.w)
-        self.tp.setToolTip("ldr-tranlate")
+        self.tp.setToolTip("ldr-translate")
 
-        self.initUI()
+        self.init_ui()
         self.run()
 
-    def initUI(self):
+    def init_ui(self):
         # 设置托盘图标
         self.tp.setIcon(QIcon(config.get_tray_icon_file()))
 
-    def quitApp(self):
+    def quit_app(self):
         # 退出程序
         self.w.show()  # w.hide() #设置退出时是否显示主窗口
         re = QMessageBox.warning(self.w, "提示", "退出兰译",
@@ -43,34 +43,34 @@ class SystemTray(object):
         if reason == 2 or reason == 3:
             self.w.show()
 
-    def setAuto(self):
+    def set_auto(self):
         global isAuto
         isAuto = self.auto.isChecked()
 
-    def _on_prefrrence(self):
-        self.preferences = ui_preferences.Ui_MainWindow()
+    def _on_preference(self):
+        self.preferences = ui_preferences.UiMainWindow()
 
-        self.preferences.setupUi(self.preferences)
+        self.preferences.setup_ui(self.preferences)
 
         self.preferences.show()
 
     def run(self):
-        self.auto = QAction('复制即翻译', triggered=self.setAuto)
+        self.auto = QAction('复制即翻译', triggered=self.set_auto)
         self.auto.setEnabled(True)
         self.auto.setCheckable(True)
         self.auto.setChecked(True)
 
-        a0 = QAction('翻译设置', triggered=self._on_prefrrence)
+        a0 = QAction('翻译设置', triggered=self._on_preference)
 
         a1 = QAction('显示兰译', triggered=self.w.show)
-        a2 = QAction('退出兰译', triggered=self.quitApp)
+        a2 = QAction('退出兰译', triggered=self.quit_app)
 
-        tpMenu = QMenu()
-        tpMenu.addAction(self.auto)
-        tpMenu.addAction(a0)
-        tpMenu.addAction(a1)
-        tpMenu.addAction(a2)
-        self.tp.setContextMenu(tpMenu)
+        tp_menu = QMenu()
+        tp_menu.addAction(self.auto)
+        tp_menu.addAction(a0)
+        tp_menu.addAction(a1)
+        tp_menu.addAction(a2)
+        self.tp.setContextMenu(tp_menu)
         self.tp.show()  # 不调用show不会显示系统托盘消息，图标隐藏无法调用
 
         # 绑定托盘菜单点击事件
@@ -89,18 +89,18 @@ def change_deal():
     span = time.time() - deal_last
     deal_last = time.time()
 
-    if (isAuto and span > 0.5):
+    if isAuto and span > 0.5:
 
         data = clipboard.mimeData()
 
         formats = data.formats()
 
         # 如果是文本格式，把内容打印出来
-        if ('text/uri-list' not in formats):
-            if (MainWindow.isHidden()):
+        if 'text/uri-list' not in formats:
+            if MainWindow.isHidden():
                 MainWindow.show()
 
-        if ('application/x-qt-image' in formats):
+        if 'application/x-qt-image' in formats:
             # 必须有.png
             img_path = config.app_home_dir + "/copy_img.png"
             clipboard.image().save(img_path)

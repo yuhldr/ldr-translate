@@ -23,7 +23,7 @@ def translate_text(s, fromLang="auto", to_lang_code=""):
     # toLang = "zh"   # 译文语种
 
     secret_id, secret_key = get_secret_id_key()
-    if (len(secret_id) == 0 or len(secret_key) == 0):
+    if len(secret_id) == 0 or len(secret_key) == 0:
         return locales.t_translate("tencent.error.t")
 
     text, ok = translate(s, secret_id, secret_key, fromLang, to_lang_code)
@@ -68,7 +68,7 @@ def translate(query_text,
                            timeout=config.time_out)
 
     result = request.json()["Response"]
-    if ("Error" in result):
+    if "Error" in result:
         print(result)
 
         s1 = tools.error2zh(result["Error"]["Code"],
@@ -100,7 +100,7 @@ def ocr(img_path,
         region="ap-beijing",
         version="2018-11-19"):
     secret_id, secret_key = get_secret_id_key()
-    if (len(secret_id) == 0 or len(secret_key) == 0):
+    if len(secret_id) == 0 or len(secret_key) == 0:
         return locales.t_translate("tencent.error.o")
 
     img_data = open(img_path, 'rb').read()
@@ -127,9 +127,9 @@ def ocr(img_path,
                                params=data,
                                timeout=config.time_out)
 
-        if (request.status_code == 200):
+        if request.status_code == 200:
             result = request.json()["Response"]
-            if ("Error" in result):
+            if "Error" in result:
                 s1 = "腾讯OCR请求错误：" + result["Error"]["Code"] + " " + result[
                     "Error"]["Message"]
             else:

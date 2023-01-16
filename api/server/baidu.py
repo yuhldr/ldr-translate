@@ -28,32 +28,32 @@ error_msg2zh_ocr = {
 }
 
 
-def translate_text(s, fromLang="auto", toLang=""):
+def translate_text(s, from_lang="auto", to_lang=""):
 
-    appId = config.get_value(config_server, "translate_app_id")
-    secretKey = config.get_value(config_server, "translate_secret_key")
+    app_id = config.get_value(config_server, "translate_app_id")
+    secret_key = config.get_value(config_server, "translate_secret_key")
 
-    if (len(appId) == 0 or len(secretKey) == 0):
+    if len(app_id) == 0 or len(secret_key) == 0:
         return locales.t_translate("baidu.error.t")
 
-    text, ok = translate(s, appId, secretKey, fromLang, toLang)
+    text, ok = translate(s, app_id, secret_key, from_lang, to_lang)
     return text
 
 
-def translate(s, appId, secretKey, fromLang="auto", toLang="zh"):
+def translate(s, app_id, secret_key, from_lang="auto", to_lang="zh"):
     ok = True
 
     salt = random.randint(32768, 65536)
-    sign = appId + s + str(salt) + secretKey
+    sign = app_id + s + str(salt) + secret_key
     sign = hashlib.md5(sign.encode()).hexdigest()
     url = "https://api.fanyi.baidu.com/api/trans/vip/translate?appid=%s&q=%s&from=%s&to=%s&salt=%s&sign=%s"
-    url = url % (appId, urllib.parse.quote(s), fromLang, toLang, salt, sign)
+    url = url % (app_id, urllib.parse.quote(s), from_lang, to_lang, salt, sign)
     s1 = ""
 
     request = requests.get(url, timeout=config.time_out)
     result = request.json()
 
-    if ("error_code" in result):
+    if "error_code" in result:
         ok = False
         s1 = tools.error2zh(result["error_code"], result["error_msg"],
                             error_msg2zh, config_server)
@@ -76,7 +76,7 @@ def get_token_by_url(ocr_api_key, ocr_secret_key):
     request = requests.get(host, timeout=config.time_out)
 
     jsons = request.json()
-    if ("access_token" not in jsons):
+    if "access_token" not in jsons:
         access_token = "错误：" + jsons["error_description"]
     else:
         access_token = jsons["access_token"]
@@ -92,20 +92,20 @@ def get_token():
 
     expires_in_date = config.get_value(config_server, "expires_in_date")
 
-    if (expires_in_date - time.time() > 0):
+    if expires_in_date - time.time() > 0:
         access_token = config.get_value(config_server, "access_token")
-        if (len(access_token) != 0):
+        if len(access_token) != 0:
             return True, access_token
 
     ocr_api_key = config.get_value(config_server, "ocr_api_key")
     ocr_secret_key = config.get_value(config_server, "ocr_secret_key")
 
-    if (len(ocr_api_key) == 0 or len(ocr_secret_key) == 0):
+    if len(ocr_api_key) == 0 or len(ocr_secret_key) == 0:
         return False, locales.t_translate("baidu.error.o")
 
     ok, access_token, expires_in_date = get_token_by_url(
         ocr_api_key, ocr_secret_key)
-    if (ok):
+    if ok:
         config.set_config(config_server, "access_token", access_token)
         config.set_config(config_server, "expires_in_date", expires_in_date)
 
@@ -125,7 +125,7 @@ def ocr(img_path):
 
     img = base64.b64encode(img_data)
     ok, token = get_token()
-    if (not ok):
+    if not ok:
         return False, token
     params = {"image": img}
     request_url = request_url + "?access_token=" + token
@@ -137,8 +137,8 @@ def ocr(img_path):
 
     jsons = (response.json())
 
-    if ("error_code" in jsons):
-        if (110 == jsons["error_code"]):
+    if "error_code" in jsons:
+        if 110 == jsons["error_code"]:
             config.set_config(config_server, "access_token", "")
         return False, tools.error2zh(jsons["error_code"], jsons["error_msg"],
                                      error_msg2zh_ocr, config_server)

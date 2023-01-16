@@ -15,17 +15,25 @@ from qt_utils import MyThread
 from utils import tools, config
 
 
+def to_copy(is_selected):
+    translate.set_no_translate_this(is_selected)
+
+
+def from_copy(is_selected):
+    translate.set_no_translate_this(is_selected)
+
+
 class Ui_MainWindow(object):
 
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(400, 360)
-        MainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+    def setupUi(self, mainWindow):
+        mainWindow.setObjectName("MainWindow")
+        mainWindow.resize(400, 360)
+        mainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icon/icon.svg"))
-        MainWindow.setWindowIcon(icon)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        mainWindow.setWindowIcon(icon)
+        self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -55,19 +63,13 @@ class Ui_MainWindow(object):
         self.te_to = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.te_to.setObjectName("te_to")
         self.verticalLayout.addWidget(self.te_to)
-        MainWindow.setCentralWidget(self.centralwidget)
+        mainWindow.setCentralWidget(self.centralwidget)
 
-        self.te_from.copyAvailable.connect(self.from_copy)
-        self.te_to.copyAvailable.connect(self.to_copy)
+        self.te_from.copyAvailable.connect(from_copy)
+        self.te_to.copyAvailable.connect(to_copy)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    def from_copy(self, is_selected):
-        translate.set_no_translate_this(is_selected)
-
-    def to_copy(self, is_selected):
-        translate.set_no_translate_this(is_selected)
+        self.retranslateUi(mainWindow)
+        QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -78,55 +80,55 @@ class Ui_MainWindow(object):
         self.cb_add.setText(_translate("MainWindow", t_ui("cb_add_label")))
 
         self.cbb_translate_to_lang.currentIndexChanged.connect(
-            self.on_cbb_tanslate_lang_changed)
+            self.on_cbb_translate_lang_changed)
 
         self.cbb_translate_server.addItems(
             tools.get_translate_server_dict_by_locale().keys())
         s = tools.get_current_translate_server_locale()
         self.cbb_translate_server.setCurrentText(s)
         self.cbb_translate_server.currentIndexChanged.connect(
-            self.on_cbb_tanslate_server_changed)
-        self.set_cbb_tanslate_to_lang_data()
+            self.on_cbb_translate_server_changed)
+        self.set_cbb_translate_to_lang_data()
 
         self.te_to.setPlainText(_translate("MainWindow", t_ui("notice_to")))
         self.te_from.setPlainText(_translate("MainWindow",
                                              t_ui("notice_from")))
-        self.pushButton.clicked.connect(self.btnTranslate)
+        self.pushButton.clicked.connect(self.btn_translate)
 
-    def on_cbb_tanslate_lang_changed(self):
+    def on_cbb_translate_lang_changed(self):
         tools.set_to_lang(self.cbb_translate_to_lang.currentText())
 
         # self.btnTranslate()
 
-    def set_cbb_tanslate_to_lang_data(self, i=-1):
+    def set_cbb_translate_to_lang_data(self, i=-1):
         self.cbb_translate_to_lang.clear()
 
         self.cbb_translate_to_lang.addItems(
             tools.get_to_lang_dict_by_locale().keys())
 
-        if (i < 0):
+        if i < 0:
             i = tools.get_current_to_lang_index()
         self.cbb_translate_to_lang.setCurrentIndex(i)
 
-    def on_cbb_tanslate_server_changed(self):
+    def on_cbb_translate_server_changed(self):
         tools.set_translate_server(self.cbb_translate_server.currentText())
         i = tools.get_current_to_lang_index(tools.translate_to_lang_cache)
 
-        self.set_cbb_tanslate_to_lang_data(i)
+        self.set_cbb_translate_to_lang_data(i)
 
-    def isAdd(self):
+    def is_add(self):
         return self.cb_add.isChecked()
 
     def ocr_image(self, img_path):
-        def next(param):
+        def next_(param):
             ok, s = param
             self.set_ui((s, "文本识别成功！"))
             self.translate_text(s)
 
         s = config.get_ocr_notice()
         self.set_ui((s, s))
-        self.thread = MyThread(translate.ocr2, (img_path))
-        self.thread.signal.connect(next)
+        self.thread = MyThread(translate.ocr2, img_path)
+        self.thread.signal.connect(next_)
         self.thread.start()
 
     def set_ui(self, param):
@@ -144,10 +146,10 @@ class Ui_MainWindow(object):
 
         self.set_ui((text_from, "翻译中..."))
         print("翻译中...", text_from)
-        self.thread = MyThread(translate.text2, (text_from, self.isAdd()))
+        self.thread = MyThread(translate.text2, (text_from, self.is_add()))
         self.thread.signal.connect(self.set_ui)
         self.thread.start()
 
-    def btnTranslate(self):
+    def btn_translate(self):
         text_from = self.te_from.toPlainText()
         self.translate_text(text_from)

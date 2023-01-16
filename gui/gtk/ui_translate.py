@@ -9,6 +9,17 @@ import time
 import threading
 
 
+def on_cbt_lang_changed(combo):
+    text = combo.get_active_text()
+    tools.set_to_lang(text)
+
+    return text
+
+
+def copy_(a):
+    translate.set_no_translate_this()
+
+
 class Translate(Gtk.ApplicationWindow):
 
     setting_titles = ["百度API", "其他待补充"]
@@ -31,10 +42,10 @@ class Translate(Gtk.ApplicationWindow):
         self.tv_from = ui.get_object('tv_from')
         self.tv_to = ui.get_object('tv_to')
 
-        self.tv_from.connect("copy-clipboard", self.copy_)
-        self.tv_from.connect("cut-clipboard", self.copy_)
-        self.tv_to.connect("copy-clipboard", self.copy_)
-        self.tv_to.connect("cut-clipboard", self.copy_)
+        self.tv_from.connect("copy-clipboard", copy_)
+        self.tv_from.connect("cut-clipboard", copy_)
+        self.tv_to.connect("copy-clipboard", copy_)
+        self.tv_to.connect("cut-clipboard", copy_)
 
         self.cbt_server = ui.get_object('cbt_server')
         for currency in tools.get_translate_server_dict_by_locale().keys():
@@ -46,7 +57,7 @@ class Translate(Gtk.ApplicationWindow):
 
         self.cbt_lang = ui.get_object('cbt_lang')
         self.set_to_lang_data()
-        self.cbt_lang.connect("changed", self.on_cbt_lang_changed)
+        self.cbt_lang.connect("changed", on_cbt_lang_changed)
 
         self.sp_translate = ui.get_object('sp_translate')
         self.btn_translate = ui.get_object('btn_translate')
@@ -58,9 +69,6 @@ class Translate(Gtk.ApplicationWindow):
         self.cbtn_add_old.set_label(t_ui("cb_add_label"))
 
         self.btn_translate.set_label(t_ui("btn_translate_label"))
-
-    def copy_(self, a):
-        translate.set_no_translate_this()
 
     def open(self):
         self.is_hide = False
@@ -75,15 +83,9 @@ class Translate(Gtk.ApplicationWindow):
         for currency in tools.get_to_lang_dict_by_locale().keys():
             self.cbt_lang.append_text(currency)
 
-        if (i < 0):
+        if i < 0:
             i = tools.get_current_to_lang_index()
         self.cbt_lang.set_active(i)
-
-    def on_cbt_lang_changed(self, combo):
-        text = combo.get_active_text()
-        tools.set_to_lang(text)
-
-        return text
 
     def on_cbt_server_changed(self, combo):
         text = combo.get_active_text()
@@ -94,15 +96,15 @@ class Translate(Gtk.ApplicationWindow):
         return text
 
     def copy_auto_translate(self, clipboard=None):
-        if (clipboard is not None):
+        if clipboard is not None:
             span = time.time() - self.deal_last
             self.deal_last = time.time()
             if span < 0.5:
                 return
-            image_pixbuf = clipboard.wait_for_image()
-            print("copy", image_pixbuf)
-            if image_pixbuf is not None:
-                self.ocr_image(image_pixbuf)
+            image = clipboard.wait_for_image()
+            print("copy", image)
+            if image is not None:
+                self.ocr_image(image)
             else:
                 self.translate_by_s(clipboard.wait_for_text())
         else:
@@ -111,18 +113,18 @@ class Translate(Gtk.ApplicationWindow):
     # 按钮再次翻译（可能修改了文本）
     def update_translate_view(self, view=None):
 
-        textbuffer_from = self.tv_from.get_buffer()
+        tb_from = self.tv_from.get_buffer()
 
-        start_iter = textbuffer_from.get_start_iter()
-        end_iter = textbuffer_from.get_end_iter()
-        s = textbuffer_from.get_text(start_iter, end_iter, True)
+        start_iter = tb_from.get_start_iter()
+        end_iter = tb_from.get_end_iter()
+        s = tb_from.get_text(start_iter, end_iter, True)
 
         self.translate_by_s(s_from=s)
 
-    def ocr_image(self, image_pixbuf):
+    def ocr_image(self, image_p):
 
-        def next(img_path):
-            ok, text = translate.ocr(img_path)
+        def next_ocr(_img_path):
+            ok, text = translate.ocr(_img_path)
             self.sp_translate.stop()
             self.translate_by_s(text)
 
@@ -130,9 +132,9 @@ class Translate(Gtk.ApplicationWindow):
         self.sp_translate.start()
 
         img_path = config.app_home_dir + "/copy_img"
-        image_pixbuf.savev(img_path, "png", "", "")
+        image_p.savev(img_path, "png", "", "")
 
-        tt = threading.Thread(target=next,
+        tt = threading.Thread(target=next_ocr,
                               args=(img_path,))
         tt.start()
 
@@ -141,17 +143,17 @@ class Translate(Gtk.ApplicationWindow):
             translate.set_no_translate_this(False)
             return
 
-        def request_text(s_from=None):
+        def request_text(s_from_=None):
             start_ = time.time()
-            s_from, s_to = translate.text(
-                s_from, add_old=self.cbtn_add_old.get_active())
+            s_from_, s_to = translate.text(
+                s_from_, add_old=self.cbtn_add_old.get_active())
             span = 0.5 - (time.time() - start_)
             if span > 0:
                 time.sleep(span)
-            self.set_text_view(s_from, s_to)
+            self.set_text_view(s_from_, s_to)
             self.sp_translate.stop()
 
-        if (s_from is not None):
+        if s_from is not None:
             self.set_text_view(s_from, "翻译中……")
             self.sp_translate.start()
         tt = threading.Thread(target=request_text, args=(s_from, ))
@@ -159,10 +161,10 @@ class Translate(Gtk.ApplicationWindow):
 
     def set_text_view(self, s_from, s_to):
 
-        def set_text(s_from, s_to):
+        def set_text(s_from_, s_to_):
 
-            if (len(s_from.strip()) > 0 and len(s_to.strip()) > 0):
-                self.tv_from.get_buffer().set_text(s_from.strip())
-                self.tv_to.get_buffer().set_text(s_to.strip())
+            if len(s_from_.strip()) > 0 and len(s_to_.strip()) > 0:
+                self.tv_from.get_buffer().set_text(s_from_.strip())
+                self.tv_to.get_buffer().set_text(s_to_.strip())
 
         GLib.idle_add(set_text, s_from, s_to)
