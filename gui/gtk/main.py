@@ -151,7 +151,7 @@ class LdrTranlate(Gtk.Application):
         if (self.translate_win is None or self.translate_win.is_hide):
             self.translate_win = Translate()
             self.translate_win.open()
-        if(b is None):
+        if b is None:
             a = None
         self.translate_win.copy_auto_translate(a)
 

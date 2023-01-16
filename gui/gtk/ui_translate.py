@@ -15,6 +15,7 @@ class Translate(Gtk.ApplicationWindow):
     setting_title_types = [baidu.config_server, ""]
     is_hide = True
     clipboard = None
+    deal_last = 0
 
     def __init__(self):
         Gtk.Window.__init__(self)
@@ -42,7 +43,6 @@ class Translate(Gtk.ApplicationWindow):
         self.cbt_server.connect("changed", self.on_cbt_server_changed)
 
         self.cbtn_add_old = ui.get_object('cbtn_add_old')
-
 
         self.cbt_lang = ui.get_object('cbt_lang')
         self.set_to_lang_data()
@@ -95,7 +95,12 @@ class Translate(Gtk.ApplicationWindow):
 
     def copy_auto_translate(self, clipboard=None):
         if (clipboard is not None):
+            span = time.time() - self.deal_last
+            self.deal_last = time.time()
+            if span < 0.5:
+                return
             image_pixbuf = clipboard.wait_for_image()
+            print("copy", image_pixbuf)
             if image_pixbuf is not None:
                 self.ocr_image(image_pixbuf)
             else:

@@ -1,4 +1,5 @@
 import sys
+import time
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QAction, QMenu, QSystemTrayIcon, QApplication, QMessageBox
 
@@ -79,10 +80,17 @@ class SystemTray(object):
 
 isAuto = True
 
+deal_last = 0
+
 
 # 当剪切板变动会执行该方法
 def change_deal():
-    if (isAuto):
+    global deal_last
+    span = time.time() - deal_last
+    deal_last = time.time()
+
+    if (isAuto and span > 0.5):
+
         data = clipboard.mimeData()
 
         formats = data.formats()
