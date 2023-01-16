@@ -31,10 +31,9 @@ jobs:
       run: make deb-gtk && make deb-qt
 
     - name: Build rpm package
-      install: |
-        apt update -y
-        apt-get -qq install -y rpm
       run: |
+        apt update -y
+        apt-get install -y rpm
         make rpm-gtk && make rpm-qt
 
     - name: Build archlinux package
