@@ -1,8 +1,9 @@
 import re
-from api.server import baidu, tencent, youdao, google
 import time
-from utils import tools, config
+
 from api import server_config
+from api.server import baidu, tencent, youdao, google
+from utils import tools, config
 from utils.locales import t_ui, t
 
 last_s_from = None
@@ -14,6 +15,7 @@ no_translate_this = False
 
 path_next_s = "s_next"
 config_section = "setting"
+
 
 # 整合一下，方便接入其他api接口
 
@@ -66,7 +68,6 @@ def text(s_from, add_old=True):
 
 
 def translate(s, server, to_lang_code, fromLang="auto"):
-
     if server == server_config.server_tencent:
         s = tencent.translate_text(s, fromLang, to_lang_code)
     elif server == server_config.server_baidu:

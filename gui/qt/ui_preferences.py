@@ -9,14 +9,16 @@
 
 from PyQt5 import QtGui
 from PyQt5.QtCore import QSize, QCoreApplication, Qt
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QCheckBox, QLabel, QComboBox, QPushButton, QLineEdit, QSpacerItem, QSizePolicy, QMainWindow
-from qt_utils import MyThread
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QCheckBox, QLabel, QComboBox, QPushButton, \
+    QLineEdit, QSpacerItem, QSizePolicy, QMainWindow
 
+from api import server_config
 from api import translate
 from api.server import baidu, tencent
-from utils import config, version
-from api import server_config
 from api.server_config import server_baidu, server_tencent, dict_api_save, get_api_key
+from qt_utils import MyThread
+from utils import config, version
+
 
 # MainWindow.setWindowFlags(Qt.WindowStaysOnTopHint)
 
@@ -436,10 +438,10 @@ class UiMainWindow(QMainWindow):
         self.load_data()
         self._listen()
 
-# self.load_data()
-# self._listen()
+    # self.load_data()
+    # self._listen()
 
-# retranslateUi
+    # retranslateUi
 
     def load_data(self):
 

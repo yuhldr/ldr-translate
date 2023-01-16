@@ -1,17 +1,18 @@
+import base64
 import hashlib
 import random
-import base64
-import requests
-import urllib
 import time
-from utils import locales, tools, config
+import urllib
+
+import requests
+
 from api import server_config
+from utils import locales, tools, config
 
 config_server = server_config.server_baidu
 
 how_get_url_translate = "https://doc.tern.1c7.me/zh/folder/setting/#%E7%99%BE%E5%BA%A6"
 how_get_url_ocr = "https://cloud.baidu.com/doc/OCR/s/dk3iqnq51"
-
 
 # 错误代码:locale文件中对应错误说明的key
 error_msg2zh = {
@@ -29,7 +30,6 @@ error_msg2zh_ocr = {
 
 
 def translate_text(s, from_lang="auto", to_lang=""):
-
     app_id = config.get_value(config_server, "translate_app_id")
     secret_key = config.get_value(config_server, "translate_secret_key")
 

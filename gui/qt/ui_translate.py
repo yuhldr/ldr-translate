@@ -10,9 +10,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from api import translate
-from utils.locales import t_ui
 from qt_utils import MyThread
 from utils import tools, config
+from utils.locales import t_ui
 
 
 def to_copy(is_selected):
@@ -23,9 +23,9 @@ def from_copy(is_selected):
     translate.set_no_translate_this(is_selected)
 
 
-class Ui_MainWindow(object):
+class UiMainWindow(object):
 
-    def setupUi(self, mainWindow):
+    def setup_ui(self, mainWindow):
         mainWindow.setObjectName("MainWindow")
         mainWindow.resize(400, 360)
         mainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)

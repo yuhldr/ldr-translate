@@ -1,5 +1,5 @@
-import json
 import copy
+import json
 import locale
 import os
 
@@ -19,7 +19,7 @@ def load_configs():
     global locale_data
     key = locale.getdefaultlocale()[0]
     path_locale = "%s/%s.json" % (locale_dir, key)
-    if (not os.path.exists(path_locale)):
+    if not os.path.exists(path_locale):
         path_locale = "%s/en_US.json" % locale_dir
 
     locale_data = get_locale_data(path_locale)
@@ -35,7 +35,7 @@ def t_ui(key):
 
 # t(ldr.cl.sd)
 def t(keys):
-    if (locale_data is None):
+    if locale_data is None:
         load_configs()
     return t_(keys, locale_data)
 
@@ -43,10 +43,10 @@ def t(keys):
 def t_(keys, locale_data_):
     dicts = copy.deepcopy(locale_data_)
     for key in keys.split("."):
-        if (key in dicts):
+        if key in dicts:
             dicts = dicts[key]
         else:
-            if (locale_data["key"] == locale_key_default):
+            if locale_data["key"] == locale_key_default:
                 return keys
             else:
                 return t_(keys, get_locale_data())

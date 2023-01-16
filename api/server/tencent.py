@@ -1,12 +1,13 @@
-import hashlib
-import random
-import requests
-import time
 import base64
+import hashlib
 import hmac
+import random
+import time
 
-from utils import locales, tools, config
+import requests
+
 from api import server_config
+from utils import locales, tools, config
 
 config_server = server_config.server_tencent
 

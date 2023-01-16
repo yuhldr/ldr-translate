@@ -2,13 +2,14 @@ import json
 import os
 import shutil
 from pathlib import Path
+
 from utils.locales import t
 
 config_data = None
 config_file_name = "config.json"
 
 HOME_PATH = os.getenv("SUDO_HOME")
-if (HOME_PATH is None):
+if HOME_PATH is None:
     HOME_PATH = os.getenv("HOME")
 
 DESKTOP_NAME = "ldr-translate.desktop"
@@ -32,8 +33,8 @@ def get_this_config_data():
 
 def get_config_data():
     global config_data
-    if (config_data is None):
-        if (not os.path.exists(config_home_path)):
+    if config_data is None:
+        if not os.path.exists(config_home_path):
             config_data = json.load(open(config_file_name, "r"))
         else:
             config_data = json.load(open(config_home_path, "r"))
@@ -42,9 +43,9 @@ def get_config_data():
 
 def get_value(section, key):
     get_config_data()
-    if (section not in config_data):
+    if section not in config_data:
         return get_this_config_data()[section][key]
-    if (key not in config_data[section]):
+    if key not in config_data[section]:
         return get_this_config_data()[section][key]
     return config_data[section][key]
 

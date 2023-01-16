@@ -1,12 +1,14 @@
 #!/usr/bin/python3
 # coding: utf-8
+import threading
+import time
+
+from gi.repository import Gtk, GLib
+
 from api import translate
 from api.server import baidu
 from utils import config, tools
 from utils.locales import t_ui
-from gi.repository import Gtk, GLib
-import time
-import threading
 
 
 def on_cbt_lang_changed(combo):
@@ -21,7 +23,6 @@ def copy_(a):
 
 
 class Translate(Gtk.ApplicationWindow):
-
     setting_titles = ["百度API", "其他待补充"]
     setting_title_types = [baidu.config_server, ""]
     is_hide = True
@@ -156,13 +157,12 @@ class Translate(Gtk.ApplicationWindow):
         if s_from is not None:
             self.set_text_view(s_from, "翻译中……")
             self.sp_translate.start()
-        tt = threading.Thread(target=request_text, args=(s_from, ))
+        tt = threading.Thread(target=request_text, args=(s_from,))
         tt.start()
 
     def set_text_view(self, s_from, s_to):
 
         def set_text(s_from_, s_to_):
-
             if len(s_from_.strip()) > 0 and len(s_to_.strip()) > 0:
                 self.tv_from.get_buffer().set_text(s_from_.strip())
                 self.tv_to.get_buffer().set_text(s_to_.strip())

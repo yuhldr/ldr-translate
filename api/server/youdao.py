@@ -1,7 +1,9 @@
-import requests
 import urllib
-from utils import config
+
+import requests
+
 from api import server_config
+from utils import config
 
 config_server = server_config.server_youdao
 

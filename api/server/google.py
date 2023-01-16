@@ -1,8 +1,9 @@
-import requests
 import json
+
+import requests
+
 from api import server_config
 from utils import config
-
 
 config_server = server_config.server_google
 

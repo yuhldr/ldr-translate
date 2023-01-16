@@ -1,12 +1,12 @@
 import sys
 import time
+
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QAction, QMenu, QSystemTrayIcon, QApplication, QMessageBox
 
-from utils import config
-
-import ui_translate
 import ui_preferences
+import ui_translate
+from utils import config
 
 
 class SystemTray(object):
@@ -111,12 +111,11 @@ def change_deal():
 
 
 if __name__ == "__main__":
-
     app = QApplication(sys.argv)
 
     MainWindow = QMainWindow()
-    ui = ui_translate.Ui_MainWindow()
-    ui.setupUi(MainWindow)
+    ui = ui_translate.UiMainWindow()
+    ui.setup_ui(MainWindow)
     MainWindow.show()
 
     clipboard = app.clipboard()

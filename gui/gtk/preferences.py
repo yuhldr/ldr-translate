@@ -1,11 +1,11 @@
-from api import translate
-from api.server import baidu, tencent
-from utils import config, version
-from api.server_config import server_baidu, server_tencent, get_api_key
 import threading
 
-
 from gi.repository import Gtk, GLib
+
+from api import translate
+from api.server import baidu, tencent
+from api.server_config import server_baidu, server_tencent, get_api_key
+from utils import config, version
 
 
 def on_cbb_tray_icon(combo):
@@ -13,7 +13,6 @@ def on_cbb_tray_icon(combo):
 
 
 def update_autostart(menu_check):
-
     config.update_autostart(menu_check.get_active())
 
 
