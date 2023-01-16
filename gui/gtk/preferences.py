@@ -27,6 +27,40 @@ def get_text(text_view):
     return text
 
 
+def save_server(tv_a, tv_b, lb_msg, server, is_ocr=False):
+    text_a = get_text(tv_a)
+    text_b = get_text(tv_b)
+
+    def _save(text_a_, text_b_):
+        ok, text_a_, text_b_ = translate.check_server_api(
+            (is_ocr, server, text_a_, text_b_))
+
+        msg = "超时或账号密码错误"
+
+        tv_a.set_text(text_a_)
+        tv_b.set_text(text_b_)
+
+        if ok:
+            msg = "成功，已保存"
+            key_a, key_b = get_api_key(server, is_ocr)
+            config.set_config(server, key_a, text_a_)
+            config.set_config(server, key_b, text_b_)
+        lb_msg.set_text(msg)
+
+    def _save_c(text_a_, text_b_):
+        GLib.idle_add(_save, text_a_, text_b_)
+
+    if len(text_a) == 0 or len(text_b) == 0:
+        lb_msg.set_text("已恢复默认（不推荐）")
+    else:
+        lb_msg.set_text("加载中...")
+        tt = threading.Thread(target=_save_c, args=(
+            text_a,
+            text_b,
+        ))
+        tt.start()
+
+
 class Preference(Gtk.ApplicationWindow):
 
     def __init__(self, parent):
@@ -63,7 +97,6 @@ class Preference(Gtk.ApplicationWindow):
         self.show_all()
 
     def init_other(self, ui):
-
         cbtn_auto_start = ui.get_object('cbtn_auto_start')
         cbtn_auto_start.set_active(config.get_autostart())
         cbtn_auto_start.connect('toggled', update_autostart)
@@ -83,7 +116,6 @@ class Preference(Gtk.ApplicationWindow):
         self.cbb_tray_icon.connect("changed", on_cbb_tray_icon)
 
     def init_baidu_api(self, ui):
-
         def set_value(tv, key):
             tv.set_text(config.get_value(server_baidu, key))
 
@@ -104,7 +136,6 @@ class Preference(Gtk.ApplicationWindow):
         ui.get_object('lb_baidu_ocr_way').set_markup(url_ocr)
 
     def init_tencent(self, ui):
-
         def set_value(tv, key):
             tv.set_text(config.get_value(server_tencent, key))
 
@@ -117,8 +148,7 @@ class Preference(Gtk.ApplicationWindow):
         ui.get_object('btn_tencent_save').connect("clicked", self.save_tencent)
 
     def save_baidu_translate(self, btn=None):
-
-        self.save_server(
+        save_server(
             self.tv_baidu_translate_app_id,
             self.tv_baidu_translate_secret_key,
             self.lb_baidu_translate_msg,
@@ -131,17 +161,15 @@ class Preference(Gtk.ApplicationWindow):
         config.set_config(server, "access_token", "")
         config.set_config(server, "expires_in_date", 0)
 
-        self.save_server(self.tv_baidu_ocr_app_key,
-                         self.tv_baidu_ocr_secret_key, self.lb_baidu_ocr_msg,
-                         server, True)
+        save_server(self.tv_baidu_ocr_app_key,
+                    self.tv_baidu_ocr_secret_key, self.lb_baidu_ocr_msg,
+                    server, True)
 
     def save_tencent(self, btn=None):
-
-        self.save_server(self.tv_tencent_secret_id, self.tv_tencent_secret_key,
-                         self.lb_tencent_msg, server_tencent)
+        save_server(self.tv_tencent_secret_id, self.tv_tencent_secret_key,
+                    self.lb_tencent_msg, server_tencent)
 
     def check_update(self, view=None):
-
         def _check():
             s, msg = version.check_update()
             self.lb_version_msg.set_markup(s)
@@ -150,37 +178,3 @@ class Preference(Gtk.ApplicationWindow):
 
         tt = threading.Thread(target=_check)
         tt.start()
-
-    def save_server(self, tv_a, tv_b, lb_msg, server, is_ocr=False):
-
-        text_a = self.get_text(tv_a)
-        text_b = self.get_text(tv_b)
-
-        def _save(text_a_, text_b_):
-            ok, text_a_, text_b_ = translate.check_server_api(
-                (is_ocr, server, text_a_, text_b_))
-
-            msg = "超时或账号密码错误"
-
-            tv_a.set_text(text_a_)
-            tv_b.set_text(text_b_)
-
-            if ok:
-                msg = "成功，已保存"
-                key_a, key_b = get_api_key(server, is_ocr)
-                config.set_config(server, key_a, text_a_)
-                config.set_config(server, key_b, text_b_)
-            lb_msg.set_text(msg)
-
-        def _save_c(text_a_, text_b_):
-            GLib.idle_add(_save, text_a_, text_b_)
-
-        if len(text_a) == 0 or len(text_b) == 0:
-            lb_msg.set_text("已恢复默认（不推荐）")
-        else:
-            lb_msg.set_text("加载中...")
-            tt = threading.Thread(target=_save_c, args=(
-                text_a,
-                text_b,
-            ))
-            tt.start()
