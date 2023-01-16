@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import QMainWindow, QAction, QMenu, QSystemTrayIcon, QAppli
 from utils import config
 
 import ui_translate
-from api import translate
 import ui_preferences
 
 

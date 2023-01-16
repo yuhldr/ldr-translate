@@ -30,8 +30,11 @@ build:
 	cp data/$(NAME).desktop build/$(NAME)/usr/share/applications/
 
 	cp -r utils api data/icon data/config.json data/version.json data/locales build/$(NAME)$(APP_PATH)/$(NAME)/
+
 	sed -i "/code/s/:\s*[0-9]*,/: $(VERSION_CODE),/g" build/$(NAME)$(APP_PATH)/$(NAME)/version.json
 	sed -i "/name/s/[0-9]\.[0-9]\.[0-9]/$(VERSION_NAME)/g" build/$(NAME)$(APP_PATH)/$(NAME)/version.json
+
+	find build/$(NAME) -name "*.pyc" -type f -delete
 
 
 gtk:
@@ -89,11 +92,6 @@ deb-qt:
 	cp build/deb/qt/$(NAME)-qt.deb disk/$(NAME)-qt-$(VERSION_NAME).deb
 
 
-rpm:
-	@echo 暂不支持，请输入以下命令，即可安装
-	@echo 'make check-qt && make qt && make install'
-
-
 aur-gtk:
 	mkdir -p build/aur/gtk
 
@@ -123,6 +121,32 @@ aur-qt:
 	makepkg -f
 	cp build/aur/qt/*.zst disk/
 
+rpm-gtk:
+	mkdir -p build/rpm/gtk/BUILD
+	cp -r build/gtk/$(NAME) build/rpm/gtk/BUILD/
+
+	cd build/rpm/gtk && \
+	cp -r ../../../data/pkg/rpm/SPECS ./ && \
+	cd SPECS && \
+	sed -i "s/PKG_TYPE/gtk/g" ldr.spec && \
+	sed -i "s/^Version:/Version: $(VERSION_NAME)/g" ldr.spec && \
+	rpmbuild -bb ldr.spec
+
+	cp build/rpm/gtk/RPMS/x86_64/*.rpm disk/
+
+
+rpm-qt:
+	mkdir -p build/rpm/qt/BUILD
+	cp -r build/qt/$(NAME) build/rpm/qt/BUILD/
+
+	cd build/rpm/qt && \
+	cp -r ../../../data/pkg/rpm/SPECS ./ && \
+	cd SPECS && \
+	sed -i "s/PKG_TYPE/qt/g" ldr.spec && \
+	sed -i "s/^Version:/Version: $(VERSION_NAME)/g" ldr.spec && \
+	rpmbuild -bb ldr.spec
+
+	cp build/rpm/qt/RPMS/x86_64/*.rpm disk/
 
 all:
 	make clear
@@ -130,9 +154,11 @@ all:
 	make gtk
 	make deb-gtk
 	make aur-gtk
+	make rpm-gtk
 	make qt
 	make deb-qt
 	make aur-qt
+	make rpm-qt
 
 
 uninstall:
@@ -144,5 +170,14 @@ clear:
 	rm -rf ./build
 	rm -rf ./test*
 	rm -rf ./tempCodeRunnerFile*
+
+
+
+check-gtk:
+	pip3 install requests PyGObject
+
+check-qt:
+	pip3 install requests PyQt5
+
 
 .PHONY:build

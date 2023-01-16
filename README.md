@@ -1,6 +1,5 @@
-# 兰译
+# 兰译 <img src="data/icon/icon.png" width = "36" height = "36" alt="图片名称" align=center />
 
- <img src="data/icon/icon.png" width = "36" height = "36" alt="图片名称" align=center />
  一个翻译软件，使用Gtk3开发（最近开发了QT版本），python语言，翻译用的百度、腾讯接口
 
 ## 特点
@@ -18,7 +17,7 @@ qt版本|![qt1](md/images/qt1.png)|![qt2](md/images/qt2.png)|![qt3](md/images/qt
 
 ## 安装
 
-- archlinux 或 manjaro 系统
+- archlinux 或 manjaro 系统 等支持 `pacman` 的系统
   
   > 已经发布在 `aur`，但是只包含 `稳定版`，而且 `aur` 在国内可能无法使用
 
@@ -52,7 +51,7 @@ qt版本|![qt1](md/images/qt1.png)|![qt2](md/images/qt2.png)|![qt3](md/images/qt
           `gnome` 桌面注意安装依赖 `gnome-shell-extension-appindicator`
 
 
-- ubuntu22.04 或其他支持 deb 的系统
+- ubuntu22.04 或其他支持 `deb` 的系统
 
     > 注意，没有刻意适配 `wayland`，对于 `ubuntu22.04` 建议注销重新登录，输入密码前，右下角，选择 `xorg`
 
@@ -77,6 +76,26 @@ qt版本|![qt1](md/images/qt1.png)|![qt2](md/images/qt2.png)|![qt3](md/images/qt
         ```
 
    5. 终端输入 `ldr` 或直接点击“兰译”图标即可运行
+
+
+- centos、Rocky、fedora等支持 `rpm` 的系统
+
+     > 注意，没有刻意适配依赖问题，可以看下面常见问题，里面有相关的依赖说明
+
+   1. 在 [github-release](https://github.com/yuhldr/ldr-translate/releases/) 下载 `.deb` 的安装包（包含 `gtk` 和 `qt` 两种）
+
+   2. 然后在下载目录，右键，终端打开，终端输入：
+
+     - fedora
+
+        ```bash
+        sudo dnf install ./下载的rpm文件名
+        ```
+     - rocky、centos
+
+        ```bash
+        sudo dnf -i ./下载的rpm文件名
+        ```
 
 
 - 其他系统 [看这里](md/build.md)

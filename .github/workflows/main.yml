@@ -27,8 +27,15 @@ jobs:
         make gtk
         make qt
 
-    - name: Build deb
+    - name: Build deb package
       run: make deb-gtk && make deb-qt
+
+    - name: Build rpm package
+      install: |
+        apt update -y
+        apt-get -qq install -y rpm
+      run: |
+        make rpm-gtk && make rpm-qt
 
     - name: Build archlinux package
       uses: vufa/arch-makepkg-action@master
@@ -49,5 +56,4 @@ jobs:
         prerelease: true
         draft: false
         files: |
-          disk/*.deb
-          disk/*.zst
+          disk/*

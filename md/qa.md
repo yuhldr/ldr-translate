@@ -110,17 +110,21 @@ cd /opt/ldr-translate && python3 main.py
 
 - 如果是在 `gnome` 桌面（如ubuntu22.04）使用 `gtk` 版本，总是白灰色
 
-    百度：`ubuntu22.04 主题美化如何适配旧应用` 
+    搜索：`ubuntu22.04 主题美化`
+
+    注意，不同版本的ubuntu不一样，以前好像不叫这个名字：`gnome-tweaks`，
 
 
 - 如果在 `gnome` 桌面（如ubuntu22.04）安装了 `qt` 版本
 
     > 注意：`qt` 版本只推荐在 `kde` 桌面环境
 
-    百度：`gnome主题如何适配qt软件`
+    搜索：`gnome主题如何适配qt软件`
+
+    好像用到这个软件：`qt5ct`，可以参考 [这里](https://www.jianshu.com/p/f4dff8ccea86)：
 
 - 如果是在 `kde` 桌面，使用了 `gtk` 版本（此桌面环境不推荐此版本）
 
     > 注意：`gtk` 版本只推荐在 `gnome` 桌面环境
 
-    百度：`kde桌面如何为gtk软件设置主题`
+    搜索：`kde桌面如何为gtk软件设置主题`
