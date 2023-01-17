@@ -13,9 +13,11 @@
 gtk版本|![gtk1](md/images/gtk1.png)|![gtk2](md/images/gtk2.png)|![gtk3](md/images/gtk3.png)
 qt版本|![qt1](md/images/qt1.png)|![qt2](md/images/qt2.png)|![qt3](md/images/qt3.png)
 
-
-
 ## 安装
+
+> 建议使用 自动打包 的预览版，预览版并非不稳定，只是因为我懒得天天 release 更新
+
+> `qt` 版本不是只能在 `kde` 桌面使用，`gtk` 版本也并不是只能在 `gnome` 桌面使用，都可以试试，`划词翻译` 目前仅支持 `gtk` 版本。
 
 - archlinux 或 manjaro 系统 等支持 `pacman` 的系统
   
@@ -80,9 +82,7 @@ qt版本|![qt1](md/images/qt1.png)|![qt2](md/images/qt2.png)|![qt3](md/images/qt
 
 - centos、Rocky、fedora等支持 `rpm` 的系统
 
-     > 注意，没有刻意适配依赖问题，可以看下面常见问题，里面有相关的依赖说明
-
-   1. 在 [github-release](https://github.com/yuhldr/ldr-translate/releases/) 下载 `.deb` 的安装包（包含 `gtk` 和 `qt` 两种）
+   1. 在 [github-release](https://github.com/yuhldr/ldr-translate/releases/) 下载 `.rpm` 的安装包（包含 `gtk` 和 `qt` 两种）
 
    2. 然后在下载目录，右键，终端打开，终端输入：
 
@@ -94,7 +94,7 @@ qt版本|![qt1](md/images/qt1.png)|![qt2](md/images/qt2.png)|![qt3](md/images/qt
      - rocky、centos
 
         ```bash
-        sudo dnf -i ./下载的rpm文件名
+        sudo yum install ./下载的rpm文件名
         ```
 
 

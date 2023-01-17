@@ -8,6 +8,7 @@ Summary:  一个非常好用的翻译软件，看文献的好帮手
 Summary(zh_CN):  一个非常好用的翻译软件，看文献的好帮手
 License:  GPLv3+
 URL:      https://github.com/yuhldr/%{Name}
+Requires:
 
 %description
 翻译软件

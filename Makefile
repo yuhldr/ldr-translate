@@ -130,6 +130,7 @@ rpm-gtk:
 	cd SPECS && \
 	sed -i "s/PKG_TYPE/gtk/g" ldr.spec && \
 	sed -i "s/^Version:/Version: $(VERSION_NAME)/g" ldr.spec && \
+	sed -i "s/^Requires:/Requires: python3 python3-requests python3-gobject libappindicator-gtk3/g" ldr.spec && \
 	rpmbuild -bb ldr.spec
 
 	cp build/rpm/gtk/RPMS/x86_64/*.rpm disk/
@@ -144,6 +145,7 @@ rpm-qt:
 	cd SPECS && \
 	sed -i "s/PKG_TYPE/qt/g" ldr.spec && \
 	sed -i "s/^Version:/Version: $(VERSION_NAME)/g" ldr.spec && \
+	sed -i "s/^Requires:/Requires: python3 python3-requests python3-qt5/g" ldr.spec && \
 	rpmbuild -bb ldr.spec
 
 	cp build/rpm/qt/RPMS/x86_64/*.rpm disk/
