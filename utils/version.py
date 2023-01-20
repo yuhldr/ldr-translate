@@ -14,7 +14,7 @@ def get_value(key):
     return version_data[key]
 
 
-def check_update():
+def check_update(qt=None):
     urls = get_value("urls")
     update = False
     i = 0
