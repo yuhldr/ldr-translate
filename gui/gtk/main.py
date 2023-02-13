@@ -142,9 +142,9 @@ class LdrTranslate(Gtk.Application):
         if n != 2:
             self.handler_id_clip = self.get_clipboard().connect(
                 "owner-change", self._active_translate_windows)
-            self.update()
         else:
             self.handler_id_clip = None
+        self.update()
 
     def _active_translate_windows(self, a=None, b=None):
 
