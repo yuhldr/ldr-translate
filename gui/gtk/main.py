@@ -14,14 +14,21 @@ import gi
 
 from utils import locales, version, config
 from utils.locales import t_ui
-gi.require_version('Keybinder', '3.0')
-from gi.repository import Keybinder
+
+from utils.locales import t
+
 try:
     gi.require_version('AyatanaAppIndicator3', '0.1')
     from gi.repository import AyatanaAppIndicator3 as appindicator
 except ValueError:
     gi.require_version('AppIndicator3', '0.1')
     from gi.repository import AppIndicator3 as appindicator
+
+try:
+    gi.require_version('Keybinder', '3.0')
+    from gi.repository import Keybinder
+except Exception():
+    print(t("error.gtk.no_lib_Keybinder"))
 
 gi.require_version("Gtk", "3.0")
 
@@ -32,8 +39,7 @@ from gi.repository import Gtk, Gdk, GdkPixbuf
 
 
 def _on_help(event=None, data=None):
-    logo = GdkPixbuf.Pixbuf.new_from_file_at_size("./icon/icon.png", 64,
-                                                  64)
+    logo = GdkPixbuf.Pixbuf.new_from_file_at_size("./icon/icon.png", 64, 64)
 
     version_home_url = version.get_value("home_url")
     version_name = version.get_value("name")
@@ -50,8 +56,7 @@ def _on_help(event=None, data=None):
     dialog.set_website(version_home_url)
 
     dialog.set_comments(locales.t("version.msg"))
-    dialog.set_website_label(
-        locales.t("version.home_name"))
+    dialog.set_website_label(locales.t("version.home_name"))
 
     dialog.set_authors(["yuh"])
     # 翻译
@@ -76,7 +81,9 @@ class LdrTranslate(Gtk.Application):
     def __init__(self):
         self.translate_win = None
         self._help_dialog = None
-        self.auto_translate = 0
+        # 翻译模式
+        self.tm_s = t("ui.appindicator_label.translate_models")
+        self.tm = -1
 
         self.clip_copy = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         self.clip_select = Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
@@ -88,9 +95,7 @@ class LdrTranslate(Gtk.Application):
         self.indicator.set_label("翻译中", "")
         self.indicator.set_ordering_index(1)
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
-        self.key_group = "<Ctrl><Alt>L"
         Keybinder.init()
-        self._set_auto_translate(init_flag=True)
         self._create_menu()
 
     def _create_menu(self):
@@ -101,21 +106,22 @@ class LdrTranslate(Gtk.Application):
         menu.add(pref_menu)
         menu.add(Gtk.SeparatorMenuItem())
 
-        menu_t_0 = Gtk.RadioMenuItem(label="复制翻译")
-        menu_t_0.connect('activate', self._set_auto_translate, 0)
+        menu_t_0 = Gtk.RadioMenuItem(label=self.tm_s[0])
+        menu_t_0.connect('activate', self._set_translate_model, 0)
         menu.append(menu_t_0)
+        # 默认初始化第一个
         menu_t_0.set_active(True)
 
-        menu_t_1 = Gtk.RadioMenuItem(label='划词翻译', group=menu_t_0)
-        menu_t_1.connect('activate', self._set_auto_translate, 1)
+        menu_t_1 = Gtk.RadioMenuItem(label=self.tm_s[1], group=menu_t_0)
+        menu_t_1.connect('activate', self._set_translate_model, 1)
         menu.append(menu_t_1)
 
-        menu_t_2 = Gtk.RadioMenuItem(label='暂不翻译', group=menu_t_0)
-        menu_t_2.connect('activate', self._set_auto_translate, 2)
+        menu_t_2 = Gtk.RadioMenuItem(label=self.tm_s[2], group=menu_t_0)
+        menu_t_2.connect('activate', self._set_translate_model, 2)
         menu.append(menu_t_2)
 
-        menu_t_3 = Gtk.RadioMenuItem(label='手动触发', group=menu_t_0)
-        menu_t_3.connect('activate', self._set_auto_translate, 3)
+        menu_t_3 = Gtk.RadioMenuItem(label=self.tm_s[3], group=menu_t_0)
+        menu_t_3.connect('activate', self._set_translate_model, 3)
         menu.append(menu_t_3)
 
         menu.add(Gtk.SeparatorMenuItem())
@@ -139,55 +145,48 @@ class LdrTranslate(Gtk.Application):
     def _on_preference(self, event=None, data=None):
         Preference(self)
 
-    def _set_auto_translate(self, view=None, n=0, init_flag=False):
-        if self.auto_translate == n and not init_flag:
+    def _set_translate_model(self, view=None, n=0):
+        if self.tm == n:
             return
-        if self.auto_translate in (0, 1) and self.handler_id_clip is not None:
+
+        # 全部关闭重新来
+        if self.tm == 3:
+            Keybinder.unbind(config.get_config_setting("key_gtk"))
+
+        if self.handler_id_clip is not None:
             self.get_clipboard().disconnect(self.handler_id_clip)
             self.handler_id_clip = None
-        if self.auto_translate == 3:
-            Keybinder.unbind(self.key_group)
-        self.auto_translate = n
+
+        self.tm = n
         if n in (0, 1):
             self.handler_id_clip = self.get_clipboard().connect(
                 "owner-change", self._active_translate_windows)
         elif n == 3:
-            Keybinder.bind(
-                self.key_group, app.key_binder_callback, self.clip_copy)
+            Keybinder.bind(config.get_config_setting("key_gtk"),
+                           app.key_binder_callback)
 
-        self.update()
+        self.indicator.set_label(self.tm_s[self.tm], "")
 
-    def _active_translate_windows(self, a=None, b=None):
-
+    def _open_translate_windows(self):
         if self.translate_win is None or self.translate_win.is_hide:
             self.translate_win = Translate()
             self.translate_win.open()
-        if b is None:
-            a = None
-        self.translate_win.copy_auto_translate(a)
 
-    def key_binder_callback(self, key_group, clipboard):
-        if self.translate_win is None or self.translate_win.is_hide:
-            self.translate_win = Translate()
-            self.translate_win.open()
+    def _active_translate_windows(self, clipboard=None, eventOwnerChange=None):
+        self._open_translate_windows()
+        if eventOwnerChange is None:
+            clipboard = None
         self.translate_win.copy_auto_translate(clipboard)
 
+    def key_binder_callback(self, key_group):
+        self._open_translate_windows()
+        self.translate_win.copy_auto_translate(self.clip_copy)
+
     def get_clipboard(self):
-        if self.auto_translate == 0:
+        if self.tm == 0:
             return self.clip_copy
-        elif self.auto_translate == 1:
+        elif self.tm == 1:
             return self.clip_select
-
-    def update(self):
-        ind_label = "复制翻译"
-        if self.auto_translate == 2:
-            ind_label = "暂停翻译"
-        elif self.auto_translate == 1:
-            ind_label = "划词翻译"
-        elif self.auto_translate == 3:
-            ind_label = "手动触发"
-
-        self.indicator.set_label(ind_label, "")
 
 
 # ******* 监测  *******

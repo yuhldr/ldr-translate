@@ -103,7 +103,6 @@ class Translate(Gtk.ApplicationWindow):
             if span < 0.5:
                 return
             image = clipboard.wait_for_image()
-            print("copy", image)
             if image is not None:
                 self.ocr_image(image)
             else:
