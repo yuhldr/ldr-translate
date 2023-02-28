@@ -35,9 +35,11 @@
 - 先复制准备翻译的文本或图片0（比如ctl-c）
 - 然后 `Ctrl Alt M` 激发翻译
 
-如果你要修改快捷键，直接编辑配置文件，注意是 `json` 文件
+## 自定义快捷键
 
 > 非常不建议修改这个文件，容易出问题！请 `提前备份` 这个文件，或者如果出问题，请删除这个文件，然后重新添加 `api` 密钥
+
+如果你要修改快捷键，直接编辑配置文件，注意是 `json` 文件
 
 - 打开 `~/.config/ldr-translate/config.json` 文件，建议 [vscode](https://code.visualstudio.com/) 等支持 `json` 高亮的编辑器打开，如果安装了 [vscode](https://code.visualstudio.com/)，可以使用下面的命令
 
