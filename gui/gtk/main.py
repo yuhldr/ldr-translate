@@ -14,7 +14,8 @@ import gi
 
 from utils import locales, version, config
 from utils.locales import t_ui
-
+gi.require_version('Keybinder', '3.0')
+from gi.repository import Keybinder
 try:
     gi.require_version('AyatanaAppIndicator3', '0.1')
     from gi.repository import AyatanaAppIndicator3 as appindicator
@@ -87,7 +88,9 @@ class LdrTranslate(Gtk.Application):
         self.indicator.set_label("翻译中", "")
         self.indicator.set_ordering_index(1)
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
-
+        self.key_group = "<Ctrl><Alt>L"
+        Keybinder.init()
+        self._set_auto_translate(init_flag=True)
         self._create_menu()
 
     def _create_menu(self):
@@ -98,7 +101,7 @@ class LdrTranslate(Gtk.Application):
         menu.add(pref_menu)
         menu.add(Gtk.SeparatorMenuItem())
 
-        menu_t_0 = Gtk.RadioMenuItem(label="复制即翻译")
+        menu_t_0 = Gtk.RadioMenuItem(label="复制翻译")
         menu_t_0.connect('activate', self._set_auto_translate, 0)
         menu.append(menu_t_0)
         menu_t_0.set_active(True)
@@ -110,6 +113,10 @@ class LdrTranslate(Gtk.Application):
         menu_t_2 = Gtk.RadioMenuItem(label='暂不翻译', group=menu_t_0)
         menu_t_2.connect('activate', self._set_auto_translate, 2)
         menu.append(menu_t_2)
+
+        menu_t_3 = Gtk.RadioMenuItem(label='手动触发', group=menu_t_0)
+        menu_t_3.connect('activate', self._set_auto_translate, 3)
+        menu.append(menu_t_3)
 
         menu.add(Gtk.SeparatorMenuItem())
 
@@ -132,18 +139,22 @@ class LdrTranslate(Gtk.Application):
     def _on_preference(self, event=None, data=None):
         Preference(self)
 
-    def _set_auto_translate(self, view=None, n=0):
-
-        if self.handler_id_clip is not None:
+    def _set_auto_translate(self, view=None, n=0, init_flag=False):
+        if self.auto_translate == n and not init_flag:
+            return
+        if self.auto_translate in (0, 1) and self.handler_id_clip is not None:
             self.get_clipboard().disconnect(self.handler_id_clip)
-
+            self.handler_id_clip = None
+        if self.auto_translate == 3:
+            Keybinder.unbind(self.key_group)
         self.auto_translate = n
-
-        if n != 2:
+        if n in (0, 1):
             self.handler_id_clip = self.get_clipboard().connect(
                 "owner-change", self._active_translate_windows)
-        else:
-            self.handler_id_clip = None
+        elif n == 3:
+            Keybinder.bind(
+                self.key_group, app.key_binder_callback, self.clip_copy)
+
         self.update()
 
     def _active_translate_windows(self, a=None, b=None):
@@ -154,6 +165,12 @@ class LdrTranslate(Gtk.Application):
         if b is None:
             a = None
         self.translate_win.copy_auto_translate(a)
+
+    def key_binder_callback(self, key_group, clipboard):
+        if self.translate_win is None or self.translate_win.is_hide:
+            self.translate_win = Translate()
+            self.translate_win.open()
+        self.translate_win.copy_auto_translate(clipboard)
 
     def get_clipboard(self):
         if self.auto_translate == 0:
@@ -167,6 +184,8 @@ class LdrTranslate(Gtk.Application):
             ind_label = "暂停翻译"
         elif self.auto_translate == 1:
             ind_label = "划词翻译"
+        elif self.auto_translate == 3:
+            ind_label = "手动触发"
 
         self.indicator.set_label(ind_label, "")
 
@@ -176,7 +195,6 @@ class LdrTranslate(Gtk.Application):
 if __name__ == "__main__":
 
     app = LdrTranslate()
-
     try:
         Gtk.main()
     except KeyboardInterrupt:

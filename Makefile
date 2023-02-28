@@ -40,13 +40,13 @@ build:
 gtk:
 	mkdir -p build/gtk/
 	cp -r build/$(NAME) build/gtk/
-	cp gui/gtk/*.ui build/gtk/$(NAME)$(APP_PATH)/$(NAME)/
-	cp gui/gtk/*.py build/gtk/$(NAME)$(APP_PATH)/$(NAME)/
+	cp gui/gtk/*.ui build/$(NAME)$(APP_PATH)/$(NAME)/
+	cp gui/gtk/*.py build/$(NAME)$(APP_PATH)/$(NAME)/
 
 qt:
 	mkdir -p build/qt/
 	cp -r build/$(NAME) build/qt/
-	cp gui/qt/*.py build/qt/$(NAME)$(APP_PATH)/$(NAME)/
+	cp gui/qt/*.py build/$(NAME)$(APP_PATH)/$(NAME)/
 
 
 install: uninstall
