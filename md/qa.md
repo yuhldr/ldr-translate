@@ -15,6 +15,7 @@
 
 - `gnome-shell-extension-appindicator`
 - `gir1.2-appindicator3-0.1` 或 `gir1.2-ayatanaappindicator3-0.1`
+- `gir1.2-keybinder-3.0`
 - `python3-gi`
 
 
