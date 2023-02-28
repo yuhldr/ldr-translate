@@ -43,5 +43,6 @@
       - python3-gi
       - gnome-shell-extension-appindicator
       - gir1.2-appindicator3-0.1 或 gir1.2-ayatanaappindicator3-0.1
+      - libkeybinder3
 
 如果遇到问题，请查看 [已知问题](qa.md)
