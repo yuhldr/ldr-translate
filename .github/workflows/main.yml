@@ -46,6 +46,7 @@ jobs:
           libappindicator-gtk3
           python-gobject
           python-pyqt5
+          libkeybinder3
         scripts: make aur-gtk && make aur-qt
 
     - name: Create Release and Upload Release Asset
