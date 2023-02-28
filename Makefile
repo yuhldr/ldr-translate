@@ -40,22 +40,31 @@ build:
 gtk:
 	mkdir -p build/gtk/
 	cp -r build/$(NAME) build/gtk/
-	cp gui/gtk/*.ui build/$(NAME)$(APP_PATH)/$(NAME)/
-	cp gui/gtk/*.py build/$(NAME)$(APP_PATH)/$(NAME)/
+	cp gui/gtk/*.ui build/gtk/$(NAME)$(APP_PATH)/$(NAME)/
+	cp gui/gtk/*.py build/gtk/$(NAME)$(APP_PATH)/$(NAME)/
 
 qt:
 	mkdir -p build/qt/
 	cp -r build/$(NAME) build/qt/
-	cp gui/qt/*.py build/$(NAME)$(APP_PATH)/$(NAME)/
+	cp gui/qt/*.py build/qt/$(NAME)$(APP_PATH)/$(NAME)/
 
 
-install: uninstall
+install-gtk: uninstall build gtk
 	sudo mkdir -p /usr/bin/
 	sudo mkdir -p /usr/share/icons/
-	sudo cp -r ./build/$(NAME)$(PREFIX)/$(NAME) $(PREFIX)/
-	sudo cp build/$(NAME)/usr/bin/* /usr/bin/
-	sudo cp build/$(NAME)/usr/share/icons/* /usr/share/icons/
-	sudo cp build/$(NAME)/usr/share/applications/* /usr/share/applications/
+	sudo cp -r ./build/gtk/$(NAME)$(PREFIX)/$(NAME) $(PREFIX)/
+	sudo cp build/gtk/$(NAME)/usr/bin/* /usr/bin/
+	sudo cp build/gtk/$(NAME)/usr/share/icons/* /usr/share/icons/
+	sudo cp build/gtk/$(NAME)/usr/share/applications/* /usr/share/applications/
+
+install-qt: uninstall build qt
+	sudo mkdir -p /usr/bin/
+	sudo mkdir -p /usr/share/icons/
+	sudo cp -r ./build/qt/$(NAME)$(PREFIX)/$(NAME) $(PREFIX)/
+	sudo cp build/qt/$(NAME)/usr/bin/* /usr/bin/
+	sudo cp build/qt/$(NAME)/usr/share/icons/* /usr/share/icons/
+	sudo cp build/qt/$(NAME)/usr/share/applications/* /usr/share/applications/
+
 
 
 deb-gtk:
@@ -67,7 +76,7 @@ deb-gtk:
 
 	cd build/deb/gtk/$(NAME)/DEBIAN/ && \
 	sed -i "s/^version:/version: $(VERSION_NAME)/g" ./control && \
-	sed -i "s/^Depends:/Depends: gir1.2-appindicator3-0.1,python3,python3-gi,python3-requests/g" ./control
+	sed -i "s/^Depends:/Depends: gir1.2-appindicator3-0.1,gir1.2-keybinder-3.0,python3,python3-gi,python3-requests/g" ./control
 
 	cd build/deb/gtk && \
 	dpkg -b $(NAME) $(NAME)-gtk.deb
@@ -99,7 +108,7 @@ aur-gtk:
 	cp ../../../data/pkg/aur/PKGBUILD ./ && \
 	sed -i "s/^pkgname=/pkgname=$(NAME)-gtk/g" PKGBUILD && \
 	sed -i "s/^pkgver=/pkgver=$(VERSION_NAME)/g" PKGBUILD && \
-	sed -i "s/^depends=()/depends=(python python-requests python-gobject libappindicator-gtk3)/g" PKGBUILD  && \
+	sed -i "s/^depends=()/depends=(python python-requests python-gobject libappindicator-gtk3 libkeybinder3)/g" PKGBUILD  && \
 	sed -i "s/^optdepends=()/optdepends=(gnome-shell-extension-appindicator)/g" PKGBUILD  && \
 	sed -i "s/^conflicts=()/conflicts=($(NAME)-qt)/g" PKGBUILD  && \
 	sed -i "s#PKG_PATH#\$(shell pwd)/build/gtk#g" PKGBUILD  && \
@@ -130,7 +139,7 @@ rpm-gtk:
 	cd SPECS && \
 	sed -i "s/PKG_TYPE/gtk/g" ldr.spec && \
 	sed -i "s/^Version:/Version: $(VERSION_NAME)/g" ldr.spec && \
-	sed -i "s/^Requires:/Requires: python3 python3-requests python3-gobject libappindicator-gtk3/g" ldr.spec && \
+	sed -i "s/^Requires:/Requires: python3 python3-requests python3-gobject libappindicator-gtk3 keybinder3/g" ldr.spec && \
 	rpmbuild -bb ldr.spec
 
 	cp build/rpm/gtk/RPMS/x86_64/*.rpm disk/
