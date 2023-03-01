@@ -13,7 +13,7 @@
 
 ### 离线安装
 
-    可以使用预览版，及时修复bugs
+可以使用预览版，及时修复bugs
 
 - 在 [github-release](https://github.com/yuhldr/ldr-translate/releases/) 下载 `.zst` 的安装包（包含 `gtk` 和 `qt` 两种）
 - 然后在下载目录，右键，终端打开，终端输入：
@@ -24,21 +24,21 @@
 
 ### 在线安装
 
-    使用 `yay` 通过 `aur`，自动更新，但是只能使用稳定版
+使用 `yay` 通过 `aur`，自动更新，但是只能使用稳定版
 
-    - qt版本：推荐 `kde` 桌面使用
+- qt版本：推荐 `kde` 桌面使用
 
     ```bash
     yay -S ldr-translate-qt
     ```
 
-    - gtk版本，推荐 `gnome` 桌面使用
+- gtk版本，推荐 `gnome` 桌面使用
 
     ```bash
     yay -S ldr-translate-gtk
     ```
 
-    `gnome` 桌面注意安装依赖 `gnome-shell-extension-appindicator`
+`gnome` 桌面注意安装依赖 `gnome-shell-extension-appindicator`
 
 
 ## ubuntu 系列
@@ -59,7 +59,7 @@
 
 ## fedora系列
 
-> 优先支持 `fedora最新版`，centos、Rocky、fedora等其他 `rpm` 的系统可能也可以用
+> 优先支持 `fedora最新版`，centos、Rocky等其他 `rpm` 的系统可能也可以用
 
 1. 在 [github-release](https://github.com/yuhldr/ldr-translate/releases/) 下载 `.rpm` 的安装包（包含 `gtk` 和 `qt` 两种）
 
@@ -67,14 +67,14 @@
 
     - fedora
 
-    ```bash
-    sudo dnf install ./下载的rpm文件名
-    ```
+        ```bash
+        sudo dnf install ./下载的rpm文件名
+        ```
     - rocky、centos
 
-    ```bash
-    sudo yum install ./下载的rpm文件名
-    ```
+        ```bash
+        sudo yum install ./下载的rpm文件名
+        ```
 
 
 ## 其他系统

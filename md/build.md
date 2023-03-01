@@ -17,7 +17,7 @@
         > `make check-qt` 是在检查部分 `python` 依赖
 
         ```bash
-        make check-qt && make build && make qt && make install
+        make install-qt
         ```
 
     - 也可以安装 `gtk` 版本
@@ -25,24 +25,25 @@
         > `make check-gtk` 是在检查部分 `python` 依赖
 
         ```bash
-        make check-gtk && make build && make gtk && make install
+        make install-gtk
         ```
 
 4. 请自己检查依赖问题：
 
-> 不同系统在软件名有差别
+    > 不同系统在软件名有差别，下面的是以 `ubuntu22.04` 为例
 
-   - qt版本：
-      - python3
-      - python3-requests
-      - python3-pyqt5
+    qt版本：
 
-   - gtk版本
-      - python3
-      - python3-requests
-      - python3-gi
-      - gnome-shell-extension-appindicator
-      - gir1.2-appindicator3-0.1 或 gir1.2-ayatanaappindicator3-0.1
-      - gir1.2-keybinder-3.0
+    - python3
+    - python3-requests
+    - python3-pyqt5
+
+    gtk版本
+    - python3
+    - python3-requests
+    - python3-gi
+    - gnome-shell-extension-appindicator
+    - gir1.2-appindicator3-0.1 或 gir1.2-ayatanaappindicator3-0.1
+    - gir1.2-keybinder-3.0
 
 如果遇到问题，请查看 [已知问题](qa.md)
