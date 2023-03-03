@@ -144,7 +144,7 @@ def ocr(img_path):
                                      error_msg2zh_ocr, config_server)
     else:
         for word in jsons["words_result"]:
-            s += word["words"]
+            s += word["words"] + '\n'
 
             s_ = word["words"]
             if s_[len(s_) - 1:len(s_)] != "-":

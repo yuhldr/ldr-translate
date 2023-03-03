@@ -88,6 +88,9 @@ def set_tray_icon(tray_text):
 def is_ocr_local():
     return get_config_setting("ocr_local")
 
+def if_del_wrapping():
+    return get_config_setting("del_wrapping")
+
 
 def get_ocr_notice():
     s = "文本识别中...\n设置中可修改识别方式"
@@ -101,6 +104,8 @@ def get_ocr_notice():
 def set_ocr_local(b):
     return set_config(config_sections_setting, "ocr_local", b)
 
+def set_del_wrapping(b):
+    return set_config(config_sections_setting, "del_wrapping", b)
 
 # 开机自启
 def update_autostart(autostart):

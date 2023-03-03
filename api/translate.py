@@ -38,9 +38,10 @@ def text(s_from, add_old=True):
             return t_ui("notice_from"), t_ui("notice_to")
         elif not add_old:
             s_from = last_s_from_all
-
-    s_from = re.sub(r"-[\n|\r]+", "", s_from)
-    s_from = re.sub(r"(?<!\.|-|。)[\n|\r]+", " ", s_from)
+    if config.get_config_setting("del_wrapping"):
+        print("del wrapping")
+        s_from = re.sub(r"-[\n|\r]+", "", s_from) 
+        s_from = re.sub(r"(?<!\.|-|。)[\n|\r]+", " ", s_from)
 
     # 文字和上次一样，并且被翻译的语言没有修改，就不翻译了
     if last_s_from == s_from and not change_lang and not change_server:

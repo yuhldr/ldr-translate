@@ -20,6 +20,9 @@ def update_ocr_local(menu_check):
     config.set_ocr_local(menu_check.get_active())
 
 
+def update_del_wrapping(menu_check):
+    config.set_del_wrapping(menu_check.get_active())
+
 def get_text(text_view):
     tb = text_view.get_buffer()
     text = tb.get_text().strip()
@@ -104,6 +107,10 @@ class Preference(Gtk.ApplicationWindow):
         cb_ocr_local = ui.get_object('cb_ocr_local')
         cb_ocr_local.set_active(config.is_ocr_local())
         cb_ocr_local.connect('toggled', update_ocr_local)
+
+        cbt_del_wrapping = ui.get_object("cbtn_del_wrapping")
+        cbt_del_wrapping.set_active(config.if_del_wrapping())
+        cbt_del_wrapping.connect("toggled", update_del_wrapping)
 
         self.lb_version_msg.set_markup(version.get_default())
 
