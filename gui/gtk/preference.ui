@@ -39,7 +39,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="margin-left">8</property>
                 <property name="margin-start">8</property>
                 <property name="margin-top">8</property>
                 <property name="margin-bottom">8</property>
@@ -56,7 +55,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="margin-left">8</property>
                 <property name="margin-start">8</property>
                 <property name="margin-top">8</property>
                 <property name="margin-bottom">8</property>
@@ -67,22 +65,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkCheckButton" id="cb_ocr_local">
                 <property name="label" translatable="yes">离线识别</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="margin-left">8</property>
                 <property name="margin-start">8</property>
                 <property name="draw-indicator">True</property>
               </object>
@@ -146,6 +133,19 @@ pip install easyocr</property>
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="cbtn_del_wrapping">
+                <property name="label" translatable="yes">删除换行</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
           </object>
