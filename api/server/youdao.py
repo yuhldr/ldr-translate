@@ -178,7 +178,7 @@ def translate_interface_1(s, from_lang="auto", to_lang=""):
             x[:x.find('p')], word[x]), filter(lambda x: "phone" in x, word.keys()))
         tmp += "  ".join(phones) + '\n'
         for description in word['trs']:
-            tmp += description['pos'] + ' ' + description['tran'] + '\n'
+            tmp += description.get("pos", "") + ' ' + description.get('tran', "") + '\n'
         wfs = word.get("wfs", None)
         if wfs is not None:
             for wf in wfs:
@@ -224,4 +224,4 @@ def decode_translate(text):
 
 
 if __name__ == "__main__":
-    pass
+    translate_text("Flow")
