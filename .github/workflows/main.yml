@@ -43,6 +43,7 @@ jobs:
           make
           python
           python-requests
+          python-cryptography
           libappindicator-gtk3
           python-gobject
           python-pyqt5
