@@ -25,6 +25,7 @@ session.headers.update({
 fixed_value = None
 interface_select = 1
 
+
 def sign(key, _time=None):
     _time = _time if _time is not None else int(time.time() * 1000)
     print(_time)
@@ -34,8 +35,6 @@ def sign(key, _time=None):
     hash_md5.update(input_string.encode('utf-8'))
     return hash_md5.hexdigest()
 
-def translate_text(s, from_lang="auto", to_lang=""):
-    ok = True
 
 def get_fixed_value():
     index_url = "https://fanyi.youdao.com/index.html"
@@ -104,6 +103,7 @@ def get_translate_secret_key():
         print("get translate secret key failed", params)
         return None
 
+
 def translate_interface_2(s, from_lang="auto", to_lang=""):
     url = "http://fanyi.youdao.com/translate?&doctype=json&type=%s&i=%s"
     url = url % (from_lang + "2" + to_lang, urllib.parse.quote(s))
@@ -126,6 +126,7 @@ def translate_interface_2(s, from_lang="auto", to_lang=""):
         s1 = "请求错误：" + request.content
 
     return s1
+
 
 def translate_interface_1(s, from_lang="auto", to_lang=""):
     url = "https://dict.youdao.com/webtranslate"
@@ -166,17 +167,19 @@ def translate_interface_1(s, from_lang="auto", to_lang=""):
                 tmp += sentence['tgt']
         tmp += '\n'
     dict_res = res.get('dictResult', None)
-    if dict_res is not None and  dict_res.get("ec", None) is not None:
+    if dict_res is not None and dict_res.get("ec", None) is not None:
         word = dict_res['ec']['word']
-        phones = map(lambda x: "{}: /{}/".format(x[:x.find('p')], word[x]), filter(lambda x: "phone" in x, word.keys()))
+        phones = map(lambda x: "{}: /{}/".format(
+            x[:x.find('p')], word[x]), filter(lambda x: "phone" in x, word.keys()))
         tmp += "  ".join(phones) + '\n'
         for description in word['trs']:
-            tmp += description['pos'] +' '+ description['tran'] + '\n'
+            tmp += description['pos'] + ' ' + description['tran'] + '\n'
         wfs = word.get("wfs", None)
         if wfs is not None:
             for wf in wfs:
                 tmp += wf['wf']['name'] + ':' + wf['wf']['value'] + '\n'
     return tmp
+
 
 def translate_text(s, from_lang="auto", to_lang=""):
     global interface_select
@@ -188,6 +191,7 @@ def translate_text(s, from_lang="auto", to_lang=""):
     elif interface_select == 2:
         res = translate_interface_2(s, from_lang, to_lang)
     return res
+
 
 def decode_translate(text):
     md5 = hashlib.md5()
