@@ -38,9 +38,15 @@ def text(s_from, add_old=True):
             return t_ui("notice_from"), t_ui("notice_to")
         elif not add_old:
             s_from = last_s_from_all
+    # 文本预处理
+    # 删除空行
+    s_from = re.sub(r'\n\s*\n', '\n', s_from)
+    # 删除多余空格
+    s_from = re.sub(r' +', ' ', s_from)
+    # 删除所有换行，除了句号后面的换行
     if config.get_config_setting("del_wrapping"):
         print("del wrapping")
-        s_from = re.sub(r"-[\n|\r]+", "", s_from) 
+        s_from = re.sub(r"-[\n|\r]+", "", s_from)
         s_from = re.sub(r"(?<!\.|-|。)[\n|\r]+", " ", s_from)
 
     # 文字和上次一样，并且被翻译的语言没有修改，就不翻译了
