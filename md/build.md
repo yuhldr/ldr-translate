@@ -36,11 +36,13 @@
 
     - python3
     - python3-requests
+    - python3-cryptography
     - python3-pyqt5
 
     gtk版本
     - python3
     - python3-requests
+    - python3-cryptography
     - python3-gi
     - gnome-shell-extension-appindicator
     - gir1.2-appindicator3-0.1 或 gir1.2-ayatanaappindicator3-0.1

@@ -76,7 +76,7 @@ deb-gtk:
 
 	cd build/deb/gtk/$(NAME)/DEBIAN/ && \
 	sed -i "s/^version:/version: $(VERSION_NAME)/g" ./control && \
-	sed -i "s/^Depends:/Depends: gir1.2-appindicator3-0.1,gir1.2-keybinder-3.0,python3,python3-gi,python3-requests/g" ./control
+	sed -i "s/^Depends:/Depends: gir1.2-appindicator3-0.1,gir1.2-keybinder-3.0,python3,python3-gi,python3-requests,python3-cryptography/g" ./control
 
 	cd build/deb/gtk && \
 	dpkg -b $(NAME) $(NAME)-gtk.deb
@@ -93,7 +93,7 @@ deb-qt:
 
 	cd build/deb/qt/$(NAME)/DEBIAN/ && \
 	sed -i "s/^version:/version: $(VERSION_NAME)/g" ./control && \
-	sed -i "s/^Depends:/Depends: python3,python3-pyqt5,python3-requests/g" ./control
+	sed -i "s/^Depends:/Depends: python3,python3-pyqt5,python3-requests,python3-cryptography/g" ./control
 
 	cd build/deb/qt && \
 	dpkg -b $(NAME) $(NAME)-qt.deb
@@ -108,7 +108,7 @@ aur-gtk:
 	cp ../../../data/pkg/aur/PKGBUILD ./ && \
 	sed -i "s/^pkgname=/pkgname=$(NAME)-gtk/g" PKGBUILD && \
 	sed -i "s/^pkgver=/pkgver=$(VERSION_NAME)/g" PKGBUILD && \
-	sed -i "s/^depends=()/depends=(python python-requests python-gobject libappindicator-gtk3 libkeybinder3)/g" PKGBUILD  && \
+	sed -i "s/^depends=()/depends=(python python-requests python-gobject python-cryptography libappindicator-gtk3 libkeybinder3)/g" PKGBUILD  && \
 	sed -i "s/^optdepends=()/optdepends=(gnome-shell-extension-appindicator)/g" PKGBUILD  && \
 	sed -i "s/^conflicts=()/conflicts=($(NAME)-qt)/g" PKGBUILD  && \
 	sed -i "s#PKG_PATH#\$(shell pwd)/build/gtk#g" PKGBUILD  && \
@@ -123,7 +123,7 @@ aur-qt:
 	cp ../../../data/pkg/aur/PKGBUILD ./ && \
 	sed -i "s/^pkgname=/pkgname=$(NAME)-qt/g" PKGBUILD && \
 	sed -i "s/^pkgver=/pkgver=$(VERSION_NAME)/g" PKGBUILD && \
-	sed -i "s/^depends=()/depends=(python python-requests python-pyqt5)/g" PKGBUILD && \
+	sed -i "s/^depends=()/depends=(python python-requests python-cryptography python-pyqt5)/g" PKGBUILD && \
 	sed -i "s/^conflicts=()/conflicts=($(NAME)-gtk)/g" PKGBUILD && \
 	sed -i "s#PKG_PATH#\$(shell pwd)/build/qt#g" PKGBUILD  && \
 	sed -i "s/PKG_TYPE/qt/g" PKGBUILD  && \
@@ -139,7 +139,7 @@ rpm-gtk:
 	cd SPECS && \
 	sed -i "s/PKG_TYPE/gtk/g" ldr.spec && \
 	sed -i "s/^Version:/Version: $(VERSION_NAME)/g" ldr.spec && \
-	sed -i "s/^Requires:/Requires: python3 python3-requests python3-gobject libappindicator-gtk3 keybinder3/g" ldr.spec && \
+	sed -i "s/^Requires:/Requires: python3 python3-requests python3-gobject python3-crypto libappindicator-gtk3 keybinder3/g" ldr.spec && \
 	rpmbuild -bb ldr.spec
 
 	cp build/rpm/gtk/RPMS/x86_64/*.rpm disk/
@@ -154,7 +154,7 @@ rpm-qt:
 	cd SPECS && \
 	sed -i "s/PKG_TYPE/qt/g" ldr.spec && \
 	sed -i "s/^Version:/Version: $(VERSION_NAME)/g" ldr.spec && \
-	sed -i "s/^Requires:/Requires: python3 python3-requests python3-qt5/g" ldr.spec && \
+	sed -i "s/^Requires:/Requires: python3 python3-requests python3-crypto python3-qt5/g" ldr.spec && \
 	rpmbuild -bb ldr.spec
 
 	cp build/rpm/qt/RPMS/x86_64/*.rpm disk/

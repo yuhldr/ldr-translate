@@ -27,8 +27,8 @@ except ValueError:
 try:
     gi.require_version('Keybinder', '3.0')
     from gi.repository import Keybinder
-except Exception():
-    print(t("error.gtk.no_lib_Keybinder"))
+except ModuleNotFoundError as e:
+    print(t("error.lib.no_Keybinder"))
 
 gi.require_version("Gtk", "3.0")
 

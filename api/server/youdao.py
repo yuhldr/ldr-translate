@@ -1,17 +1,22 @@
-import urllib
 import base64
-import re
-import requests
 import hashlib
-import time
-import sys
-import random
 import json
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from cryptography.hazmat.primitives import padding
-from cryptography.hazmat.backends import default_backend, openssl
+import random
+import re
+import time
+import urllib
 
-from utils import config
+import requests
+
+from utils.locales import t
+
+try:
+    from cryptography.hazmat.backends import openssl
+    from cryptography.hazmat.primitives import padding
+    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+except ModuleNotFoundError as e:
+    print(t("error.lib.no_cryptography"))
+
 from api import server_config
 from utils import config
 

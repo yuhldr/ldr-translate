@@ -6,6 +6,7 @@
 
 - `python3`
 - `python3-requests`
+- `python3-cryptography`
 
 对于 `qt` 版本，额外需要
 

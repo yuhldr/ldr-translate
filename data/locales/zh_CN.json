@@ -67,11 +67,13 @@
         }
     },
     "error": {
-        "gtk": {
-            "no_lib_Keybinder": "缺失“libkeybinder3”依赖，请自行搜索如何安装，翻译时无法使用“手动触发”模式"
-        },
         "api_translate_notice": "请在设置中检查自己的密钥",
         "ocr_translate_notice": "请在设置中检查为自己的识别",
-        "request": "请求错误"
+        "request": "请求错误",
+        "lib": {
+            "no_Keybinder": "缺失“libkeybinder3”依赖，请自行搜索如何安装，翻译时无法使用“手动触发”模式",
+            "no_cryptography":"请安装 python 库 cryptography，例如，终端输入：pip3 install cryptography",
+            "on_easyocr": "离线识别（也可以使用在线文本识别（百度OCR））请安装依赖，例如，终端输入： pip3 install easyocr"
+        }
     }
 }
