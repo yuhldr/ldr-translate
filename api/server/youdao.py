@@ -13,6 +13,8 @@ from cryptography.hazmat.backends import default_backend, openssl
 
 from utils import config
 from api import server_config
+from utils import config
+
 config_server = server_config.server_youdao
 session = requests.Session()
 session.headers.update({
@@ -32,6 +34,8 @@ def sign(key, _time=None):
     hash_md5.update(input_string.encode('utf-8'))
     return hash_md5.hexdigest()
 
+def translate_text(s, from_lang="auto", to_lang=""):
+    ok = True
 
 def get_fixed_value():
     index_url = "https://fanyi.youdao.com/index.html"
@@ -151,20 +155,27 @@ def translate_interface_1(s, from_lang="auto", to_lang=""):
         print('decrypt translation message failed', e)
         return None
     print(res)
-    trans_res = res['translateResult']
     tmp = ""
-    for line in trans_res:
-        # 有道接口数据已提供段落换行
-        for sentence in line:
-            tmp += sentence['tgt']
+    if res['code'] != 0:
+        return ""
+    trans_res = res.get('translateResult', None)
+    if trans_res is not None:
+        for line in trans_res:
+            # 有道接口数据已提供段落换行符号
+            for sentence in line:
+                tmp += sentence['tgt']
+        tmp += '\n'
     dict_res = res.get('dictResult', None)
     if dict_res is not None and  dict_res.get("ec", None) is not None:
-        for i in filter(lambda x: "phone" in x, dict_res['ec']['word'].keys()):
-            tmp += dict_res['ec']['word'][i] + ' '
-        tmp += '\n'
-        for description in dict_res['ec']['word']['trs']:
+        word = dict_res['ec']['word']
+        phones = map(lambda x: "{}: /{}/".format(x[:x.find('p')], word[x]), filter(lambda x: "phone" in x, word.keys()))
+        tmp += "  ".join(phones) + '\n'
+        for description in word['trs']:
             tmp += description['pos'] +' '+ description['tran'] + '\n'
-    trans_res = tmp
+        wfs = word.get("wfs", None)
+        if wfs is not None:
+            for wf in wfs:
+                tmp += wf['wf']['name'] + ':' + wf['wf']['value'] + '\n'
     return tmp
 
 def translate_text(s, from_lang="auto", to_lang=""):
