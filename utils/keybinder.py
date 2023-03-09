@@ -5,31 +5,28 @@ import queue
 import threading
 import re
 
-__event_queue = queue.Queue()
-__callback_list = []
-__state = set()
-keybinder_thread: threading.Thread = None
-keyboard_listener: threading.Thread = None
-mouse_listener: threading.Thread = None
-close_event = threading.Event()
+_event_queue = queue.Queue()
+_callback_list = []
+_state = set()
+_close_event = threading.Event()
 
 
-def on_click(x, y, button: mouse.Button, pressed: bool):
-    if not close_event.is_set():
-        __event_queue.put((button, pressed))
+def _on_click(_x,  _y, button: mouse.Button, pressed: bool):
+    if not _close_event.is_set():
+        _event_queue.put((button, pressed))
 
 
-def on_press(key):
-    if not close_event.is_set():
-        __event_queue.put((key, True))
+def _on_press(key):
+    if not _close_event.is_set():
+        _event_queue.put((key, True))
 
 
-def on_release(key):
-    if not close_event.is_set():
-        __event_queue.put((key, False))
+def _on_release(key):
+    if not _close_event.is_set():
+        _event_queue.put((key, False))
 
 
-def parse(keylist):
+def _parse(keylist):
     special_keys = re.findall(r"(\<.+?\>)", keylist)
     for key in special_keys:
         keylist = keylist.replace(key, "")
@@ -52,38 +49,46 @@ def parse(keylist):
 
 
 def bind(keylist, callback, *args):
-    keylist = parse(keylist)
+    """
+    绑定热键的回调函数
+    Args:
+        keylist: 形如<ctrl><button9>q的字符串,代表同时按下ctrl+鼠标测键+q时调用`callback(*args)`
+    """
+    keylist = _parse(keylist)
     print(keylist)
-    __callback_list.append((keylist, callback, args))
+    _callback_list.append((keylist, callback, args))
 
 
 def unbind(keylist, callback, *args):
-    keylist = parse(keylist)
-    __callback_list.remove((keylist, callback, args))
+    """
+    清除热键的回调函数, 各个参数需要与绑定时一致才可以找到并清除
+    """
+    keylist = _parse(keylist)
+    _callback_list.remove((keylist, callback, args))
 
 
-def consumer():
+def _consumer():
     while True:
-        event = __event_queue.get()
+        event = _event_queue.get()
         if event is None:
             # clear
-            __event_queue.task_done()
-            while not __event_queue.empty():
-                __event_queue.get()
-                __event_queue.task_done()
-            __state.clear()
+            _event_queue.task_done()
+            while not _event_queue.empty():
+                _event_queue.get()
+                _event_queue.task_done()
+            _state.clear()
             return
         if event[1]:
-            __state.add(event[0])
-            for i in filter(lambda x: __state == x[0], __callback_list):
+            _state.add(event[0])
+            for i in filter(lambda x: _state == x[0], _callback_list):
                 print("active", i)
                 func = i[1]
                 args = i[2]
                 func(*args)
         if not event[1]:
-            if event[0] in __state:
-                __state.remove(event[0])
-        __event_queue.task_done()
+            if event[0] in _state:
+                _state.remove(event[0])
+        _event_queue.task_done()
 
 def key2str(key):
     try:
@@ -93,6 +98,12 @@ def key2str(key):
     return key
 
 def capture_hotkey(process_callback=None, result_callback = None):
+    """
+    用于捕获热键，方便动态设置热键
+    Args:
+        process_callback: 捕获过程中的回调函数，传递捕获过程中按键集合参数
+        result_callback: 传递捕获结果的回调函数
+    """
     state = set()
     count = 0
     lock = threading.Lock()
@@ -104,7 +115,7 @@ def capture_hotkey(process_callback=None, result_callback = None):
         if process_callback:
             print(state)
             process_callback(state)
-    def click(x, y, button: mouse.Button, pressed: bool):
+    def click(_x,  _y, button: mouse.Button, pressed: bool):
         if over_event.is_set():
             return False
         if pressed:
@@ -122,7 +133,7 @@ def capture_hotkey(process_callback=None, result_callback = None):
                 result_callback(state)
                 return False
             lock.release()
-    def release(key):
+    def release(_):
         if over_event.is_set():
             return False
         nonlocal count
@@ -133,7 +144,7 @@ def capture_hotkey(process_callback=None, result_callback = None):
             over_event.set()
             result_callback(state)
             return False
-        lock.release() 
+        lock.release()
     _keyboard_listener = keyboard.Listener(
             on_press=press,
             on_release=release)
@@ -143,32 +154,45 @@ def capture_hotkey(process_callback=None, result_callback = None):
     _mouse_listener.start()
     return over_event, _keyboard_listener, _mouse_listener
 
+KEYBINDER_THREAD: threading.Thread = None
+KEYBOARD_LISTENER: threading.Thread = None
+MOUSE_LISTENER: threading.Thread = None
 
 def start_keybinder(daemon=True):
-    close_event.clear()
-    global keyboard_listener, mouse_listener, keyboard_listener
-    if keyboard_listener is None:
-        keyboard_listener = keyboard.Listener(
-            on_press=on_press,
-            on_release=on_release)
-        keyboard_listener.start()
-    if mouse_listener is None:
-        mouse_listener = mouse.Listener(
-            on_click=on_click)
-        mouse_listener.start()
-    keybinder_thread = threading.Thread(target=consumer, daemon=daemon)
-    keybinder_thread.start()
-    return keybinder_thread
+    """
+    启动热键处理线程，只能启动一次
+    Args:
+        daemon: 守护线程
+    """
+    _close_event.clear()
+    global KEYBINDER_THREAD
+    global MOUSE_LISTENER
+    global KEYBOARD_LISTENER
+    if KEYBOARD_LISTENER is None:
+        KEYBOARD_LISTENER = keyboard.Listener(
+            on_press=_on_press,
+            on_release=_on_release)
+        KEYBOARD_LISTENER.start()
+    if MOUSE_LISTENER is None:
+        MOUSE_LISTENER = mouse.Listener(
+            on_click=_on_click)
+        MOUSE_LISTENER.start()
+    KEYBINDER_THREAD = threading.Thread(target=_consumer, daemon=daemon)
+    KEYBINDER_THREAD.start()
+    return KEYBINDER_THREAD
 
 
 def stop_keybinder():
+    """
+    关闭keybinder线程,不会清除绑定列表
+    """
     print("stop keybinder")
-    close_event.set()
-    __event_queue.put(None)
-    __event_queue.join()
+    _close_event.set()
+    _event_queue.put(None)
+    _event_queue.join()
 
 
 if __name__ == "__main__":
     # bind("<Ctrl><B9>C", lambda: print("hello"))
     # start_keybinder().join()
-    print(capture_hotkey(lambda x: print(x)))
+    print(capture_hotkey(print, print))
