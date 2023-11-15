@@ -1,3 +1,10 @@
+!! 项目重构，后续将不再更新此项目
+
+> 目前仅在 `archlinux最新版` `gnome桌面` 测试，还在开发阶段，小白不容易使用！！
+
+新项目见：[gnome-lt](https://github.com/yuhldr/gnome-lt)
+
+
 # 兰译 <img src="data/icon/icon.png" width = "36" height = "36" alt="图片名称" align=center />
 
  一个翻译软件，使用Gtk3开发（最近开发了QT版本），python语言，翻译用的百度、腾讯接口
