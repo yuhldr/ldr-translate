@@ -1,8 +1,8 @@
-!! 项目重构，后续将不再更新此项目
+!! 项目已经重构，后续将不再更新此项目
 
-> 目前仅在 `archlinux最新版` `gnome桌面` 测试，还在开发阶段，小白不容易使用！！
+> 目前仅在 `archlinux最新版` `gnome桌面` 测试！！
 
-新项目见：[gnome-lt](https://github.com/yuhldr/gnome-lt)
+新项目见：[lfy](https://github.com/yuhldr/lfy)，欢迎贡献代码
 
 
 # 兰译 <img src="data/icon/icon.png" width = "36" height = "36" alt="图片名称" align=center />
