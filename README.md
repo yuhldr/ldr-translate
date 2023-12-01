@@ -2,7 +2,7 @@
 
 > 目前仅在 `archlinux最新版` `gnome桌面` 测试！！
 
-新项目见：[lfy](https://github.com/yuhldr/lfy)，欢迎贡献代码
+新项目见：[lfy](https://github.com/ldrfy/lfy)，欢迎贡献代码
 
 
 # 兰译 <img src="data/icon/icon.png" width = "36" height = "36" alt="图片名称" align=center />
